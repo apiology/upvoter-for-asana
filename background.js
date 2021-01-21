@@ -2,6 +2,21 @@
 
 'use strict';
 
+const client = Asana.Client.create().useAccessToken(asanaAccessToken);
+
+var workspaceGid = null;
+
+client.workspaces.getWorkspaces()
+  .then((result) => {
+    result.stream().on('data', workspace => {
+      if (workspace.name == workspaceName) {
+        workspaceGid = workspace.gid
+        console.log("Found workspace GID as " + workspaceGid);
+      }
+    })});
+
+
+
 // This event is fired each time the user updates the text in the omnibox,
 // as long as the extension's keyword mode is still active.
 chrome.omnibox.onInputChanged.addListener(
