@@ -53,7 +53,7 @@ chrome.omnibox.onInputEntered.addListener(
         console.log('Custom field number value: ', customField.number_value)
         let currentValue = customField.number_value;
         // https://developers.asana.com/docs/update-a-task
-        let newValue = currentValue - 1;
+        let newValue = increment ? currentValue + 1 : currentValue - 1;
         let updatedCustomFields = {};
         updatedCustomFields[customFieldGid] =  newValue;
         client.tasks.updateTask(taskGid,
