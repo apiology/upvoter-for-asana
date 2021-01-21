@@ -12,7 +12,7 @@ Quickly increment integer custom fields in Asana tasks from the Chrome Omnibox
    wget https://github.com/Asana/node-asana/releases/download/v0.18.4/asana.js
    ```
 
-2. Create a secrets.js with a variable named 'asanaAccessToken' with a
+2. Create a config.js with a variable named 'asanaAccessToken' with a
    new
    [Asana Personal Access Token](https://app.asana.com/0/developer-console)
    assigned to it.
