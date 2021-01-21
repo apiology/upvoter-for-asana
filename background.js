@@ -14,6 +14,7 @@ chrome.omnibox.onInputChanged.addListener(
     // console.log('Asana.Client: ' + Asana.Client);
 //    console.log('asana: ' + asana);
 //    console.log('Client: ' + Client);
+    console.log('inputChanged: ' + text);
     suggest([
       {content: text + " one", description: "the first one"},
       {content: text + " number two", description: "the second entry"}
@@ -26,4 +27,3 @@ chrome.omnibox.onInputEntered.addListener(
     console.log('inputEntered: ' + text);
     alert('You just typed "' + text + '"');
   });
-});
