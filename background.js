@@ -21,11 +21,15 @@ client.workspaces.getWorkspaces()
 // as long as the extension's keyword mode is still active.
 chrome.omnibox.onInputChanged.addListener(
   function(text, suggest) {
-    console.log('inputChanged: ' + text);
-    suggest([
-      {content: text + " one", description: "the first one"},
-      {content: text + " number two", description: "the second entry"}
-    ]);
+
+    client.typeahead.typeaheadForWorkspace(workspaceGid,
+                                           {"resource_type": "task",
+                                            "query": text, opt_pretty: true})
+      .then((result) => {
+        let suggestions = result.data.map(task => ({content: task.gid, description: task.name}));
+        console.log('suggestions: ' + suggestions);
+        suggest(suggestions);
+      });
   });
 
 // This event is fired with the user accepts the input in the omnibox.
