@@ -6,15 +6,25 @@ const client = Asana.Client.create().useAccessToken(asanaAccessToken);
 
 var workspaceGid = null;
 
+var customFieldGid = null;
+
 client.workspaces.getWorkspaces()
   .then((result) => {
     result.stream().on('data', workspace => {
       if (workspace.name == workspaceName) {
         workspaceGid = workspace.gid
         console.log("Found workspace GID as " + workspaceGid);
+        client.customFields.getCustomFieldsForWorkspace(workspaceGid,
+                                                        {})
+          .then((result) => {
+            result.stream().on('data', customField => {
+              if (customField.name == customFieldName) {
+                customFieldGid = customField.gid
+                console.log("Found custom field GID as " + customFieldGid);
+              }
+            })});
       }
     })});
-
 
 
 // This event is fired each time the user updates the text in the omnibox,
@@ -34,7 +44,25 @@ chrome.omnibox.onInputChanged.addListener(
 
 // This event is fired with the user accepts the input in the omnibox.
 chrome.omnibox.onInputEntered.addListener(
-  function(text) {
-    console.log('inputEntered: ' + text);
-    alert('You just typed "' + text + '"');
+  function(taskGid) {
+    client.tasks.getTask(taskGid)
+      .then((task) => {
+        console.log(task);
+        let customField = task.custom_fields.find(field => field.gid == customFieldGid);
+        console.log('Custom field: ', customField);
+        console.log('Custom field number value: ', customField.number_value)
+        let currentValue = customField.number_value;
+        // https://developers.asana.com/docs/update-a-task
+        let newValue = currentValue - 1;
+        let updatedCustomFields = {};
+        updatedCustomFields[customFieldGid] =  newValue;
+        client.tasks.updateTask(taskGid,
+                                {custom_fields: updatedCustomFields})
+          .then((result) => {
+            console.log(result);
+            alert('Just upvoted "' + task.name + '" to ' + newValue);
+          });
+        // return a non-undefined value to signal that we didn't forget to return
+        return null;
+      });
   });

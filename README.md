@@ -17,7 +17,9 @@ Quickly increment integer custom fields in Asana tasks from the Chrome Omnibox
    [Asana Personal Access Token](https://app.asana.com/0/developer-console)
    assigned to it.
 3. Add the name of your Asana workspace to config.js under the name 'workspaceName'
-4. Go to chrome://extensions/
-5. Click the 'Load unpacked' button.
-6. Choose the directory containing your Chrome extension code.
-7. Now you can work on your extension.
+4. Add the name of the custom field you want to increment to config.js
+   under the name 'customFieldName'
+5. Go to chrome://extensions/
+6. Click the 'Load unpacked' button.
+7. Choose the directory containing your Chrome extension code.
+8. Now you can work on your extension.
