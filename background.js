@@ -24,7 +24,7 @@ client.workspaces.getWorkspaces()
               }
             })});
       }
-    })})
+    })});
 
 
 // This event is fired each time the user updates the text in the omnibox,
