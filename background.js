@@ -45,9 +45,7 @@ chrome.omnibox.onInputChanged.addListener(
 // This event is fired with the user accepts the input in the omnibox.
 chrome.omnibox.onInputEntered.addListener(
   function(taskGid) {
-    client.tasks.getTask(taskGid,
-                         // {opt_fields: "value", param: "value", opt_pretty: true}
-                        )
+    client.tasks.getTask(taskGid)
       .then((task) => {
         console.log(task);
         let customField = task.custom_fields.find(field => field.gid == customFieldGid);
