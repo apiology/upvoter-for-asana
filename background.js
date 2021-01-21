@@ -8,13 +8,6 @@ chrome.omnibox.onInputChanged.addListener(
   function(text, suggest) {
     // console.log('asanaAccessToken: ' + asanaAccessToken);
     console.log('inputChanged: ' + text);
-    console.log('Asana: ' + Asana);
-    const client = Asana.Client.create().useAccessToken(asanaAccessToken);
-    client.users.me().then(function(me) { console.log(me); });
-    // console.log('Asana.Client: ' + Asana.Client);
-//    console.log('asana: ' + asana);
-//    console.log('Client: ' + Client);
-    console.log('inputChanged: ' + text);
     suggest([
       {content: text + " one", description: "the first one"},
       {content: text + " number two", description: "the second entry"}
