@@ -36,7 +36,8 @@ chrome.omnibox.onInputChanged.addListener(
                                            {"resource_type": "task",
                                             "query": text, opt_pretty: true})
       .then((result) => {
-        let suggestions = result.data.map(task => ({content: task.gid, description: task.name}));
+        let suggestions = result.data.map(task =>
+          ({content: task.gid, description: task.name}));
         console.log('suggestions: ' + suggestions);
         suggest(suggestions);
       });
@@ -48,7 +49,8 @@ chrome.omnibox.onInputEntered.addListener(
     client.tasks.getTask(taskGid)
       .then((task) => {
         console.log(task);
-        let customField = task.custom_fields.find(field => field.gid == customFieldGid);
+        let customField =
+            task.custom_fields.find(field => field.gid == customFieldGid);
         console.log('Custom field: ', customField);
         console.log('Custom field number value: ', customField.number_value)
         let currentValue = customField.number_value;
@@ -62,7 +64,8 @@ chrome.omnibox.onInputEntered.addListener(
             console.log(result);
             alert('Just upvoted "' + task.name + '" to ' + newValue);
           });
-        // return a non-undefined value to signal that we didn't forget to return
+        // return a non-undefined value to signal that we didn't
+        // forget to return
         return null;
       });
   });
