@@ -1,0 +1,28 @@
+{
+  "name": "upvoter_for_asana",
+  "version": "0.1.0",
+  "description": "Chrome extension which quickly finds and increments integer custom fields in Asana tasks from the Chrome Omnibox.",
+  "main": "asana.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/apiology/upvoter_for_asana.git"
+  },
+  "keywords": [
+    "chrome-extension",
+    "asana"
+  ],
+  "author": "Vince Broz <vince@broz.cc>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/apiology/upvoter_for_asana/issues"
+  },
+  "homepage": "https://github.com/apiology/upvoter_for_asana#readme",
+  "devDependencies": {
+    "eslint": "^7.18.0",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-plugin-import": "^2.22.1"
+  }
+}

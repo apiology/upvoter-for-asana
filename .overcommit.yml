@@ -15,7 +15,9 @@
 #
 # Uncomment the following lines to make the configuration take effect.
 
-#PreCommit:
+PreCommit:
+  EsLint:
+    enabled: true
 #  RuboCop:
 #    enabled: true
 #    on_warn: fail # Treat all warnings as failures
