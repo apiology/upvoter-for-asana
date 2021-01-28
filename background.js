@@ -106,7 +106,7 @@ const logSuccess = ({ result, task, newValue }) => {
   alert(`Just upvoted "${task.name}" to ${newValue}`);
 };
 
-const omniboxInputListener = (taskGid) => {
+const omniboxInputEnteredListener = (taskGid) => {
   client.tasks.getTask(taskGid)
     .then(upvoteTaskFn(taskGid))
     .then(logSuccess)
@@ -114,4 +114,4 @@ const omniboxInputListener = (taskGid) => {
 };
 
 // This event is fired with the user accepts the input in the omnibox.
-chrome.omnibox.onInputEntered.addListener(omniboxInputListener);
+chrome.omnibox.onInputEntered.addListener(omniboxInputEnteredListener);
