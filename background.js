@@ -61,7 +61,7 @@ const passOnTypeaheadResultToOmnibox = ({ suggest, typeaheadResult }) => {
 
 class NotInitializedError extends Error {}
 
-const populateOmniboxSuggestions = (text, suggest) => {
+const pullTypeaheadSuggestions = (text, suggest) => {
   const query = {
     resource_type: 'task',
     query: text,
@@ -86,7 +86,7 @@ const logError = (err) => {
 // This event is fired each time the user updates the text in the omnibox,
 // as long as the extension's keyword mode is still active.
 chrome.omnibox.onInputChanged
-  .addListener((text, suggest) => populateOmniboxSuggestions(text, suggest)
+  .addListener((text, suggest) => pullTypeaheadSuggestions(text, suggest)
     .then(passOnTypeaheadResultToOmnibox)
     .catch(logError));
 
