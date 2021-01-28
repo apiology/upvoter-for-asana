@@ -39,7 +39,7 @@ const passOnTypeaheadResultToOmnibox = ({ suggest, typeaheadResult }) => {
   const suggestions = typeaheadResult.data.map((task) => ({
     content: task.gid,
     description: task.name,
-  }));
+  })).filter((suggestion) => suggestion.description.length > 0);
   console.log('suggestions:', suggestions);
   suggest(suggestions);
 };
