@@ -48,10 +48,12 @@ const escapeHTML = (str) => str.replace(/[&<>'"]/g,
 
 const passOnTypeaheadResultToOmnibox = ({ suggest, typeaheadResult }) => {
   // TODO: why not stream like above?
-  const suggestions = typeaheadResult.data.map((task) => ({
-    content: task.gid,
-    description: escapeHTML(task.name),
-  })).filter((suggestion) => suggestion.description.length > 0);
+  const suggestions = typeaheadResult.data
+    .filter((task) => !task.completed)
+    .map((task) => ({
+      content: task.gid,
+      description: escapeHTML(task.name),
+    })).filter((suggestion) => suggestion.description.length > 0);
   console.log('suggestions:', suggestions);
   suggest(suggestions);
 };
@@ -63,6 +65,7 @@ const populateOmniboxSuggestions = (text, suggest) => {
     resource_type: 'task',
     query: text,
     opt_pretty: true,
+    opt_fields: ['name', 'completed'],
   };
   if (workspaceGid == null) {
     throw new NotInitializedError();
