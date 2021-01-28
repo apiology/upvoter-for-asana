@@ -34,7 +34,7 @@ const findAndSaveWorkspaceAndCustomFieldGids = (workspacesResult) => {
 
 client.workspaces.getWorkspaces().then(findAndSaveWorkspaceAndCustomFieldGids);
 
-const passOnTypeaheadResultToOmnibox = (suggest) => (typeaheadResult) => {
+const passOnTypeaheadResultToOmnibox = ({ suggest, typeaheadResult }) => {
   // TODO: why not stream like above?
   const suggestions = typeaheadResult.data.map((task) => ({
     content: task.gid,
@@ -44,21 +44,23 @@ const passOnTypeaheadResultToOmnibox = (suggest) => (typeaheadResult) => {
   suggest(suggestions);
 };
 
+const populateOmniboxSuggestions = (text, suggest) => {
+  const query = {
+    resource_type: 'task',
+    query: text,
+    opt_pretty: true,
+  };
+  console.log('requesting typeahead with workspaceGid', workspaceGid,
+    ' and query of ', query);
+  return client.typeahead.typeaheadForWorkspace(workspaceGid, query)
+    .then((typeaheadResult) => ({ suggest, typeaheadResult }));
+};
+
 // This event is fired each time the user updates the text in the omnibox,
 // as long as the extension's keyword mode is still active.
-chrome.omnibox.onInputChanged.addListener(
-  (text, suggest) => {
-    const query = {
-      resource_type: 'task',
-      query: text,
-      opt_pretty: true,
-    };
-    console.log('requesting typeahead with workspaceGid', workspaceGid,
-      ' and query of ', query);
-    client.typeahead.typeaheadForWorkspace(workspaceGid, query)
-      .then(passOnTypeaheadResultToOmnibox(suggest));
-  }
-);
+chrome.omnibox.onInputChanged
+  .addListener(populateOmniboxSuggestions
+    .then(passOnTypeaheadResultToOmnibox));
 
 const upvoteTaskFn = (taskGid) => (task) => {
   console.log('upvoteTaskFn got task', task);
