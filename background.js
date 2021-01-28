@@ -56,12 +56,18 @@ const passOnTypeaheadResultToOmnibox = ({ suggest, typeaheadResult }) => {
   suggest(suggestions);
 };
 
+class NotInitializedError extends Error {}
+
 const populateOmniboxSuggestions = (text, suggest) => {
   const query = {
     resource_type: 'task',
     query: text,
     opt_pretty: true,
   };
+  if (workspaceGid == null) {
+    throw new NotInitializedError();
+  }
+
   console.log('requesting typeahead with workspaceGid', workspaceGid,
     ' and query of ', query);
   return client.typeahead.typeaheadForWorkspace(workspaceGid, query)
