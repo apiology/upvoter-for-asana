@@ -40,7 +40,7 @@ const passOnTypeaheadResultToOmnibox = ({ suggest, typeaheadResult }) => {
     content: task.gid,
     description: task.name,
   }));
-  console.log(`suggestions: ${suggestions}`);
+  console.log('suggestions:', suggestions);
   suggest(suggestions);
 };
 
