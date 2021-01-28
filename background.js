@@ -53,6 +53,8 @@ const passOnTypeaheadResultToOmnibox = ({ suggest, typeaheadResult }) => {
     .filter((task) => !task.completed)
     .filter((task) => task.parent == null)
     .filter((task) => task.name.length > 0)
+    .filter((task) => task.custom_fields
+      .map((customField) => customField.gid).includes(customFieldGid))
     .map((task) => ({
       content: task.gid,
       description: escapeHTML(task.name),
@@ -68,7 +70,7 @@ const pullTypeaheadSuggestions = (text, suggest) => {
     resource_type: 'task',
     query: text,
     opt_pretty: true,
-    opt_fields: ['name', 'completed', 'parent'],
+    opt_fields: ['name', 'completed', 'parent', 'custom_fields.gid'],
   };
   if (workspaceGid == null) {
     throw new NotInitializedError();
