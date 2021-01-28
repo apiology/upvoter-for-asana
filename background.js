@@ -74,6 +74,7 @@ const pullTypeaheadSuggestions = (text, suggest) => {
 
   console.log('requesting typeahead with workspaceGid', workspaceGid,
     ' and query of ', query);
+  // https://developers.asana.com/docs/typeahead
   return client.typeahead.typeaheadForWorkspace(workspaceGid, query)
     .then((typeaheadResult) => ({ suggest, typeaheadResult }));
 };
