@@ -48,23 +48,20 @@ const passOnTypeaheadResultToOmnibox = (suggest) => (typeaheadResult) => {
 // as long as the extension's keyword mode is still active.
 chrome.omnibox.onInputChanged.addListener(
   (text, suggest) => {
-    client.typeahead.typeaheadForWorkspace(workspaceGid,
-      {
-        resource_type: 'task',
-        query: text,
-        opt_pretty: true,
-      })
+    const query = {
+      resource_type: 'task',
+      query: text,
+      opt_pretty: true,
+    };
+    console.log('requesting typeahead with workspaceGid', workspaceGid,
+      ' and query of ', query);
+    client.typeahead.typeaheadForWorkspace(workspaceGid, query)
       .then(passOnTypeaheadResultToOmnibox(suggest));
   }
 );
 
-const logSuccessFn = (task, newValue) => (result) => {
-  console.log(result);
-  alert(`Just upvoted "${task.name}" to ${newValue}`);
-};
-
 const upvoteTaskFn = (taskGid) => (task) => {
-  console.log(task);
+  console.log('upvoteTaskFn got task', task);
   const customField = task.custom_fields.find((field) => field.gid === customFieldGid);
   console.log('Custom field: ', customField);
   console.log('Custom field number value: ', customField.number_value);
@@ -73,15 +70,20 @@ const upvoteTaskFn = (taskGid) => (task) => {
   const newValue = increment ? currentValue + 1 : currentValue - 1;
   const updatedCustomFields = {};
   updatedCustomFields[customFieldGid] = newValue;
-  client.tasks.updateTask(taskGid, { custom_fields: updatedCustomFields })
-    .then(logSuccessFn(task, newValue));
-  // return a non-undefined value to signal that we didn't
-  // forget to return
-  return null;
+  return client.tasks.updateTask(taskGid,
+    { custom_fields: updatedCustomFields })
+    .then((result) => ({ result, task, newValue }));
+};
+
+const logSuccess = ({ result, task, newValue }) => {
+  console.log(result);
+  alert(`Just upvoted "${task.name}" to ${newValue}`);
 };
 
 const omniboxInputListener = (taskGid) => {
-  client.tasks.getTask(taskGid).then(upvoteTaskFn(taskGid));
+  client.tasks.getTask(taskGid)
+    .then(upvoteTaskFn(taskGid))
+    .then(logSuccess);
 };
 
 // This event is fired with the user accepts the input in the omnibox.
