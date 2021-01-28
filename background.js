@@ -8,24 +8,41 @@ let workspaceGid = null;
 
 let customFieldGid = null;
 
-client.workspaces.getWorkspaces()
-  .then((workspacesResult) => {
-    workspacesResult.stream().on('data', (workspace) => {
-      if (workspace.name === workspaceName) {
-        workspaceGid = workspace.gid;
-        console.log(`Found workspace GID as ${workspaceGid}`);
-        client.customFields.getCustomFieldsForWorkspace(workspaceGid, {})
-          .then((customFieldsResult) => {
-            customFieldsResult.stream().on('data', (customField) => {
-              if (customField.name === customFieldName) {
-                customFieldGid = customField.gid;
-                console.log(`Found custom field GID as ${customFieldGid}`);
-              }
-            });
-          });
-      }
-    });
-  });
+const inspectCustomField = (customField) => {
+  if (customField.name === customFieldName) {
+    customFieldGid = customField.gid;
+    console.log(`Found custom field GID as ${customFieldGid}`);
+  }
+};
+
+const inspectCustomFieldsResult = (customFieldsResult) => {
+  customFieldsResult.stream().on('data', inspectCustomField);
+};
+
+const inspectWorkspace = (workspace) => {
+  if (workspace.name === workspaceName) {
+    workspaceGid = workspace.gid;
+    console.log(`Found workspace GID as ${workspaceGid}`);
+    client.customFields.getCustomFieldsForWorkspace(workspaceGid, {})
+      .then(inspectCustomFieldsResult);
+  }
+};
+
+const inspectWorkspacesResult = (workspacesResult) => {
+  workspacesResult.stream().on('data', inspectWorkspace);
+};
+
+client.workspaces.getWorkspaces().then(inspectWorkspacesResult);
+
+const inspectTypeaheadResultFn = (suggest) => (typeaheadResult) => {
+  // TODO: why not stream like above?
+  const suggestions = typeaheadResult.data.map((task) => ({
+    content: task.gid,
+    description: task.name,
+  }));
+  console.log(`suggestions: ${suggestions}`);
+  suggest(suggestions);
+};
 
 // This event is fired each time the user updates the text in the omnibox,
 // as long as the extension's keyword mode is still active.
@@ -37,39 +54,35 @@ chrome.omnibox.onInputChanged.addListener(
         query: text,
         opt_pretty: true,
       })
-      .then((result) => {
-        const suggestions = result.data.map((task) => ({
-          content: task.gid,
-          description: task.name,
-        }));
-        console.log(`suggestions: ${suggestions}`);
-        suggest(suggestions);
-      });
+      .then(inspectTypeaheadResultFn(suggest));
   }
 );
 
+const logSuccessFn = (task, newValue) => (result) => {
+  console.log(result);
+  alert(`Just upvoted "${task.name}" to ${newValue}`);
+};
+
+const upvoteTaskFn = (taskGid) => (task) => {
+  console.log(task);
+  const customField = task.custom_fields.find((field) => field.gid === customFieldGid);
+  console.log('Custom field: ', customField);
+  console.log('Custom field number value: ', customField.number_value);
+  const currentValue = customField.number_value;
+  // https://developers.asana.com/docs/update-a-task
+  const newValue = increment ? currentValue + 1 : currentValue - 1;
+  const updatedCustomFields = {};
+  updatedCustomFields[customFieldGid] = newValue;
+  client.tasks.updateTask(taskGid, { custom_fields: updatedCustomFields })
+    .then(logSuccessFn(task, newValue));
+  // return a non-undefined value to signal that we didn't
+  // forget to return
+  return null;
+};
+
+const omniboxInputListener = (taskGid) => {
+  client.tasks.getTask(taskGid).then(upvoteTaskFn(taskGid));
+};
+
 // This event is fired with the user accepts the input in the omnibox.
-chrome.omnibox.onInputEntered.addListener(
-  (taskGid) => {
-    client.tasks.getTask(taskGid)
-      .then((task) => {
-        console.log(task);
-        const customField = task.custom_fields.find((field) => field.gid === customFieldGid);
-        console.log('Custom field: ', customField);
-        console.log('Custom field number value: ', customField.number_value);
-        const currentValue = customField.number_value;
-        // https://developers.asana.com/docs/update-a-task
-        const newValue = increment ? currentValue + 1 : currentValue - 1;
-        const updatedCustomFields = {};
-        updatedCustomFields[customFieldGid] = newValue;
-        client.tasks.updateTask(taskGid, { custom_fields: updatedCustomFields })
-          .then((result) => {
-            console.log(result);
-            alert(`Just upvoted "${task.name}" to ${newValue}`);
-          });
-        // return a non-undefined value to signal that we didn't
-        // forget to return
-        return null;
-      });
-  }
-);
+chrome.omnibox.onInputEntered.addListener(omniboxInputListener);
