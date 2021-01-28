@@ -8,33 +8,33 @@ let workspaceGid = null;
 
 let customFieldGid = null;
 
-const inspectCustomField = (customField) => {
+const saveCustomFieldGidIfRightName = (customField) => {
   if (customField.name === customFieldName) {
     customFieldGid = customField.gid;
     console.log(`Found custom field GID as ${customFieldGid}`);
   }
 };
 
-const inspectCustomFieldsResult = (customFieldsResult) => {
-  customFieldsResult.stream().on('data', inspectCustomField);
+const findAndSaveCustomFieldGid = (customFieldsResult) => {
+  customFieldsResult.stream().on('data', saveCustomFieldGidIfRightName);
 };
 
-const inspectWorkspace = (workspace) => {
+const saveWorkspaceAndCustomFieldGidsIfRightNames = (workspace) => {
   if (workspace.name === workspaceName) {
     workspaceGid = workspace.gid;
     console.log(`Found workspace GID as ${workspaceGid}`);
     client.customFields.getCustomFieldsForWorkspace(workspaceGid, {})
-      .then(inspectCustomFieldsResult);
+      .then(findAndSaveCustomFieldGid);
   }
 };
 
-const inspectWorkspacesResult = (workspacesResult) => {
-  workspacesResult.stream().on('data', inspectWorkspace);
+const findAndSaveWorkspaceAndCustomFieldGids = (workspacesResult) => {
+  workspacesResult.stream().on('data', saveWorkspaceAndCustomFieldGidsIfRightNames);
 };
 
-client.workspaces.getWorkspaces().then(inspectWorkspacesResult);
+client.workspaces.getWorkspaces().then(findAndSaveWorkspaceAndCustomFieldGids);
 
-const inspectTypeaheadResultFn = (suggest) => (typeaheadResult) => {
+const passOnTypeaheadResultToOmnibox = (suggest) => (typeaheadResult) => {
   // TODO: why not stream like above?
   const suggestions = typeaheadResult.data.map((task) => ({
     content: task.gid,
@@ -54,7 +54,7 @@ chrome.omnibox.onInputChanged.addListener(
         query: text,
         opt_pretty: true,
       })
-      .then(inspectTypeaheadResultFn(suggest));
+      .then(passOnTypeaheadResultToOmnibox(suggest));
   }
 );
 
