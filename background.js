@@ -47,6 +47,7 @@ const escapeHTML = (str) => str.replace(/[&<>'"]/g,
   }[tag]));
 
 const passOnTypeaheadResultToOmnibox = ({ suggest, typeaheadResult }) => {
+  console.log('typeaheadResult: ', typeaheadResult);
   // TODO: why not stream like above?
   const suggestions = typeaheadResult.data
     .filter((task) => !task.completed)
