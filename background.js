@@ -51,6 +51,7 @@ const passOnTypeaheadResultToOmnibox = ({ suggest, typeaheadResult }) => {
   // TODO: why not stream like above?
   const suggestions = typeaheadResult.data
     .filter((task) => !task.completed)
+    .filter((task) => task.parent == null)
     .map((task) => ({
       content: task.gid,
       description: escapeHTML(task.name),
@@ -66,7 +67,7 @@ const pullTypeaheadSuggestions = (text, suggest) => {
     resource_type: 'task',
     query: text,
     opt_pretty: true,
-    opt_fields: ['name', 'completed'],
+    opt_fields: ['name', 'completed', 'parent'],
   };
   if (workspaceGid == null) {
     throw new NotInitializedError();
