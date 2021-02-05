@@ -47,6 +47,9 @@ const escapeHTML = (str) => str.replace(/[&<>'"]/g,
   }[tag]));
 
 const passOnTypeaheadResultToOmnibox = ({ suggest, typeaheadResult }) => {
+  chrome.omnibox.setDefaultSuggestion({
+    description: '<dim>Processing results...</dim>',
+  });
   console.log('typeaheadResult: ', typeaheadResult);
   // TODO: why not stream like above?
   const suggestions = typeaheadResult.data
@@ -61,11 +64,17 @@ const passOnTypeaheadResultToOmnibox = ({ suggest, typeaheadResult }) => {
     }));
   console.log('suggestions:', suggestions);
   suggest(suggestions);
+  chrome.omnibox.setDefaultSuggestion({
+    description: '<dim>Results:</dim>',
+  });
 };
 
 class NotInitializedError extends Error {}
 
 const pullTypeaheadSuggestions = (text, suggest) => {
+  chrome.omnibox.setDefaultSuggestion({
+    description: '<dim>Searching Asana...</dim>',
+  });
   const query = {
     resource_type: 'task',
     query: text,
