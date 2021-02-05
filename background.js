@@ -88,12 +88,15 @@ const logError = (err) => {
   throw err;
 };
 
+const omniboxInputChangedListener = (text, suggest) => {
+  pullTypeaheadSuggestions(text, suggest)
+    .then(passOnTypeaheadResultToOmnibox)
+    .catch(logError);
+};
+
 // This event is fired each time the user updates the text in the omnibox,
 // as long as the extension's keyword mode is still active.
-chrome.omnibox.onInputChanged
-  .addListener((text, suggest) => pullTypeaheadSuggestions(text, suggest)
-    .then(passOnTypeaheadResultToOmnibox)
-    .catch(logError));
+chrome.omnibox.onInputChanged.addListener(omniboxInputChangedListener);
 
 const upvoteTaskFn = (taskGid) => (task) => {
   console.log('upvoteTaskFn got task', task);
