@@ -13,6 +13,11 @@ globals:
   workspaceName: readonly
   customFieldName: readonly
   increment: readonly
+  escapeHTML: readonly
+  customFieldGid: readonly
+  pullTypeaheadSuggestions: readonly
+  client: readonly
+  upvoteTaskFn: readonly
 rules:
   # might be worth bringing no-console back or stripping as part of
   # the build once this is more mature - right now it's helpful in
