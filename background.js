@@ -2,7 +2,7 @@
 
 // https://github.com/GoogleChrome/chrome-extensions-samples/blob/1d8d137d20fad5972292377dc22498529d2a4039/api/omnibox/simple-example/background.js
 
-const passOnTypeaheadResultToOmnibox = ({ suggest, typeaheadResult }) => {
+const passOnTypeaheadResultToOmnibox = (text) => ({ suggest, typeaheadResult }) => {
   chrome.omnibox.setDefaultSuggestion({
     description: '<dim>Processing results...</dim>',
   });
@@ -18,7 +18,7 @@ const passOnTypeaheadResultToOmnibox = ({ suggest, typeaheadResult }) => {
       content: task.gid,
       description: escapeHTML(task.name),
     }));
-  console.log('suggestions:', suggestions);
+  console.log(`${suggestions.length} suggestions from ${text}:`, suggestions);
   suggest(suggestions);
   chrome.omnibox.setDefaultSuggestion({
     description: '<dim>Results:</dim>',
@@ -32,7 +32,7 @@ const logError = (err) => {
 
 const omniboxInputChangedListener = (text, suggest) => {
   pullTypeaheadSuggestions(text, suggest)
-    .then(passOnTypeaheadResultToOmnibox)
+    .then(passOnTypeaheadResultToOmnibox(text))
     .catch(logError);
 };
 
