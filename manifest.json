@@ -10,8 +10,5 @@
     "scripts": ["asana.js", "config.js", "upvoter.js", "background.js"],
     "persistent": false
   },
-  "browser_action": {
-    "default_title": "Make this page red"
-  },
   "manifest_version": 2
 }
