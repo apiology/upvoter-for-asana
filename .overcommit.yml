@@ -1,3 +1,5 @@
+---
+
 # Use this file to configure the Overcommit hooks you wish to use. This will
 # extend the default configuration defined in:
 # https://github.com/sds/overcommit/blob/master/config/default.yml
@@ -16,17 +18,6 @@
 # Uncomment the following lines to make the configuration take effect.
 
 PreCommit:
-  RuboCop:
-    enabled: true
-    on_warn: fail # Treat all warnings as failures
-    include:
-      - '**/*.gemspec'
-      - '**/*.rake'
-      - '**/*.rb'
-      - '**/*.ru'
-      - '**/Gemfile'
-      - '**/Rakefile'
-      - 'bin/*'
   PythonFlake8:
     enabled: true
   ShellCheck:
