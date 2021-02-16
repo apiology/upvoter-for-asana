@@ -21,7 +21,7 @@ commands:
             export PATH="${HOME}/.rbenv/bin:${HOME}/.rbenv/shims:${PATH}"
             eval "$(rbenv init -)"
             # Coax overcommit into working
-            bundle exec overcommit --sign
+            bundle exec overcommit --sign pre-commit
 
             bundle exec overcommit --run
           environment:
@@ -43,6 +43,7 @@ jobs:
           condition:
             equal: [ << pipeline.git.branch >>, "main" ]
           steps:
+            - overcommit  # TODO not yet
             - run: echo "overcommit only runs on main branch"
 workflows:
   version: 2
