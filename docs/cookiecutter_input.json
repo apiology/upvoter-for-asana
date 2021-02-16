@@ -1,0 +1,12 @@
+{
+    "_template": "../cookiecutter-chrome-extension/",
+    "email": "vince@broz.cc",
+    "full_name": "Vince Broz",
+    "github_username": "apiology",
+    "open_source_license": "MIT license",
+    "project_name": "Upvoter for Asana",
+    "project_short_description": "Chrome extension which quickly finds and increments integer custom fields in Asana tasks from the Chrome Omnibox.",
+    "project_slug": "upvoter_for_asana",
+    "type_of_github_repo": "public",
+    "version": "0.1.0"
+}
