@@ -1,6 +1,6 @@
 {
   "name": "Upvoter for Asana",
-  "description": "Quickly increment integer custom fields in Asana tasks from the Chrome Omnibox",
+  "description": "Chrome extension which quickly finds and increments integer custom fields in Asana tasks from the Chrome Omnibox.",
   "version": "0.1.0",
   "permissions": [
     "activeTab"
