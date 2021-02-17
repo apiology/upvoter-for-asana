@@ -49,6 +49,7 @@ jobs:
           condition:
             equal: [<< pipeline.git.branch >>, "main"]
           steps:
+            - overcommit # XXX
             - run: echo "overcommit only runs on main branch"
 workflows:
   version: 2
