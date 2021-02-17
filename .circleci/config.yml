@@ -47,7 +47,7 @@ jobs:
             - overcommit
       - unless:
           condition:
-            equal: [ << pipeline.git.branch >>, "main" ]
+            equal: [<< pipeline.git.branch >>, "main"]
           steps:
             - overcommit   # TODO
             - run: echo "overcommit only runs on main branch"
