@@ -26,6 +26,7 @@ PreCommit:
     on_warn: fail
   YamlLint:
     enabled: true
+    on_warn: fail
   CircleCi:
     required_executable: 'circleci'
     flags: ['config', 'validate']
