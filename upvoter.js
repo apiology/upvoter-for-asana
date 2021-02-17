@@ -35,7 +35,7 @@ client.workspaces.getWorkspaces().then(findAndSaveWorkspaceAndCustomFieldGids);
 // How on God's green earth is there no built-in function to do this?
 //
 // https://stackoverflow.com/questions/40263803/native-javascript-or-es6-way-to-encode-and-decode-html-entities
-const escapeHTML = (str) => str.replace(/[&<>'"]/g,
+window.escapeHTML = (str) => str.replace(/[&<>'"]/g,
   (tag) => ({
     '&': '&amp;',
     '<': '&lt;',
@@ -46,7 +46,7 @@ const escapeHTML = (str) => str.replace(/[&<>'"]/g,
 
 class NotInitializedError extends Error {}
 
-const pullTypeaheadSuggestions = (text, suggest) => {
+window.pullTypeaheadSuggestions = (text, suggest) => {
   chrome.omnibox.setDefaultSuggestion({
     description: '<dim>Searching Asana...</dim>',
   });
@@ -67,7 +67,7 @@ const pullTypeaheadSuggestions = (text, suggest) => {
     .then((typeaheadResult) => ({ suggest, typeaheadResult }));
 };
 
-const upvoteTaskFn = (taskGid) => (task) => {
+window.upvoteTaskFn = (taskGid) => (task) => {
   console.log('upvoteTaskFn got task', task);
   const customField = task.custom_fields.find((field) => field.gid === customFieldGid);
   console.log('Custom field: ', customField);
