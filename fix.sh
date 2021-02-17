@@ -196,7 +196,7 @@ latest_python_version="$(cut -d' ' -f1 <<< "${python_versions}")"
 virtualenv_name="upvoter_for_asana-${latest_python_version}"
 pyenv virtualenv "${latest_python_version}" "${virtualenv_name}" || true
 # You can use this for your global stuff!
-pyenv virtualenv mylibs || true
+pyenv virtualenv "${latest_python_version}" mylibs || true
 # shellcheck disable=SC2086
 pyenv local "${virtualenv_name}" ${python_versions} mylibs
 # Make sure we have a pip with the 20.3 resolver, and after the
