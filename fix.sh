@@ -2,7 +2,7 @@
 
 set -o pipefail
 
-ensure_npm() {
+install_npm() {
   if [ "$(uname)" == "Darwin" ]
   then
     HOMEBREW_NO_AUTO_UPDATE=1 brew install npm || true
@@ -10,6 +10,13 @@ ensure_npm() {
   then
     sudo apt-get update -y
     sudo apt-get install npm
+  fi
+}
+
+ensure_npm() {
+  if ! type npm >/dev/null 2>&1
+  then
+    install_npm
   fi
 }
 
@@ -197,7 +204,7 @@ ensure_python_requirements() {
 install_shellcheck() {
   if [ "$(uname)" == "Darwin" ]
   then
-    HOMEBREW_NO_AUTO_UPDATE=1 brew install check || true
+    HOMEBREW_NO_AUTO_UPDATE=1 brew install shellcheck || true
   elif type apt-get >/dev/null 2>&1
   then
     sudo apt-get update -y
