@@ -18,6 +18,11 @@ commands:
             - "/home/circleci/.pyenv"
             - "/home/circleci/project/node_modules"
       - run:
+          name: Download new circleci tool
+          command: |
+            curl -fLSs \
+            https://raw.githubusercontent.com/CircleCI-Public/circleci-cli/master/install.sh | sudo bash
+      - run:
           name: Run overcommit
           command: |
             export PATH="${HOME}/.pyenv/bin:${PATH}"
@@ -52,17 +57,6 @@ jobs:
           condition:
             equal: [<< pipeline.git.branch >>, "main"]
           steps:
-            - run: "circleci version"  # TODO
-            - run:
-                name: Download new circleci
-                command: |
-                  curl -fLSs \
-                  https://raw.githubusercontent.com/CircleCI-Public/circleci-cli/master/install.sh | sudo bash  # TODO
-            - run: "circleci version"  # TODO
-            - run: "circleci version"  # TODO
-            - run: "circleci config validate .circleci/config.yml"  # TODO
-            - run: "circleci update"  # TODO
-
             - overcommit # TODO
             - run: echo "overcommit only runs on main branch"
 workflows:
