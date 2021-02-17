@@ -57,7 +57,7 @@ jobs:
                 name: Download new circleci
                 command: |
                   curl -fLSs \
-                  https://raw.githubusercontent.com/CircleCI-Public/circleci-cli/master/install.sh | bash  # TODO
+                  https://raw.githubusercontent.com/CircleCI-Public/circleci-cli/master/install.sh | sudo bash  # TODO
             - run: "circleci version"  # TODO
             - run: "circleci version"  # TODO
             - run: "circleci config validate .circleci/config.yml"  # TODO
