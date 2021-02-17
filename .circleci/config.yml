@@ -20,6 +20,7 @@ commands:
           name: Run overcommit
           command: |
             export PATH="${HOME}/.pyenv/bin:${HOME}/.rbenv/bin:${HOME}/.rbenv/shims:${PATH}"
+            pwd  # XXX
             eval "$(pyenv init -)"
             eval "$(pyenv virtualenv-init -)"
             eval "$(rbenv init -)"
