@@ -24,6 +24,7 @@ commands:
             eval "$(rbenv init -)"
             # Coax overcommit into working
             bundle exec overcommit --sign
+            bundle exec overcommit --sign pre-commit
 
             bundle exec overcommit --run
           environment:
