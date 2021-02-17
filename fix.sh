@@ -2,6 +2,28 @@
 
 set -o pipefail
 
+install_npm() {
+  if [ "$(uname)" == "Darwin" ]
+  then
+    HOMEBREW_NO_AUTO_UPDATE=1 brew install npm || true
+  elif type apt-get >/dev/null 2>&1
+  then
+    sudo apt-get update -y
+    sudo apt-get install npm
+  fi
+}
+
+ensure_npm() {
+  if ! type npm >/dev/null 2>&1
+  then
+    install_npm
+  fi
+}
+
+ensure_npm_modules() {
+  npm install
+}
+
 install_rbenv() {
   if [ "$(uname)" == "Darwin" ]
   then
@@ -159,10 +181,30 @@ ensure_python_versions() {
   done
 }
 
+ensure_pyenv_virtualenvs() {
+  latest_python_version="$(cut -d' ' -f1 <<< "${python_versions}")"
+  virtualenv_name="upvoter_for_asana-${latest_python_version}"
+  pyenv virtualenv "${latest_python_version}" "${virtualenv_name}" || true
+  # You can use this for your global stuff!
+  pyenv virtualenv "${latest_python_version}" mylibs || true
+  # shellcheck disable=SC2086
+  pyenv local "${virtualenv_name}" ${python_versions} mylibs
+}
+
+ensure_pip() {
+  # Make sure we have a pip with the 20.3 resolver, and after the
+  # initial bugfix release
+  pip install 'pip>=20.3.1'
+}
+
+ensure_python_requirements() {
+  pip install -r requirements_dev.txt
+}
+
 install_shellcheck() {
   if [ "$(uname)" == "Darwin" ]
   then
-    HOMEBREW_NO_AUTO_UPDATE=1 brew install check || true
+    HOMEBREW_NO_AUTO_UPDATE=1 brew install shellcheck || true
   elif type apt-get >/dev/null 2>&1
   then
     sudo apt-get update -y
@@ -177,6 +219,10 @@ ensure_shellcheck() {
   fi
 }
 
+ensure_npm
+
+ensure_npm_modules
+
 ensure_rbenv
 
 ensure_ruby_version
@@ -187,19 +233,10 @@ ensure_pyenv
 
 ensure_python_versions
 
+ensure_pyenv_virtualenvs
+
+ensure_pip
+
+ensure_python_requirements
+
 ensure_shellcheck
-
-
-
-
-latest_python_version="$(cut -d' ' -f1 <<< "${python_versions}")"
-virtualenv_name="upvoter_for_asana-${latest_python_version}"
-pyenv virtualenv "${latest_python_version}" "${virtualenv_name}" || true
-# You can use this for your global stuff!
-pyenv virtualenv "${latest_python_version}" mylibs || true
-# shellcheck disable=SC2086
-pyenv local "${virtualenv_name}" ${python_versions} mylibs
-# Make sure we have a pip with the 20.3 resolver, and after the
-# initial bugfix release
-pip install 'pip>=20.3.1'
-pip install -r requirements_dev.txt
