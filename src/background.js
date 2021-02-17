@@ -11,15 +11,19 @@ const passOnTypeaheadResultToOmnibox = (text) => ({ suggest, typeaheadResult }) 
   });
   console.log('typeaheadResult: ', typeaheadResult);
   // TODO: why not stream like above?
-  const suggestions = typeaheadResult.data
-    .filter((task) => !task.completed)
+  const customFieldGid = pullCustomFieldGid();
+  const suggestions = typeaheadResult.data.filter((task) => !task.completed)
     .filter((task) => task.parent == null)
     .filter((task) => task.name.length > 0)
-    .filter((task) => task.custom_fields
-      .map((customField) => customField.gid).includes(pullCustomFieldGid()))
-    .map((task) => ({
+    .map((task) => {
+      const customField = task.custom_fields.find((field) => field.gid === customFieldGid);
+
+      return { task, customField };
+    })
+    .filter(({ customField }) => customField != null)
+    .map(({ task, customField }) => ({
       content: task.gid,
-      description: escapeHTML(task.name),
+      description: escapeHTML(`${customField.number_value}: ${task.name}`),
     }));
   console.log(`${suggestions.length} suggestions from ${text}:`, suggestions);
   suggest(suggestions);
@@ -43,10 +47,7 @@ const omniboxInputChangedListener = (text, suggest) => {
 // as long as the extension's keyword mode is still active.
 chrome.omnibox.onInputChanged.addListener(omniboxInputChangedListener);
 
-const logSuccess = ({ result, task, newValue }) => {
-  console.log(result);
-  alert(`Just upvoted "${task.name}" to ${newValue}`);
-};
+const logSuccess = (result) => console.log('Upvoted task:', result);
 
 const omniboxInputEnteredListener = (taskGid) => {
   client.tasks.getTask(taskGid)

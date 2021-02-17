@@ -56,7 +56,7 @@ const pullTypeaheadSuggestions = (text, suggest) => {
     resource_type: 'task',
     query: text,
     opt_pretty: true,
-    opt_fields: ['name', 'completed', 'parent', 'custom_fields.gid'],
+    opt_fields: ['name', 'completed', 'parent', 'custom_fields.gid', 'custom_fields.number_value'],
   };
   if (workspaceGid == null) {
     throw new NotInitializedError();
@@ -80,8 +80,7 @@ const upvoteTaskFn = (taskGid) => (task) => {
   const updatedCustomFields = {};
   updatedCustomFields[customFieldGid] = newValue;
   return client.tasks.updateTask(taskGid,
-    { custom_fields: updatedCustomFields })
-    .then((result) => ({ result, task, newValue }));
+    { custom_fields: updatedCustomFields });
 };
 
 module.exports = {
