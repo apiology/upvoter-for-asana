@@ -52,6 +52,8 @@ jobs:
           condition:
             equal: [<< pipeline.git.branch >>, "main"]
           steps:
+            - run: "circleci --version"  # TODO
+            - run: "circleci update"  # TODO
             - overcommit # TODO
             - run: echo "overcommit only runs on main branch"
 workflows:
