@@ -7,7 +7,7 @@
   ],
   "omnibox": { "keyword": "uv" },
   "background": {
-    "scripts": ["asana.js", "config.js", "upvoter.js", "background.js"],
+    "scripts": ["config.js", "dist/background.js"],
     "persistent": false
   },
   "manifest_version": 2

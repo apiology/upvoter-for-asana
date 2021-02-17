@@ -1,6 +1,9 @@
-'use strict';
-
 // https://github.com/GoogleChrome/chrome-extensions-samples/blob/1d8d137d20fad5972292377dc22498529d2a4039/api/omnibox/simple-example/background.js
+
+const {
+  pullCustomFieldGid, escapeHTML, pullTypeaheadSuggestions, upvoteTaskFn,
+  client,
+} = require('./upvoter.js');
 
 const passOnTypeaheadResultToOmnibox = (text) => ({ suggest, typeaheadResult }) => {
   chrome.omnibox.setDefaultSuggestion({
@@ -13,7 +16,7 @@ const passOnTypeaheadResultToOmnibox = (text) => ({ suggest, typeaheadResult }) 
     .filter((task) => task.parent == null)
     .filter((task) => task.name.length > 0)
     .filter((task) => task.custom_fields
-      .map((customField) => customField.gid).includes(customFieldGid))
+      .map((customField) => customField.gid).includes(pullCustomFieldGid()))
     .map((task) => ({
       content: task.gid,
       description: escapeHTML(task.name),
