@@ -7,14 +7,15 @@ commands:
     steps:
       - checkout
       - restore_cache:
-          key: fix.sh-v2-{{ checksum "fix.sh" }}
+          key: fix.sh-v1-{{ checksum "fix.sh" }}
       - run:
           name: Initialize packages
           command: './fix.sh'
       - save_cache:
-          key: fix.sh-v2-{{ checksum "fix.sh" }}
+          key: fix.sh-v1-{{ checksum "fix.sh" }}
           paths:
             - "/home/circleci/.rbenv"
+            - "/home/circleci/.pyenv"
       - run:
           name: Run overcommit
           command: |
