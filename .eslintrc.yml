@@ -7,7 +7,7 @@ extends:
   - airbnb-base
 parserOptions:
   ecmaVersion: 11
-  sourceType: script
+  sourceType: module
 globals:
   Asana: readonly
   asanaAccessToken: readonly

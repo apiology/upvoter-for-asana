@@ -1,4 +1,4 @@
-'use strict';
+const Asana = require('asana');
 
 const client = Asana.Client.create().useAccessToken(asanaAccessToken);
 
