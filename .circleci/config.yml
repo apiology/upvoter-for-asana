@@ -7,18 +7,21 @@ commands:
     steps:
       - checkout
       - restore_cache:
-          key: fix.sh-v2-{{ checksum "fix.sh" }}
+          key: fix.sh-v1-{{ checksum "fix.sh" }}
       - run:
           name: Initialize packages
           command: './fix.sh'
       - save_cache:
-          key: fix.sh-v2-{{ checksum "fix.sh" }}
+          key: fix.sh-v1-{{ checksum "fix.sh" }}
           paths:
             - "/home/circleci/.rbenv"
+            - "/home/circleci/.pyenv"
       - run:
           name: Run overcommit
           command: |
-            export PATH="${HOME}/.rbenv/bin:${HOME}/.rbenv/shims:${PATH}"
+            export PATH="${HOME}/.pyenv/bin:${HOME}/.rbenv/bin:${HOME}/.rbenv/shims:${PATH}"
+            eval "$(pyenv init -)"
+            eval "$(pyenv virtualenv-init -)"
             eval "$(rbenv init -)"
             # Coax overcommit into working
             git config --global user.email "test@test.test"
@@ -44,7 +47,7 @@ jobs:
             - overcommit
       - unless:
           condition:
-            equal: [ << pipeline.git.branch >>, "main" ]
+            equal: [<< pipeline.git.branch >>, "main"]
           steps:
             - run: echo "overcommit only runs on main branch"
 workflows:
