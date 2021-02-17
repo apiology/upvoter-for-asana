@@ -1,3 +1,4 @@
+---
 env:
   browser: true
   es2020: true
@@ -22,9 +23,9 @@ rules:
   # might be worth bringing no-console back or stripping as part of
   # the build once this is more mature - right now it's helpful in
   # development
-  no-console: off
+  no-console: "off"
   # Not sure of other easy UI available in an omnibox action
-  no-alert: off
+  no-alert: "off"
   #
   # Dangling commas on a function call/declaration just seems *wrong*,
   # regardless of what the geniuses at AirBNB think.
