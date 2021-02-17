@@ -53,7 +53,7 @@ jobs:
             equal: [<< pipeline.git.branch >>, "main"]
           steps:
             - run: "circleci version"  # TODO
-            - run: "circleci config validate"  # TODO
+            - run: "circleci config validate .circleci/config.yml"  # TODO
             - run: "circleci update"  # TODO
             - overcommit # TODO
             - run: echo "overcommit only runs on main branch"
