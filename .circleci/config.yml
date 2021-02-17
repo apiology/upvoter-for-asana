@@ -41,7 +41,7 @@ commands:
 jobs:
   overcommit:
     docker:
-      - image: cimg/ruby:3
+      - image: circleci/ruby:3
     steps:
       - when:
           condition:
