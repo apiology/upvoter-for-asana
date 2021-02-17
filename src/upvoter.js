@@ -6,6 +6,8 @@ let workspaceGid = null;
 
 let customFieldGid = null;
 
+const pullCustomFieldGid = () => customFieldGid;
+
 const saveCustomFieldGidIfRightName = (customField) => {
   if (customField.name === customFieldName) {
     customFieldGid = customField.gid;
@@ -35,7 +37,7 @@ client.workspaces.getWorkspaces().then(findAndSaveWorkspaceAndCustomFieldGids);
 // How on God's green earth is there no built-in function to do this?
 //
 // https://stackoverflow.com/questions/40263803/native-javascript-or-es6-way-to-encode-and-decode-html-entities
-window.escapeHTML = (str) => str.replace(/[&<>'"]/g,
+const escapeHTML = (str) => str.replace(/[&<>'"]/g,
   (tag) => ({
     '&': '&amp;',
     '<': '&lt;',
@@ -46,7 +48,7 @@ window.escapeHTML = (str) => str.replace(/[&<>'"]/g,
 
 class NotInitializedError extends Error {}
 
-window.pullTypeaheadSuggestions = (text, suggest) => {
+const pullTypeaheadSuggestions = (text, suggest) => {
   chrome.omnibox.setDefaultSuggestion({
     description: '<dim>Searching Asana...</dim>',
   });
@@ -67,7 +69,7 @@ window.pullTypeaheadSuggestions = (text, suggest) => {
     .then((typeaheadResult) => ({ suggest, typeaheadResult }));
 };
 
-window.upvoteTaskFn = (taskGid) => (task) => {
+const upvoteTaskFn = (taskGid) => (task) => {
   console.log('upvoteTaskFn got task', task);
   const customField = task.custom_fields.find((field) => field.gid === customFieldGid);
   console.log('Custom field: ', customField);
@@ -80,4 +82,12 @@ window.upvoteTaskFn = (taskGid) => (task) => {
   return client.tasks.updateTask(taskGid,
     { custom_fields: updatedCustomFields })
     .then((result) => ({ result, task, newValue }));
+};
+
+module.exports = {
+  pullCustomFieldGid,
+  escapeHTML,
+  pullTypeaheadSuggestions,
+  upvoteTaskFn,
+  client,
 };

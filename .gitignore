@@ -3,3 +3,4 @@
 /node_modules
 # Installed by fix.sh based on what latest versions are
 /.python-version
+/dist
