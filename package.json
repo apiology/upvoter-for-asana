@@ -4,6 +4,7 @@
   "description": "Chrome extension which quickly finds and increments integer custom fields in Asana tasks from the Chrome Omnibox.",
   "private": true,
   "scripts": {
+    "start": "webpack --mode=development --watch",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
