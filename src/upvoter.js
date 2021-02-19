@@ -1,5 +1,7 @@
 const Asana = require('asana');
 
+const _ = require('lodash');
+
 const client = Asana.Client.create().useAccessToken(asanaAccessToken);
 
 let workspaceGid = null;
@@ -48,7 +50,7 @@ const escapeHTML = (str) => str.replace(/[&<>'"]/g,
 
 class NotInitializedError extends Error {}
 
-const pullTypeaheadSuggestions = (text, suggest) => {
+const pullTypeaheadSuggestionsUnthrottled = (text, suggest) => {
   chrome.omnibox.setDefaultSuggestion({
     description: '<dim>Searching Asana...</dim>',
   });
@@ -68,6 +70,8 @@ const pullTypeaheadSuggestions = (text, suggest) => {
   return client.typeahead.typeaheadForWorkspace(workspaceGid, query)
     .then((typeaheadResult) => ({ suggest, typeaheadResult }));
 };
+
+const pullTypeaheadSuggestions = _.throttle(pullTypeaheadSuggestionsUnthrottled);
 
 const upvoteTaskFn = (taskGid) => (task) => {
   console.log('upvoteTaskFn got task', task);
