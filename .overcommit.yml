@@ -1,5 +1,4 @@
 ---
-
 # Use this file to configure the Overcommit hooks you wish to use. This will
 # extend the default configuration defined in:
 # https://github.com/sds/overcommit/blob/master/config/default.yml
@@ -25,19 +24,13 @@ PreCommit:
     on_warn: fail
   YamlLint:
     enabled: true
+    on_warn: fail
   CircleCi:
     required_executable: 'circleci'
     flags: ['config', 'validate']
     include:
       - '.circleci/config.yml'
     enabled: true
-
-#
-#  TrailingWhitespace:
-#    enabled: true
-#    exclude:
-#      - '**/db/structure.sql' # Ignore trailing whitespace in generated files
-#
 
 #PostCheckout:
 #  ALL: # Special hook name that customizes all hooks of this type
