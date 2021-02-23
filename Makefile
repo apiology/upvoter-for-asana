@@ -30,7 +30,7 @@ quality:  ## run precommit quality checks
 update_from_cookiecutter: ## Bring in changes from template project used to create this repo
 	IN_COOKIECUTTER_PROJECT_UPGRADER=1 cookiecutter_project_upgrader || true
 	git checkout cookiecutter-template && git push && git checkout main
-	git checkout main && git pull && git checkout -b update-from-cookiecutter-$$(date +%Y-%m-%d-%H%M)
+	git checkout main && bundle exec overcommit --sign && git pull && git checkout -b update-from-cookiecutter-$$(date +%Y-%m-%d-%H%M)
 	echo
 	echo "Please resolve any merge conflicts below and push up a PR with:"
 	echo
