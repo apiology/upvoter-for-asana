@@ -15,4 +15,6 @@ module.exports = {
     // @ multi ./src/background.js ./src/upvoter.js
     fs: 'empty',
   },
+  // https://stackoverflow.com/questions/48047150/chrome-extension-compiled-by-webpack-throws-unsafe-eval-error
+  devtool: 'cheap-module-source-map',
 };

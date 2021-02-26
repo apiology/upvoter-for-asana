@@ -18,6 +18,9 @@ help:
 webpack: ## run webpack and tie together modules for use by browser
 	npx webpack
 
+start: ## run webpack continuously and watch files
+	npm start
+
 default: webpack test ## run default tests and quality
 
 clean: ## remove all built artifacts
