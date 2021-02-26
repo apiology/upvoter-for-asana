@@ -1,5 +1,5 @@
 {
-    "_template": "../cookiecutter-chrome-extension/",
+    "_template": "https://github.com/apiology/cookiecutter-multicli.git",
     "email": "vince@broz.cc",
     "full_name": "Vince Broz",
     "github_username": "apiology",
