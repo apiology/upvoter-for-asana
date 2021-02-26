@@ -1,5 +1,7 @@
 // https://github.com/GoogleChrome/chrome-extensions-samples/blob/1d8d137d20fad5972292377dc22498529d2a4039/api/omnibox/simple-example/background.js
 
+const _ = require('lodash');
+
 const {
   pullCustomFieldGid, escapeHTML, pullTypeaheadSuggestions, upvoteTaskFn,
   client,
@@ -37,15 +39,18 @@ const logError = (err) => {
   throw err;
 };
 
+let omniboxInputChangedListenerDebounced = null;
+
 const omniboxInputChangedListener = (text, suggest) => {
-  pullTypeaheadSuggestions(text, suggest)
-    .then(passOnTypeaheadResultToOmnibox(text))
+  pullTypeaheadSuggestions(text, suggest).then(passOnTypeaheadResultToOmnibox(text))
     .catch(logError);
 };
 
+omniboxInputChangedListenerDebounced = _.debounce(omniboxInputChangedListener, 500);
+
 // This event is fired each time the user updates the text in the omnibox,
 // as long as the extension's keyword mode is still active.
-chrome.omnibox.onInputChanged.addListener(omniboxInputChangedListener);
+chrome.omnibox.onInputChanged.addListener(omniboxInputChangedListenerDebounced);
 
 const logSuccess = (result) => console.log('Upvoted task:', result);
 
