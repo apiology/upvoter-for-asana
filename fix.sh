@@ -2,22 +2,33 @@
 
 set -o pipefail
 
-install_npm() {
-  if [ "$(uname)" == "Darwin" ]
+install_nvm() {
+  curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.37.2/install.sh | bash
+}
+
+set_nvm_env_variables() {
+  set +eu
+  export NVM_DIR="$HOME/.nvm"
+  # shellcheck disable=SC1090
+  [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+  # shellcheck disable=SC1090
+  [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+  set -eu
+}
+
+ensure_nvm() {
+  if ! [ -f "${HOME}/.nvm/nvm.sh" ]
   then
-    HOMEBREW_NO_AUTO_UPDATE=1 brew install npm || true
-  elif type apt-get >/dev/null 2>&1
+    install_nvm
+  fi
+  if ! type nvm >/dev/null 2>&1
   then
-    sudo apt-get update -y
-    sudo apt-get install npm
+    set_nvm_env_variables
   fi
 }
 
-ensure_npm() {
-  if ! type npm >/dev/null 2>&1
-  then
-    install_npm
-  fi
+ensure_node_versions() {
+  nvm install
 }
 
 ensure_npm_modules() {
@@ -153,17 +164,6 @@ ensure_python_versions() {
   do
     if [ "$(uname)" == Darwin ]
     then
-      if ! [ -f /usr/local/opt/zlib/lib/libz.dylib ]
-      then
-        # https://teratail.com/questions/309663
-        HOMEBREW_NO_AUTO_UPDATE=1 brew install zlib || true
-      fi
-      if ! [ -f /usr/local/opt/bzip2/bin/bzip2 ]
-      then
-        # https://teratail.com/questions/309663
-        HOMEBREW_NO_AUTO_UPDATE=1 brew install bzip2 || true
-      fi
-
       pyenv_install() {
         CFLAGS="-I/usr/local/opt/zlib/include -I/usr/local/opt/bzip2/include" LDFLAGS="-L/usr/local/opt/zlib/lib -L/usr/local/opt/bzip2/lib" pyenv install --skip-existing "$@"
       }
@@ -219,7 +219,9 @@ ensure_shellcheck() {
   fi
 }
 
-ensure_npm
+ensure_nvm
+
+ensure_node_versions
 
 ensure_npm_modules
 
