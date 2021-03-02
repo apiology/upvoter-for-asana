@@ -8,9 +8,13 @@ commands:
       command:
         type: string
         description: "What command to execute"
+      label:
+        type: string
+        description: "What to label the run"
+        default: <<parameters.command>>
     steps:
       - run:
-          name: Run command
+          name: <<parameters.label>>
           command: |
             export PATH="${HOME}/.pyenv/bin:${PATH}"
             export PATH="${HOME}/.rbenv/bin:${HOME}/.rbenv/shims:${PATH}"
@@ -66,7 +70,7 @@ commands:
     steps:
       - set_up_environment
       - run_with_languages:
-          name: Run overcommit
+          label: Run overcommit
           command: |
             # Coax overcommit into working
             git config --global user.email "test@test.test"
