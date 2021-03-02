@@ -23,6 +23,7 @@ commands:
             eval "$(pyenv virtualenv-init -)"
             eval "$(rbenv init -)"
             export BUNDLE_PATH=vendor/bundle
+            . "$HOME/.nvm/nvm.sh"
 
             <<parameters.command>>
           environment:
