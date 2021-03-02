@@ -2,6 +2,29 @@
 version: 2.1
 
 commands:
+  run_with_languages:
+    description: "Run the given command in an environment that includes relevant langauges in the PATH"
+    parameters:
+      command:
+        type: string
+        description: "What command to execute"
+    steps:
+      - run:
+          name: Run command
+          command: |
+            export PATH="${HOME}/.pyenv/bin:${PATH}"
+            export PATH="${HOME}/.rbenv/bin:${HOME}/.rbenv/shims:${PATH}"
+            export PATH="${HOME}/project/node_modules/.bin:${PATH}"
+            eval "$(pyenv init -)"
+            eval "$(pyenv virtualenv-init -)"
+            eval "$(rbenv init -)"
+            export BUNDLE_PATH=vendor/bundle
+
+            <<parameters.command>>
+          environment:
+            # https://app.circleci.com/pipelines/github/apiology/cookiecutter-pypackage/4/workflows/29074dc8-944c-4600-8aaa-5116575fed90/jobs/4
+            "LC_ALL": "C.UTF-8"
+            "LANG": "C.UTF-8"
   set_up_environment:
     description: "Install source environment"
     steps:
@@ -42,16 +65,10 @@ commands:
     description: "Run overcommit"
     steps:
       - set_up_environment
-      - run:
+      - run_with_languages:
           name: Run overcommit
+          command: make test
           command: |
-            export PATH="${HOME}/.pyenv/bin:${PATH}"
-            export PATH="${HOME}/.rbenv/bin:${HOME}/.rbenv/shims:${PATH}"
-            export PATH="${HOME}/project/node_modules/.bin:${PATH}"
-            eval "$(pyenv init -)"
-            eval "$(pyenv virtualenv-init -)"
-            eval "$(rbenv init -)"
-            export BUNDLE_PATH=vendor/bundle
             # Coax overcommit into working
             git config --global user.email "test@test.test"
             git config --global user.name "Test Test"
@@ -59,10 +76,6 @@ commands:
             bundle exec overcommit --sign pre-commit
 
             bundle exec overcommit --run
-          environment:
-            # https://app.circleci.com/pipelines/github/apiology/cookiecutter-pypackage/4/workflows/29074dc8-944c-4600-8aaa-5116575fed90/jobs/4
-            "LC_ALL": "C.UTF-8"
-            "LANG": "C.UTF-8"
 
 jobs:
   overcommit:
@@ -85,16 +98,8 @@ jobs:
       - image: apiology/circleci:latest
     steps:
       - set_up_environment
-      - run:
-          command: |
-            export PATH="${HOME}/.pyenv/bin:${PATH}"
-            export PATH="${HOME}/.rbenv/bin:${HOME}/.rbenv/shims:${PATH}"
-            eval "$(pyenv init -)"
-            eval "$(pyenv virtualenv-init -)"
-            eval "$(rbenv init -)"
-            export BUNDLE_PATH=vendor/bundle
-
-            make test
+      - run_with_languages:
+          command: make test
 
 workflows:
   version: 2
