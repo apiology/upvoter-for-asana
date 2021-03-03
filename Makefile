@@ -25,7 +25,7 @@ default: webpack test ## run default tests and quality
 
 clean: ## remove all built artifacts
 
-test: ## run tests quickly
+test: webpack ## run tests quickly
 
 quality:  ## run precommit quality checks
 	bundle exec overcommit --run

@@ -16,7 +16,7 @@
     "asana"
   ],
   "author": "Vince Broz <vince@broz.cc>",
-  "license": "ISC",
+  "license": "MIT license",
   "bugs": {
     "url": "https://github.com/apiology/upvoter_for_asana/issues"
   },
