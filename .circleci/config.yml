@@ -2,6 +2,34 @@
 version: 2.1
 
 commands:
+  run_with_languages:
+    description: "Run the given command in an environment that includes relevant langauges in the PATH"
+    parameters:
+      command:
+        type: string
+        description: "What command to execute"
+      label:
+        type: string
+        description: "What to label the run"
+        default: <<parameters.command>>
+    steps:
+      - run:
+          name: <<parameters.label>>
+          command: |
+            export PATH="${HOME}/.pyenv/bin:${PATH}"
+            export PATH="${HOME}/.rbenv/bin:${HOME}/.rbenv/shims:${PATH}"
+            export PATH="${HOME}/project/node_modules/.bin:${PATH}"
+            eval "$(pyenv init -)"
+            eval "$(pyenv virtualenv-init -)"
+            eval "$(rbenv init -)"
+            export BUNDLE_PATH=vendor/bundle
+            . "$HOME/.nvm/nvm.sh"
+
+            <<parameters.command>>
+          environment:
+            # https://app.circleci.com/pipelines/github/apiology/cookiecutter-pypackage/4/workflows/29074dc8-944c-4600-8aaa-5116575fed90/jobs/4
+            "LC_ALL": "C.UTF-8"
+            "LANG": "C.UTF-8"
   set_up_environment:
     description: "Install source environment"
     steps:
@@ -9,7 +37,7 @@ commands:
       - restore_cache:
           key: gems-v4-{{ checksum "Gemfile.lock" }}
       - restore_cache:
-          key: ruby-and-python-v4-{{ checksum "fix.sh" }}
+          key: node_modules-v1-{{ checksum "package-lock.json" }}
       - run:
           name: Initialize packages
           command: |
@@ -23,11 +51,17 @@ commands:
               >&2 echo "Please resolve changes to Gemfile.lock after bundle install to avoid caching difficulties"
               exit 1
             fi
+      - run:
+          name: Verify package-lock.json
+          command: |
+            if ! git diff --exit-code package-lock.json
+            then
+              >&2 echo "Please resolve changes to package-lock.json after npm install to avoid caching difficulties"
+              exit 1
+            fi
       - save_cache:
-          key: ruby-and-python-v4-{{ checksum "fix.sh" }}
+          key: node_modules-v1-{{ checksum "package-lock.json" }}
           paths:
-            - "/home/circleci/.rbenv"
-            - "/home/circleci/.pyenv"
             - "/home/circleci/project/node_modules"
       - save_cache:
           key: gems-v4-{{ checksum "Gemfile.lock" }}
@@ -42,16 +76,9 @@ commands:
     description: "Run overcommit"
     steps:
       - set_up_environment
-      - run:
-          name: Run overcommit
+      - run_with_languages:
+          label: Run overcommit
           command: |
-            export PATH="${HOME}/.pyenv/bin:${PATH}"
-            export PATH="${HOME}/.rbenv/bin:${HOME}/.rbenv/shims:${PATH}"
-            export PATH="${HOME}/project/node_modules/.bin:${PATH}"
-            eval "$(pyenv init -)"
-            eval "$(pyenv virtualenv-init -)"
-            eval "$(rbenv init -)"
-            export BUNDLE_PATH=vendor/bundle
             # Coax overcommit into working
             git config --global user.email "test@test.test"
             git config --global user.name "Test Test"
@@ -59,10 +86,6 @@ commands:
             bundle exec overcommit --sign pre-commit
 
             bundle exec overcommit --run
-          environment:
-            # https://app.circleci.com/pipelines/github/apiology/cookiecutter-pypackage/4/workflows/29074dc8-944c-4600-8aaa-5116575fed90/jobs/4
-            "LC_ALL": "C.UTF-8"
-            "LANG": "C.UTF-8"
 
 jobs:
   overcommit:
@@ -85,16 +108,8 @@ jobs:
       - image: apiology/circleci:latest
     steps:
       - set_up_environment
-      - run:
-          command: |
-            export PATH="${HOME}/.pyenv/bin:${PATH}"
-            export PATH="${HOME}/.rbenv/bin:${HOME}/.rbenv/shims:${PATH}"
-            eval "$(pyenv init -)"
-            eval "$(pyenv virtualenv-init -)"
-            eval "$(rbenv init -)"
-            export BUNDLE_PATH=vendor/bundle
-
-            make test
+      - run_with_languages:
+          command: make test
 
 workflows:
   version: 2

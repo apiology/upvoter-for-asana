@@ -1,0 +1,38 @@
+---
+env:
+  browser: true
+  es2020: true
+  webextensions: true
+extends:
+  - airbnb-base
+parserOptions:
+  ecmaVersion: 11
+  sourceType: module
+globals:
+  asanaAccessToken: readonly
+  workspaceName: readonly
+  customFieldName: readonly
+  increment: readonly
+rules:
+  # might be worth bringing no-console back or stripping as part of
+  # the build once this is more mature - right now it's helpful in
+  # development
+  no-console: "off"
+  # Not sure of other easy UI available in an omnibox action
+  no-alert: "off"
+  #
+  # Dangling commas on a function call/declaration just seems *wrong*,
+  # regardless of what the geniuses at AirBNB think.
+  #
+  comma-dangle:
+    - error
+    - arrays: always-multiline
+      objects: always-multiline
+      imports: always-multiline
+      exports: always-multiline
+      functions: never
+  # I don't know whether 'use strict' is the default in Chrome
+  # extensions, so let's assume not.
+  strict:
+    - error
+    - safe

@@ -17,6 +17,10 @@
 # Uncomment the following lines to make the configuration take effect.
 
 PreCommit:
+  EsLint:
+    required_executable: 'npx'
+    command: ['npx', 'eslint']
+    enabled: true
   PythonFlake8:
     enabled: true
   ShellCheck:

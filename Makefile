@@ -15,11 +15,17 @@ export PRINT_HELP_PYSCRIPT
 help:
 	@python -c "$$PRINT_HELP_PYSCRIPT" < $(MAKEFILE_LIST)
 
-default: test ## run default typechecking and tests
+webpack: ## run webpack and tie together modules for use by browser
+	npx webpack
+
+start: ## run webpack continuously and watch files
+	npm start
+
+default: webpack test ## run default typechecking and tests
 
 clean: ## remove all built artifacts
 
-test: ## run tests quickly
+test: webpack ## run tests quickly
 
 quality:  ## run precommit quality checks
 	bundle exec overcommit --run

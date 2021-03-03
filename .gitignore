@@ -36,3 +36,13 @@ Temporary Items
 
 # Installed by fix.sh based on what latest versions are
 /.python-version
+/.ruby-version
+
+# From package.json and npm
+/node_modules
+
+# From webpack
+/dist
+
+# Provided by user
+/config.js
