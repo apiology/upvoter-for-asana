@@ -30,7 +30,7 @@ const passOnTypeaheadResultToOmnibox = (text) => ({ suggest, typeaheadResult }) 
   console.log(`${suggestions.length} suggestions from ${text}:`, suggestions);
   suggest(suggestions);
   chrome.omnibox.setDefaultSuggestion({
-    description: '<dim>Results:</dim>',
+    description: `<dim>Results for ${text}:</dim>`,
   });
 };
 
@@ -39,18 +39,24 @@ const logError = (err) => {
   throw err;
 };
 
-let omniboxInputChangedListenerDebounced = null;
-
-const omniboxInputChangedListener = (text, suggest) => {
+const pullAndReportTypeaheadSuggestions = (text, suggest) => {
   pullTypeaheadSuggestions(text, suggest).then(passOnTypeaheadResultToOmnibox(text))
     .catch(logError);
 };
 
-omniboxInputChangedListenerDebounced = _.debounce(omniboxInputChangedListener, 500);
+const pullAndReportTypeaheadSuggestionsDebounced = _.debounce(pullAndReportTypeaheadSuggestions,
+  500);
+
+const omniboxInputChangedListener = (text, suggest) => {
+  chrome.omnibox.setDefaultSuggestion({
+    description: '<dim>Waiting...</dim>',
+  });
+  return pullAndReportTypeaheadSuggestionsDebounced(text, suggest);
+};
 
 // This event is fired each time the user updates the text in the omnibox,
 // as long as the extension's keyword mode is still active.
-chrome.omnibox.onInputChanged.addListener(omniboxInputChangedListenerDebounced);
+chrome.omnibox.onInputChanged.addListener(omniboxInputChangedListener);
 
 const logSuccess = (result) => console.log('Upvoted task:', result);
 
