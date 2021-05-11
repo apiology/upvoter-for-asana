@@ -5,7 +5,7 @@
   "permissions": [
     "activeTab"
   ],
-  "omnibox": { "keyword": "kw" },
+  "omnibox": { "keyword": "uv" },
   "background": {
     "scripts": ["config.js", "dist/background.js"],
     "persistent": false
