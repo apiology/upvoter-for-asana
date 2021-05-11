@@ -23,6 +23,7 @@ PreCommit:
     enabled: true
   PythonFlake8:
     enabled: true
+    on_warn: fail
   ShellCheck:
     enabled: true
     on_warn: fail
