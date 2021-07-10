@@ -37,6 +37,8 @@ commands:
       - restore_cache:
           key: gems-v4-{{ checksum "Gemfile.lock" }}
       - restore_cache:
+          key: wheels-v1-{{ checksum "requirements_dev.txt" }}
+      - restore_cache:
           key: node_modules-v1-{{ checksum "package-lock.json" }}
       - run:
           name: Initialize packages
@@ -67,6 +69,10 @@ commands:
           key: gems-v4-{{ checksum "Gemfile.lock" }}
           paths:
             - "vendor/bundle"
+      - save_cache:
+          key: wheels-v1-{{ checksum "requirements_dev.txt" }}
+          paths:
+            - "/home/circleci/.cache/pip/wheels"
       - run:
           name: Download new circleci tool
           command: |
@@ -124,6 +130,7 @@ workflows:
                 - main
     jobs:
       - build
+      - overcommit
   overcommit:
     jobs:
       - overcommit
