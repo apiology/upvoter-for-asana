@@ -35,7 +35,7 @@ commands:
     steps:
       - checkout
       - restore_cache:
-          key: gems-v4-{{ checksum "Gemfile.lock" }}
+          key: gems-v1-{{ checksum "Gemfile.lock" }}
       - restore_cache:
           key: wheels-v1-{{ checksum "requirements_dev.txt" }}
       - restore_cache:
@@ -66,7 +66,7 @@ commands:
           paths:
             - "/home/circleci/project/node_modules"
       - save_cache:
-          key: gems-v4-{{ checksum "Gemfile.lock" }}
+          key: gems-v1-{{ checksum "Gemfile.lock" }}
           paths:
             - "vendor/bundle"
       - save_cache:
@@ -109,7 +109,6 @@ jobs:
           steps:
             - run: echo "overcommit only runs on main branch"
   build:
-    working_directory: ~/upvoter_for_asana
     docker:
       - image: apiology/circleci:latest
     steps:
