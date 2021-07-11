@@ -43,6 +43,10 @@ ensure_node_versions() {
   set -u
 }
 
+ensure_npm() {
+  npm install -g npm
+}
+
 ensure_npm_modules() {
   npm install
 }
@@ -356,6 +360,8 @@ ensure_overcommit() {
 ensure_nvm
 
 ensure_node_versions
+
+ensure_npm
 
 ensure_npm_modules
 
