@@ -29,10 +29,7 @@ const passOnTypeaheadResultToOmnibox = (text) => ({ suggest, typeaheadResult }) 
     }));
   console.log(`${suggestions.length} suggestions from ${text}:`, suggestions);
   suggest(suggestions);
-  let description = `<dim>${suggestions.length} results for ${text}:</dim>`;
-  if (suggestions.length === 1) {
-    description = `<dim>No results for ${text}.</dim>`;
-  }
+  const description = `<dim>${suggestions.length} results for ${text}:</dim>`;
   chrome.omnibox.setDefaultSuggestion({ description });
 };
 
