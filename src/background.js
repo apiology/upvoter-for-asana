@@ -29,9 +29,8 @@ const passOnTypeaheadResultToOmnibox = (text) => ({ suggest, typeaheadResult }) 
     }));
   console.log(`${suggestions.length} suggestions from ${text}:`, suggestions);
   suggest(suggestions);
-  chrome.omnibox.setDefaultSuggestion({
-    description: `<dim>Results for ${text}:</dim>`,
-  });
+  const description = `<dim>${suggestions.length} results for ${text}:</dim>`;
+  chrome.omnibox.setDefaultSuggestion({ description });
 };
 
 const logError = (err) => {
@@ -49,7 +48,7 @@ const pullAndReportTypeaheadSuggestionsDebounced = _.debounce(pullAndReportTypea
 
 const omniboxInputChangedListener = (text, suggest) => {
   chrome.omnibox.setDefaultSuggestion({
-    description: '<dim>Waiting...</dim>',
+    description: `<dim>Waiting for results from ${text}...</dim>`,
   });
   return pullAndReportTypeaheadSuggestionsDebounced(text, suggest);
 };
