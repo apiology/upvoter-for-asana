@@ -32,7 +32,8 @@ const findAndSaveWorkspaceAndCustomFieldGids = (workspacesResult) => {
   workspacesResult.stream().on('data', saveWorkspaceAndCustomFieldGidsIfRightNames);
 };
 
-client.workspaces.getWorkspaces().then(findAndSaveWorkspaceAndCustomFieldGids);
+const workspaceGidFetch = client
+  .workspaces.getWorkspaces().then(findAndSaveWorkspaceAndCustomFieldGids);
 
 // How on God's green earth is there no built-in function to do this?
 //
@@ -55,19 +56,22 @@ const pullTypeaheadSuggestions = (text, suggest) => {
     opt_pretty: true,
     opt_fields: ['name', 'completed', 'parent', 'custom_fields.gid', 'custom_fields.number_value'],
   };
-  if (workspaceGid == null) {
-    throw new NotInitializedError();
-  }
+  return workspaceGidFetch.then(() => {
+    if (workspaceGid == null) {
+      alert('NOT INITIALIZED!');
+      throw new NotInitializedError();
+    }
 
-  console.log('requesting typeahead with workspaceGid', workspaceGid,
-    ' and query of ', query);
-  chrome.omnibox.setDefaultSuggestion({
-    description: `<dim>Searching for ${text}...</dim>`,
+    console.log('requesting typeahead with workspaceGid', workspaceGid,
+      ' and query of ', query);
+    chrome.omnibox.setDefaultSuggestion({
+      description: `<dim>Searching for ${text}...</dim>`,
+    });
+
+    // https://developers.asana.com/docs/typeahead
+    return client.typeahead.typeaheadForWorkspace(workspaceGid, query)
+      .then((typeaheadResult) => ({ suggest, typeaheadResult }));
   });
-
-  // https://developers.asana.com/docs/typeahead
-  return client.typeahead.typeaheadForWorkspace(workspaceGid, query)
-    .then((typeaheadResult) => ({ suggest, typeaheadResult }));
 };
 
 const upvoteTaskFn = (taskGid) => (task) => {
