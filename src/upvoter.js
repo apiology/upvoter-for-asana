@@ -15,9 +15,14 @@ const saveCustomFieldGidIfRightName = (customField) => {
   }
 };
 
-const findAndSaveCustomFieldGid = (customFieldsResult) => {
-  customFieldsResult.stream().on('data', saveCustomFieldGidIfRightName);
-};
+const findAndSaveCustomFieldGid = (customFieldsResult) => new Promise((resolve, reject) => {
+  // https://stackoverflow.com/questions/44013020/using-promises-with-streams-in-node-js
+  const stream = customFieldsResult.stream();
+  stream.on('data', saveCustomFieldGidIfRightName);
+  stream.on('end', () => resolve());
+  stream.on('finish', () => resolve());
+  stream.on('error', () => reject());
+});
 
 const saveWorkspaceAndCustomFieldGidsIfRightNames = (workspace) => {
   if (workspace.name === workspaceName) {
@@ -28,9 +33,15 @@ const saveWorkspaceAndCustomFieldGidsIfRightNames = (workspace) => {
   }
 };
 
-const findAndSaveWorkspaceAndCustomFieldGids = (workspacesResult) => {
-  workspacesResult.stream().on('data', saveWorkspaceAndCustomFieldGidsIfRightNames);
-};
+const findAndSaveWorkspaceAndCustomFieldGids = (workspacesResult) => new Promise((resolve,
+  reject) => {
+  // https://stackoverflow.com/questions/44013020/using-promises-with-streams-in-node-js
+  const stream = workspacesResult.stream();
+  stream.on('data', saveWorkspaceAndCustomFieldGidsIfRightNames);
+  stream.on('end', () => resolve());
+  stream.on('finish', () => resolve());
+  stream.on('error', () => reject());
+});
 
 const workspaceGidFetch = client
   .workspaces.getWorkspaces().then(findAndSaveWorkspaceAndCustomFieldGids);
