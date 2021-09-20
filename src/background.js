@@ -4,7 +4,7 @@ const _ = require('lodash');
 
 const {
   pullCustomFieldGid, escapeHTML, pullTypeaheadSuggestions, upvoteTaskFn,
-  client,
+  client, gidFetch,
 } = require('./upvoter.js');
 
 const passOnTypeaheadResultToOmnibox = (text) => ({ suggest, typeaheadResult }) => {
@@ -50,7 +50,7 @@ const omniboxInputChangedListener = (text, suggest) => {
   chrome.omnibox.setDefaultSuggestion({
     description: `<dim>Waiting for results from ${text}...</dim>`,
   });
-  return pullAndReportTypeaheadSuggestionsDebounced(text, suggest);
+  return gidFetch.then(() => pullAndReportTypeaheadSuggestionsDebounced(text, suggest));
 };
 
 // This event is fired each time the user updates the text in the omnibox,

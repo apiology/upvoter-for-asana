@@ -8,28 +8,29 @@ let customFieldGid = null;
 
 const pullCustomFieldGid = () => customFieldGid;
 
-const saveCustomFieldGidIfRightName = (customField) => {
+const saveCustomFieldGidIfRightName = (customField, resolve) => {
   if (customField.name === customFieldName) {
     customFieldGid = customField.gid;
     console.log(`Found custom field GID as ${customFieldGid}`);
+    resolve();
   }
 };
 
 const findAndSaveCustomFieldGid = (customFieldsResult) => new Promise((resolve, reject) => {
   // https://stackoverflow.com/questions/44013020/using-promises-with-streams-in-node-js
   const stream = customFieldsResult.stream();
-  stream.on('data', saveCustomFieldGidIfRightName);
+  stream.on('data', (customField) => saveCustomFieldGidIfRightName(customField, resolve));
   stream.on('end', () => resolve());
   stream.on('finish', () => resolve());
   stream.on('error', () => reject());
 });
 
-const saveWorkspaceAndCustomFieldGidsIfRightNames = (workspace) => {
+const saveWorkspaceAndCustomFieldGidsIfRightNames = (workspace, resolve) => {
   if (workspace.name === workspaceName) {
     workspaceGid = workspace.gid;
     console.log(`Found workspace GID as ${workspaceGid}`);
-    client.customFields.getCustomFieldsForWorkspace(workspaceGid, {})
-      .then(findAndSaveCustomFieldGid);
+    resolve(client.customFields.getCustomFieldsForWorkspace(workspaceGid, {})
+      .then(findAndSaveCustomFieldGid));
   }
 };
 
@@ -37,7 +38,8 @@ const findAndSaveWorkspaceAndCustomFieldGids = (workspacesResult) => new Promise
   reject) => {
   // https://stackoverflow.com/questions/44013020/using-promises-with-streams-in-node-js
   const stream = workspacesResult.stream();
-  stream.on('data', saveWorkspaceAndCustomFieldGidsIfRightNames);
+  stream.on('data',
+    (workspace) => saveWorkspaceAndCustomFieldGidsIfRightNames(workspace, resolve));
   stream.on('end', () => resolve());
   stream.on('finish', () => resolve());
   stream.on('error', () => reject());
@@ -104,4 +106,5 @@ module.exports = {
   pullTypeaheadSuggestions,
   upvoteTaskFn,
   client,
+  gidFetch,
 };
