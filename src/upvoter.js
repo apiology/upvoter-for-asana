@@ -43,8 +43,7 @@ const findAndSaveWorkspaceAndCustomFieldGids = (workspacesResult) => new Promise
   stream.on('error', () => reject());
 });
 
-const workspaceGidFetch = client
-  .workspaces.getWorkspaces().then(findAndSaveWorkspaceAndCustomFieldGids);
+const gidFetch = client.workspaces.getWorkspaces().then(findAndSaveWorkspaceAndCustomFieldGids);
 
 // How on God's green earth is there no built-in function to do this?
 //
@@ -67,7 +66,7 @@ const pullTypeaheadSuggestions = (text, suggest) => {
     opt_pretty: true,
     opt_fields: ['name', 'completed', 'parent', 'custom_fields.gid', 'custom_fields.number_value'],
   };
-  return workspaceGidFetch.then(() => {
+  return gidFetch.then(() => {
     if (workspaceGid == null) {
       alert('NOT INITIALIZED!');
       throw new NotInitializedError();
