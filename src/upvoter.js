@@ -6,8 +6,6 @@ let workspaceGid = null;
 
 let customFieldGid = null;
 
-const pullCustomFieldGid = () => customFieldGid;
-
 const saveCustomFieldGidIfRightName = (customField, resolve) => {
   if (customField.name === customFieldName) {
     customFieldGid = customField.gid;
@@ -46,6 +44,8 @@ const findAndSaveWorkspaceAndCustomFieldGids = (workspacesResult) => new Promise
 });
 
 const gidFetch = client.workspaces.getWorkspaces().then(findAndSaveWorkspaceAndCustomFieldGids);
+
+const pullCustomFieldGid = () => gidFetch.then(() => customFieldGid);
 
 // How on God's green earth is there no built-in function to do this?
 //

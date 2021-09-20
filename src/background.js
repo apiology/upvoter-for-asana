@@ -4,7 +4,7 @@ const _ = require('lodash');
 
 const {
   pullCustomFieldGid, escapeHTML, pullTypeaheadSuggestions, upvoteTaskFn,
-  client, gidFetch,
+  client,
 } = require('./upvoter.js');
 
 const passOnTypeaheadResultToOmnibox = (text) => ({ suggest, typeaheadResult }) => {
@@ -12,25 +12,25 @@ const passOnTypeaheadResultToOmnibox = (text) => ({ suggest, typeaheadResult }) 
     description: '<dim>Processing results...</dim>',
   });
   console.log('typeaheadResult: ', typeaheadResult);
-  // TODO: why not stream like above?
-  const customFieldGid = pullCustomFieldGid();
-  const suggestions = typeaheadResult.data.filter((task) => !task.completed)
-    .filter((task) => task.parent == null)
-    .filter((task) => task.name.length > 0)
-    .map((task) => {
-      const customField = task.custom_fields.find((field) => field.gid === customFieldGid);
+  return pullCustomFieldGid().then((customFieldGid) => {
+    const suggestions = typeaheadResult.data.filter((task) => !task.completed)
+      .filter((task) => task.parent == null)
+      .filter((task) => task.name.length > 0)
+      .map((task) => {
+        const customField = task.custom_fields.find((field) => field.gid === customFieldGid);
 
-      return { task, customField };
-    })
-    .filter(({ customField }) => customField != null)
-    .map(({ task, customField }) => ({
-      content: task.gid,
-      description: escapeHTML(`${customField.number_value}: ${task.name}`),
-    }));
-  console.log(`${suggestions.length} suggestions from ${text}:`, suggestions);
-  suggest(suggestions);
-  const description = `<dim>${suggestions.length} results for ${text}:</dim>`;
-  chrome.omnibox.setDefaultSuggestion({ description });
+        return { task, customField };
+      })
+      .filter(({ customField }) => customField != null)
+      .map(({ task, customField }) => ({
+        content: task.gid,
+        description: escapeHTML(`${customField.number_value}: ${task.name}`),
+      }));
+    console.log(`${suggestions.length} suggestions from ${text}:`, suggestions);
+    suggest(suggestions);
+    const description = `<dim>${suggestions.length} results for ${text}:</dim>`;
+    chrome.omnibox.setDefaultSuggestion({ description });
+  });
 };
 
 const logError = (err) => {
@@ -50,7 +50,7 @@ const omniboxInputChangedListener = (text, suggest) => {
   chrome.omnibox.setDefaultSuggestion({
     description: `<dim>Waiting for results from ${text}...</dim>`,
   });
-  return gidFetch.then(() => pullAndReportTypeaheadSuggestionsDebounced(text, suggest));
+  return pullAndReportTypeaheadSuggestionsDebounced(text, suggest);
 };
 
 // This event is fired each time the user updates the text in the omnibox,
