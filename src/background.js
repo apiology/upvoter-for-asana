@@ -1,6 +1,6 @@
 const _ = require('lodash');
 
-const { pullSuggestions, actOnInputData } = require('./upvoter_for_asana.js');
+const { pullSuggestions, actOnInputData } = require('./upvoter_for_asana');
 
 const logError = (err) => {
   alert(err);
