@@ -1,7 +1,10 @@
 module.exports = {
-  entry: ['./src/background.js', './src/upvoter.js'],
+  entry: {
+    background: ['./src/background.js', './src/upvoter.js'],
+    'content-script': ['./src/content-script.js'],
+  },
   output: {
-    filename: 'background.js',
+    filename: '[name].js',
   },
   node: {
     // https://github.com/webpack-contrib/css-loader/issues/447
