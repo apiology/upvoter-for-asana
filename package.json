@@ -21,7 +21,7 @@
     "url": "https://github.com/apiology/upvoter_for_asana/issues"
   },
   "homepage": "https://github.com/apiology/upvoter_for_asana#readme",
-  "_devDependenciesComments": "set-value, ansi-regex are transitive deps;  from dependabot security alert",
+  "_devDependenciesComments": "set-value, ansi-regex, path-parse are transitive deps; from dependabot security alerts",
   "devDependencies": {
     "eslint": "^7.18.0",
     "eslint-config-airbnb-base": "^14.2.1",
@@ -29,7 +29,8 @@
     "webpack": "^4.46.0",
     "webpack-cli": "^4.5.0",
     "set-value": ">=4.0.1",
-    "ansi-regex": ">=5.0.1"
+    "ansi-regex": ">=5.0.1",
+    "path-parse": ">=1.0.7"
   },
   "dependencies": {
     "asana": "^0.18.5",
