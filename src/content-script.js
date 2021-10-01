@@ -9,12 +9,11 @@ setInterval(() => {
     const upvoteLinks = Array.from(bodyNode.getElementsByClassName(upvoteLinkClassName));
     if (upvoteLinks.length === 0) {
       for (const link of links) {
-        const newNode = document.createElement('a');
-        newNode.classList.add(upvoteLinkClassName);
-        newNode.innerHTML = '<div style="font-size:20px;display:inline">⬆️</div>[123] ';
-        const linkParent = link.parentNode;
-        linkParent.insertBefore(newNode, link);
         console.log('link', link);
+        console.log('innerHTML', link.innerHTML);
+        link.setAttribute('href', 'https://www.jwz.org/');
+        link.innerHTML += ' [123]';
+        link.classList.add(upvoteLinkClassName);
       }
     }
   }
