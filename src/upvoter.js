@@ -86,8 +86,8 @@ const pullTypeaheadSuggestions = (text, suggest) => {
   });
 };
 
-const upvoteTaskFn = (taskGid) => (task) => {
-  console.log('upvoteTaskFn got task', task);
+const upvoteTask = (task) => {
+  console.log('upvoteTask got task', task);
   const customField = task.custom_fields.find((field) => field.gid === customFieldGid);
   console.log('Custom field: ', customField);
   console.log('Custom field number value: ', customField.number_value);
@@ -96,7 +96,7 @@ const upvoteTaskFn = (taskGid) => (task) => {
   const newValue = increment ? currentValue + 1 : currentValue - 1;
   const updatedCustomFields = {};
   updatedCustomFields[customFieldGid] = newValue;
-  return client.tasks.updateTask(taskGid,
+  return client.tasks.updateTask(task.gid,
     { custom_fields: updatedCustomFields });
 };
 
@@ -104,7 +104,7 @@ module.exports = {
   pullCustomFieldGid,
   escapeHTML,
   pullTypeaheadSuggestions,
-  upvoteTaskFn,
+  upvoteTask,
   client,
   gidFetch,
 };
