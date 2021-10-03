@@ -3,7 +3,7 @@
 const _ = require('lodash');
 
 const {
-  pullCustomFieldGid, escapeHTML, pullTypeaheadSuggestions, upvoteTaskFn,
+  pullCustomFieldGid, escapeHTML, pullTypeaheadSuggestions, upvoteTask,
   client,
 } = require('./upvoter.js');
 
@@ -61,7 +61,7 @@ const logSuccess = (result) => console.log('Upvoted task:', result);
 
 const omniboxInputEnteredListener = (taskGid) => {
   client.tasks.getTask(taskGid)
-    .then(upvoteTaskFn(taskGid))
+    .then(upvoteTask)
     .then(logSuccess)
     .catch(logError);
 };
