@@ -4,7 +4,7 @@ const _ = require('lodash');
 
 const {
   pullCustomFieldGid, escapeHTML, pullTypeaheadSuggestions, upvoteTask,
-  client,
+  client, logSuccess,
 } = require('./upvoter.js');
 
 const passOnTypeaheadResultToOmnibox = (text) => ({ suggest, typeaheadResult }) => {
@@ -56,8 +56,6 @@ const omniboxInputChangedListener = (text, suggest) => {
 // This event is fired each time the user updates the text in the omnibox,
 // as long as the extension's keyword mode is still active.
 chrome.omnibox.onInputChanged.addListener(omniboxInputChangedListener);
-
-const logSuccess = (result) => console.log('Upvoted task:', result);
 
 const omniboxInputEnteredListener = (taskGid) => {
   client.tasks.getTask(taskGid)

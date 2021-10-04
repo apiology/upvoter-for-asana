@@ -1,3 +1,7 @@
+const {
+  upvoteTask, client, logSuccess,
+} = require('./upvoter.js');
+
 setInterval(() => {
   const bodyNodesClassName = 'CompleteTaskWithIncompletePrecedentTasksConfirmationModal-bodyNode';
 
@@ -11,8 +15,15 @@ setInterval(() => {
       for (const link of links) {
         console.log('link', link);
         console.log('innerHTML', link.innerHTML);
-        link.setAttribute('href', 'https://www.jwz.org/');
-        link.innerHTML += ' [123]';
+        const url = link.getAttribute('href');
+        const dependentTaskGid = url.split('/').at(-1);
+        console.log('Looking for dependentTaskGid', dependentTaskGid);
+        link.onclick = () => {
+          client.tasks.getTask(dependentTaskGid)
+            .then(upvoteTask)
+            .then(logSuccess);
+        };
+        link.innerHTML += ' [...]';
         link.classList.add(upvoteLinkClassName);
       }
     }

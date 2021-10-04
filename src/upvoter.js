@@ -100,11 +100,14 @@ const upvoteTask = (task) => {
     { custom_fields: updatedCustomFields });
 };
 
+const logSuccess = (result) => console.log('Upvoted task:', result);
+
 module.exports = {
   pullCustomFieldGid,
   escapeHTML,
   pullTypeaheadSuggestions,
   upvoteTask,
+  logSuccess,
   client,
   gidFetch,
 };
