@@ -19,13 +19,16 @@ setInterval(() => {
         const dependentTaskGid = url.split('/').at(-1);
         link.removeAttribute('href');
         console.log('Looking for dependentTaskGid', dependentTaskGid);
+        link.innerHTML += ' [...]';
         link.onclick = (event) => {
           client.tasks.getTask(dependentTaskGid)
             .then(upvoteTask)
-            .then(logSuccess);
+            .then(logSuccess)
+            .then(() => {
+              link.innerHTML += ' [^]';
+            });
           event.stopPropagation();
         };
-        link.innerHTML += ' [...]';
         link.classList.add(upvoteLinkClassName);
       }
     }
