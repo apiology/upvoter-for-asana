@@ -17,11 +17,13 @@ setInterval(() => {
         console.log('innerHTML', link.innerHTML);
         const url = link.getAttribute('href');
         const dependentTaskGid = url.split('/').at(-1);
+        link.removeAttribute('href');
         console.log('Looking for dependentTaskGid', dependentTaskGid);
-        link.onclick = () => {
+        link.onclick = (event) => {
           client.tasks.getTask(dependentTaskGid)
             .then(upvoteTask)
             .then(logSuccess);
+          event.stopPropagation();
         };
         link.innerHTML += ' [...]';
         link.classList.add(upvoteLinkClassName);
