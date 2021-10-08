@@ -1,5 +1,5 @@
 const {
-  upvoteTask, client, logSuccess,
+  upvoteTask, client, logSuccess, pullCustomFieldGid, pullCustomFieldFn,
 } = require('./upvoter.js');
 
 const onDependentTaskClickFn = (dependentTaskGid, link) => (event) => {
@@ -14,11 +14,24 @@ const onDependentTaskClickFn = (dependentTaskGid, link) => (event) => {
 
 const upvoteLinkClassName = 'upvoter-upvote-link';
 
+const updateLinkMarker = (link, indicator) => {
+  link.innerHTML = link.innerHTML.replace(/ \[.*\]$/, ` [${indicator}]`);
+};
+
+const populateInitialCount = (dependentTaskGid, link) => pullCustomFieldGid()
+  .then((customFieldGid) => {
+    const pullCustomField = pullCustomFieldFn(customFieldGid);
+    return client.tasks.getTask(dependentTaskGid)
+      .then(pullCustomField)
+      .then(({ customField }) => updateLinkMarker(link, customField.number_value));
+  });
+
 const fixUpLinkToDependency = (link) => {
   const url = link.getAttribute('href');
   const dependentTaskGid = url.split('/').at(-1);
   link.removeAttribute('href');
   link.innerHTML += ' [...]';
+  populateInitialCount(dependentTaskGid, link);
   link.onclick = onDependentTaskClickFn(dependentTaskGid, link);
   link.classList.add(upvoteLinkClassName);
 };
