@@ -102,6 +102,12 @@ const upvoteTask = (task) => {
 
 const logSuccess = (result) => console.log('Upvoted task:', result);
 
+const pullCustomFieldFn = (upvotesCustomFieldGid) => (task) => {
+  const customField = task.custom_fields.find((field) => field.gid === upvotesCustomFieldGid);
+
+  return { task, customField };
+};
+
 module.exports = {
   pullCustomFieldGid,
   escapeHTML,
@@ -110,4 +116,5 @@ module.exports = {
   logSuccess,
   client,
   gidFetch,
+  pullCustomFieldFn,
 };
