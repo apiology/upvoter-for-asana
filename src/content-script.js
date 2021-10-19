@@ -16,12 +16,16 @@ const populateCurrentCount = (dependentTaskGid, link) => pullCustomFieldGid()
       .then(({ customField }) => updateLinkMarker(link, customField.number_value));
   });
 
-const onDependentTaskClickFn = (dependentTaskGid, link) => (event) => {
+const upvote = (dependentTaskGid, link) => {
   updateLinkMarker(link, '^^');
   client.tasks.getTask(dependentTaskGid)
     .then(upvoteTask)
     .then(logSuccess)
     .then(() => populateCurrentCount(dependentTaskGid, link));
+};
+
+const onDependentTaskClickFn = (dependentTaskGid, link) => (event) => {
+  upvote(dependentTaskGid, link);
   event.stopPropagation();
 };
 
