@@ -72,8 +72,21 @@ function upvoterKeyDown(e) {
     const linkFound = links[num - 1];
     console.log('linkFound', linkFound);
     linkFound.click();
+  } else if (e.metaKey && e.key === 'Enter') {
+    console.log('got meta enter');
+    const markCompleteSelector = 'div.CompleteTaskWithIncompletePrecedentTasksConfirmationModal div.PrimaryButton';
+    const element = document.querySelector(markCompleteSelector);
+    if (element != null) {
+      console.log('single element', element);
+      console.log(e);
+      element.click();
+    }
   }
 }
 
-document.addEventListener('keydown', upvoterKeyDown, false);
+// capture: true ensures that we can differentiate between the
+// cmd-enter key event when the dependent dialog is initially brought
+// up, and when it was already up and the user wants to confirm to
+// close the task.
+document.addEventListener('keydown', upvoterKeyDown, { capture: true });
 console.log('Registered keydown listener', upvoterKeyDown);
