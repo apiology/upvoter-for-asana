@@ -88,16 +88,24 @@ const pullTypeaheadSuggestions = (text, suggest) => {
 
 const upvoteTask = (task) => {
   console.log('upvoteTask got task', task);
-  const customField = task.custom_fields.find((field) => field.gid === customFieldGid);
-  console.log('Custom field: ', customField);
-  console.log('Custom field number value: ', customField.number_value);
-  const currentValue = customField.number_value;
-  // https://developers.asana.com/docs/update-a-task
-  const newValue = increment ? currentValue + 1 : currentValue - 1;
-  const updatedCustomFields = {};
-  updatedCustomFields[customFieldGid] = newValue;
-  return client.tasks.updateTask(task.gid,
-    { custom_fields: updatedCustomFields });
+  return pullCustomFieldGid().then((upvotesCustomFieldGid) => {
+    const customField = task.custom_fields.find((field) => field.gid === upvotesCustomFieldGid);
+    const currentValue = customField.number_value;
+    // https://developers.asana.com/docs/update-a-task
+    const newValue = increment ? currentValue + 1 : currentValue - 1;
+    const updatedCustomFields = {};
+    updatedCustomFields[customFieldGid] = newValue;
+    return client.tasks.updateTask(task.gid,
+      { custom_fields: updatedCustomFields });
+  });
+};
+
+const logSuccess = (result) => console.log('Upvoted task:', result);
+
+const pullCustomFieldFn = (upvotesCustomFieldGid) => (task) => {
+  const customField = task.custom_fields.find((field) => field.gid === upvotesCustomFieldGid);
+
+  return { task, customField };
 };
 
 module.exports = {
@@ -105,6 +113,8 @@ module.exports = {
   escapeHTML,
   pullTypeaheadSuggestions,
   upvoteTask,
+  logSuccess,
   client,
   gidFetch,
+  pullCustomFieldFn,
 };

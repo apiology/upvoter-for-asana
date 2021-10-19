@@ -10,5 +10,11 @@
     "scripts": ["config.js", "dist/background.js"],
     "persistent": false
   },
+  "content_scripts": [
+    {
+      "matches": ["https://app.asana.com/*"],
+      "js": ["config.js", "dist/content-script.js"]
+    }
+  ],
   "manifest_version": 2
 }

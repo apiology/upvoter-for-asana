@@ -12,7 +12,7 @@ most upvoted tasks!
 
 ## Installing
 
-This isn't in the Chrome App Store and doesn't have any cool config,
+This isn't in the Chrome App Store and doesn't have any cool config UI,
 so welcome to the Chrome Extension development experience!
 
 1. Create a config.js in this directory with a variable named
@@ -40,3 +40,10 @@ so welcome to the Chrome Extension development experience!
 Go to the URL bar ("Chrome Omnibox"), and type 'uv', a space, then
 search for an Asana task.  You should see them pop up as suggestions.
 Pick one, and your custom field will be uploaded!
+
+Also, if you mark a task done which has dependent upvotable tasks, you
+can click on the dependent task links to upvote those tasks.  There's also keyboard shortcuts:
+
+* cmd-ctrl-1: upvote first task in the dependent task warning dialog.
+* cmd-ctrl-2...: etc
+* cmd-enter: mark the original task as complete and close the dialog.
