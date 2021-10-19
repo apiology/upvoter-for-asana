@@ -35,7 +35,7 @@ const fixUpLinkToDependency = (link) => {
   link.classList.add(upvoteLinkClassName);
 };
 
-setInterval(() => {
+function* dependencyLinks() {
   const bodyNodesClassName = 'CompleteTaskWithIncompletePrecedentTasksConfirmationModal-bodyNode';
 
   const bodyNodes = Array.from(document.getElementsByClassName(bodyNodesClassName));
@@ -46,8 +46,14 @@ setInterval(() => {
     if (upvoteLinks.length === 0) {
       // don't process links twice; if we've marked one as processed, consider this done.
       for (const link of links) {
-        fixUpLinkToDependency(link);
+        yield link;
       }
     }
+  }
+}
+
+setInterval(() => {
+  for (const dependencyLink of dependencyLinks()) {
+    fixUpLinkToDependency(dependencyLink);
   }
 }, 1000);
