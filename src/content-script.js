@@ -71,6 +71,7 @@ function upvoterKeyDown(e) {
     const links = Array.from(dependencyLinks());
     const linkFound = links[num - 1];
     console.log('linkFound', linkFound);
+    linkFound.click();
   }
 }
 
