@@ -39,18 +39,17 @@ const fixUpLinkToDependency = (link) => {
   link.classList.add(upvoteLinkClassName);
 };
 
-function* dependencyLinks() {
+const dependencyLinks = () => {
+  const links = [];
   const bodyNodesClassName = 'CompleteTaskWithIncompletePrecedentTasksConfirmationModal-bodyNode';
 
   const bodyNodes = Array.from(document.getElementsByClassName(bodyNodesClassName));
   for (const bodyNode of bodyNodes) {
     const linkClassName = 'CompleteTaskWithIncompletePrecedentTasksConfirmationModal-primaryNavigationLink';
-    const links = Array.from(bodyNode.getElementsByClassName(linkClassName));
-    for (const link of links) {
-      yield link;
-    }
+    links.push(...Array.from(bodyNode.getElementsByClassName(linkClassName)));
   }
-}
+  return links;
+};
 
 setInterval(() => {
   for (const dependencyLink of dependencyLinks()) {
@@ -68,7 +67,7 @@ function upvoterKeyDown(e) {
   const nonZeroDigits = ['1', '2', '3', '4', '5', '6', '7', '8', '9'];
   if (e.metaKey && e.ctrlKey && nonZeroDigits.includes(e.key)) {
     const num = parseInt(e.key, 10);
-    const links = Array.from(dependencyLinks());
+    const links = dependencyLinks();
     const linkFound = links[num - 1];
     console.log('linkFound', linkFound);
     linkFound.click();
