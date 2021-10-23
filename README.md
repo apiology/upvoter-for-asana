@@ -42,8 +42,6 @@ search for an Asana task.  You should see them pop up as suggestions.
 Pick one, and your custom field will be uploaded!
 
 Also, if you mark a task done which has dependent upvotable tasks, you
-can click on the dependent task links to upvote those tasks.  There's also keyboard shortcuts:
-
-* cmd-ctrl-1: upvote first task in the dependent task warning dialog.
-* cmd-ctrl-2...: etc
-* cmd-enter: mark the original task as complete and close the dialog.
+can click on the dependent task links to upvote those tasks.  See
+[Shortcuts for Asana](https://github.com/apiology/shortcuts_for_asana)
+for keyboard shortcuts to hit those links!
