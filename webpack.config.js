@@ -1,7 +1,7 @@
 module.exports = {
   entry: {
-    background: ['./src/background.js', './src/upvoter.js'],
-    'content-script': ['./src/content-script.js'],
+    background: ['./src/background.ts', './src/upvoter.ts'],
+    'content-script': ['./src/content-script.ts'],
   },
   output: {
     filename: '[name].js',

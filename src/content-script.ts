@@ -1,6 +1,6 @@
 const {
   upvoteTask, client, logSuccess, pullCustomFieldGid, pullCustomFieldFn,
-} = require('./upvoter.js');
+} = require('./upvoter.ts');
 
 const updateLinkMarker = (link, indicator) => {
   link.innerHTML = link.innerHTML.replace(/ \[.*\]$/, ` [${indicator}]`);
