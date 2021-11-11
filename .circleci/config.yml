@@ -39,7 +39,7 @@ commands:
       - restore_cache:
           key: wheels-v1-{{ checksum "requirements_dev.txt" }}
       - restore_cache:
-          key: node_modules-v1-{{ checksum "package-lock.json" }}
+          key: node_modules-v1-{{ checksum "yarn.lock" }}
       - run:
           name: Initialize packages
           command: |
@@ -54,15 +54,15 @@ commands:
               exit 1
             fi
       - run:
-          name: Verify package-lock.json
+          name: Verify yarn.lock
           command: |
-            if ! git diff --exit-code package-lock.json
+            if ! git diff --exit-code yarn.lock
             then
-              >&2 echo "Please resolve changes to package-lock.json after npm install to avoid caching difficulties"
+              >&2 echo "Please resolve changes to yarn.lock after yarn install to avoid caching difficulties"
               exit 1
             fi
       - save_cache:
-          key: node_modules-v1-{{ checksum "package-lock.json" }}
+          key: node_modules-v1-{{ checksum "yarn.lock" }}
           paths:
             - "/home/circleci/project/node_modules"
       - save_cache:

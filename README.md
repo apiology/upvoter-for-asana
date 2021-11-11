@@ -6,9 +6,16 @@ WARNING: This is not ready for use yet!
 
 Chrome extension which quickly finds and increments integer custom fields in Asana tasks from the Chrome Omnibox.
 
-## Usage
+## Using
 
-1. Go to chrome://extensions/
-2. Click the Load unpacked button.
-3. Choose the directory containing your Chrome extension code.
-4. Now you can work on your extension.
+## Installing
+
+This isn't in the Chrome App Store, so welcome to the Chrome Extension
+development experience!
+
+1. Run 'make' to create the bundle with webpack, or 'make start' to
+   start webpack in watch mode.
+2. Go to [chrome://extensions/](chrome://extensions/)
+3. Make sure 'Developer mode' is flipped on in the upper right.
+4. Click the 'Load unpacked' button.
+5. Choose this directory

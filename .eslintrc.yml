@@ -4,6 +4,7 @@ env:
   es2020: true
   webextensions: true
 extends:
+  # https://github.com/airbnb/javascript/tree/master/packages/eslint-config-airbnb-base/rules
   - airbnb-base
 parserOptions:
   ecmaVersion: 11
@@ -51,3 +52,15 @@ rules:
       message: 'Labels are a form of GOTO; using them makes code confusing and hard to maintain and understand.'
     - selector: 'WithStatement'
       message: '`with` is disallowed in strict mode because it makes code impossible to predict and optimize.'
+  no-param-reassign:
+    - error
+    # this overrides the airbnb default.  callbacks modifying DOM
+    # elements seem a reasonable thing to do, and the default of
+    # 'props: true' would make that difficult, as the increasingly
+    # ridiculous list of ways to fool the linter on this stackoverflow
+    # page suggests:
+    #
+    # https://stackoverflow.com/questions/35637770/how-to-avoid-no-param-reassign-when-setting-a-property-on-a-dom-object
+    - props: false
+# arrow-body-style
+# https://github.com/airbnb/javascript/blob/35914b14025cd52f53cd2ae2f353cdc7384087c0/packages/eslint-config-airbnb-base/rules/es6.js#L15-L20
