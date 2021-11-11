@@ -7,7 +7,7 @@
   ],
   "omnibox": { "keyword": "uv" },
   "background": {
-    "scripts": ["config.js", "dist/background.js"],
+    "scripts": ["dist/background.js"],
     "persistent": false
   },
   "content_scripts": [
