@@ -4,6 +4,7 @@ env:
   es2020: true
   webextensions: true
 extends:
+  # https://github.com/airbnb/javascript/tree/master/packages/eslint-config-airbnb-base/rules
   - airbnb-base
 parserOptions:
   ecmaVersion: 11
@@ -61,3 +62,5 @@ rules:
     #
     # https://stackoverflow.com/questions/35637770/how-to-avoid-no-param-reassign-when-setting-a-property-on-a-dom-object
     - props: false
+# arrow-body-style
+# https://github.com/airbnb/javascript/blob/35914b14025cd52f53cd2ae2f353cdc7384087c0/packages/eslint-config-airbnb-base/rules/es6.js#L15-L20

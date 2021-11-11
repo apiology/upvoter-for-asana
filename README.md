@@ -10,6 +10,17 @@ just throw a backlog feature task a quick upvote in real time as you
 suffer through missing the feature, then go back later and take on the
 most upvoted tasks!
 
+## Using
+
+Go to the URL bar ("Chrome Omnibox"), and type 'uv', a space, then
+search for an Asana task.  You should see them pop up as suggestions.
+Pick one, and your custom field will be uploaded!
+
+Also, if you mark a task done which has dependent upvotable tasks, you
+can click on the dependent task links to upvote those tasks.  See
+[Shortcuts for Asana](https://github.com/apiology/shortcuts_for_asana)
+for keyboard shortcuts to hit those links!
+
 ## Installing
 
 This isn't in the Chrome App Store and doesn't have any cool config UI,
@@ -29,19 +40,9 @@ so welcome to the Chrome Extension development experience!
    custom with the highest values on top, so you may find it more
    helpful to set 'increment' to 'false' and use negative values so
    your most important thing show up at top by default.
-5. Run `npm install && node_modules/.bin/webpack`
+5. Run 'make' to create the bundle with webpack, or 'make start' to
+   start webpack in watch mode.
 6. Go to [chrome://extensions/](chrome://extensions/)
 7. Make sure 'Developer mode' is flipped on in the upper right.
 8. Click the 'Load unpacked' button.
-9. Choose the directory containing this code.
-
-## Using
-
-Go to the URL bar ("Chrome Omnibox"), and type 'uv', a space, then
-search for an Asana task.  You should see them pop up as suggestions.
-Pick one, and your custom field will be uploaded!
-
-Also, if you mark a task done which has dependent upvotable tasks, you
-can click on the dependent task links to upvote those tasks.  See
-[Shortcuts for Asana](https://github.com/apiology/shortcuts_for_asana)
-for keyboard shortcuts to hit those links!
+9. Choose this directory

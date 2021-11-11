@@ -43,12 +43,13 @@ ensure_node_versions() {
   set -u
 }
 
-ensure_npm() {
-  npm install -g npm
+ensure_yarn() {
+  npm install -g yarn
 }
 
 ensure_npm_modules() {
-  npm install
+  # progress bar creates artifacst in M-x shell
+  yarn install --no-progress
 }
 
 apt_upgraded=0
@@ -56,7 +57,7 @@ apt_upgraded=0
 update_apt() {
   if [ "${apt_upgraded}" = 0 ]
   then
-    sudo apt-get update -y
+    sudo DEBIAN_FRONTEND=noninteractive apt-get update -y
     apt_upgraded=1
   fi
 }
@@ -292,7 +293,7 @@ install_package() {
   elif type apt-get >/dev/null 2>&1
   then
     update_apt
-    sudo apt-get install -y "${apt_package}"
+    sudo DEBIAN_FRONTEND=noninteractive apt-get install -y "${apt_package}"
   else
     >&2 echo "Teach me how to install packages on this plaform"
     exit 1
@@ -306,7 +307,7 @@ ensure_python_build_requirements() {
   ensure_dev_library ffi.h libffi libffi-dev
   ensure_dev_library sqlite3.h sqlite3 libsqlite3-dev
   ensure_dev_library lzma.h xz liblzma-dev
-  ensure_dev_library readline.h readline libreadline-dev
+  ensure_dev_library readline/readline.h readline libreadline-dev
 }
 
 # You can find out which feature versions are still supported / have
@@ -324,8 +325,12 @@ ensure_python_versions() {
   do
     if [ "$(uname)" == Darwin ]
     then
+      if [ -z "${HOMEBREW_OPENSSL_PREFIX:-}" ]
+      then
+        HOMEBREW_OPENSSL_PREFIX="$(brew --prefix openssl)"
+      fi
       pyenv_install() {
-        CFLAGS="-I/usr/local/opt/zlib/include -I/usr/local/opt/bzip2/include" LDFLAGS="-L/usr/local/opt/zlib/lib -L/usr/local/opt/bzip2/lib" pyenv install --skip-existing "$@"
+        CFLAGS="-I/usr/local/opt/zlib/include -I/usr/local/opt/bzip2/include -I${HOMEBREW_OPENSSL_PREFIX}/include" LDFLAGS="-L/usr/local/opt/zlib/lib -L/usr/local/opt/bzip2/lib -L${HOMEBREW_OPENSSL_PREFIX}/lib" pyenv install --skip-existing "$@"
       }
 
       major_minor="$(cut -d. -f1-2 <<<"${ver}")"
@@ -390,7 +395,7 @@ ensure_nvm
 
 ensure_node_versions
 
-ensure_npm
+ensure_yarn
 
 ensure_npm_modules
 
