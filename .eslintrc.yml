@@ -6,6 +6,11 @@ env:
 extends:
   # https://github.com/airbnb/javascript/tree/master/packages/eslint-config-airbnb-base/rules
   - airbnb-base
+  - plugin:@typescript-eslint/eslint-recommended
+  - plugin:@typescript-eslint/recommended
+parser: "@typescript-eslint/parser"
+plugins:
+  - "@typescript-eslint"
 parserOptions:
   ecmaVersion: 11
   sourceType: module
