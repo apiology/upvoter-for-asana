@@ -3,6 +3,7 @@ module.exports = {
     background: ['./src/background.js', './src/upvoter.js'],
     'content-script': ['./src/content-script.js'],
   },
+  mode: 'development', // override with webpack --mode=production on CLI builds
   output: {
     filename: '[name].js',
   },
