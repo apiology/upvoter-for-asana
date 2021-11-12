@@ -30,11 +30,16 @@
     "glob-parent": ">=5.1.2",
     "path-parse": ">=1.0.7",
     "set-value": ">=4.0.1",
-    "webpack": "^4.46.0",
+    "webpack": "^5",
     "webpack-cli": "^4.5.0"
   },
+  "_dependenciesComments": "buffer, stream-browserify, url and util are node polyfills needed by asana library",
   "dependencies": {
     "asana": "^0.18.5",
-    "lodash": "^4.17.21"
+    "buffer": "^6.0.3",
+    "lodash": "^4.17.21",
+    "stream-browserify": "^3.0.0",
+    "url": "^0.11.0",
+    "util": "^0.12.4"
   }
 }
