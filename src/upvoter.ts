@@ -1,6 +1,6 @@
-const Asana = require('asana');
+import Asana from 'asana';
 
-const client = Asana.Client.create().useAccessToken(asanaAccessToken);
+export const client = Asana.Client.create().useAccessToken(asanaAccessToken);
 
 let workspaceGid = null;
 
@@ -43,14 +43,15 @@ const findAndSaveWorkspaceAndCustomFieldGids = (workspacesResult) => new Promise
   stream.on('error', () => reject());
 });
 
-const gidFetch = client.workspaces.getWorkspaces().then(findAndSaveWorkspaceAndCustomFieldGids);
+export const gidFetch = client.workspaces.getWorkspaces()
+  .then(findAndSaveWorkspaceAndCustomFieldGids);
 
-const pullCustomFieldGid = () => gidFetch.then(() => customFieldGid);
+export const pullCustomFieldGid = () => gidFetch.then(() => customFieldGid);
 
 // How on God's green earth is there no built-in function to do this?
 //
 // https://stackoverflow.com/questions/40263803/native-javascript-or-es6-way-to-encode-and-decode-html-entities
-const escapeHTML = (str) => str.replace(/[&<>'"]/g,
+export const escapeHTML = (str) => str.replace(/[&<>'"]/g,
   (tag) => ({
     '&': '&amp;',
     '<': '&lt;',
@@ -61,7 +62,7 @@ const escapeHTML = (str) => str.replace(/[&<>'"]/g,
 
 class NotInitializedError extends Error {}
 
-const pullTypeaheadSuggestions = (text, suggest) => {
+export const pullTypeaheadSuggestions = (text, suggest) => {
   const query = {
     resource_type: 'task',
     query: text,
@@ -86,7 +87,7 @@ const pullTypeaheadSuggestions = (text, suggest) => {
   });
 };
 
-const upvoteTask = (task) => {
+export const upvoteTask = (task) => {
   console.log('upvoteTask got task', task);
   return pullCustomFieldGid().then((upvotesCustomFieldGid) => {
     const customField = task.custom_fields.find((field) => field.gid === upvotesCustomFieldGid);
@@ -100,21 +101,10 @@ const upvoteTask = (task) => {
   });
 };
 
-const logSuccess = (result) => console.log('Upvoted task:', result);
+export const logSuccess = (result) => console.log('Upvoted task:', result);
 
-const pullCustomFieldFn = (upvotesCustomFieldGid) => (task) => {
+export const pullCustomFieldFn = (upvotesCustomFieldGid) => (task) => {
   const customField = task.custom_fields.find((field) => field.gid === upvotesCustomFieldGid);
 
   return { task, customField };
-};
-
-module.exports = {
-  pullCustomFieldGid,
-  escapeHTML,
-  pullTypeaheadSuggestions,
-  upvoteTask,
-  logSuccess,
-  client,
-  gidFetch,
-  pullCustomFieldFn,
 };
