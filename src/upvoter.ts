@@ -89,7 +89,7 @@ export const pullTypeaheadSuggestions = (text: string, suggest: SuggestFunction)
   });
 };
 
-export const upvoteTask = (task) => {
+export const upvoteTask = (task: Asana.resources.Tasks.Type) => {
   console.log('upvoteTask got task', task);
   return pullCustomFieldGid().then((upvotesCustomFieldGid: Gid) => {
     const customField = task.custom_fields.find((field) => field.gid === upvotesCustomFieldGid);
@@ -105,7 +105,8 @@ export const upvoteTask = (task) => {
 
 export const logSuccess = (result: string) => console.log('Upvoted task:', result);
 
-export const pullCustomFieldFn = (upvotesCustomFieldGid: Gid) => (task) => {
+export const pullCustomFieldFn = (upvotesCustomFieldGid: Gid) => (task: Asana
+  .resources.Tasks.Type) => {
   const customField = task.custom_fields.find((field) => field.gid === upvotesCustomFieldGid);
 
   return { task, customField };

@@ -1,6 +1,7 @@
 // https://github.com/GoogleChrome/chrome-extensions-samples/blob/1d8d137d20fad5972292377dc22498529d2a4039/api/omnibox/simple-example/background.js
 
 import * as _ from 'lodash';
+import * as Asana from 'asana';
 import { Gid } from './asana-types.ts';
 import { SuggestFunction } from './chrome-types.ts';
 
@@ -16,15 +17,18 @@ const passOnTypeaheadResultToOmnibox = (text: string) => ({ suggest, typeaheadRe
   });
   console.log('typeaheadResult: ', typeaheadResult);
   return pullCustomFieldGid().then((customFieldGid: Gid) => {
-    const suggestions = typeaheadResult.data.filter((task) => !task.completed)
-      .filter((task) => task.parent == null)
-      .filter((task) => task.name.length > 0)
+    const suggestions = typeaheadResult.data
+      .filter((task: Asana.resources.Tasks.Type) => !task.completed)
+      .filter((task: Asana.resources.Tasks.Type) => task.parent == null)
+      .filter((task: Asana.resources.Tasks.Type) => task.name.length > 0)
       .map(pullCustomFieldFn(customFieldGid))
       .filter(({ customField }) => customField != null)
-      .map(({ task, customField }) => ({
-        content: task.gid,
-        description: escapeHTML(`${customField.number_value}: ${task.name}`),
-      }));
+      .map(({ task, customField }:
+        { task: Asana.resources.Tasks.Type, customField }) => (
+        {
+          content: task.gid,
+          description: escapeHTML(`${customField.number_value}: ${task.name}`),
+        }));
     console.log(`${suggestions.length} suggestions from ${text}:`, suggestions);
     suggest(suggestions);
     const description = `<dim>${suggestions.length} results for ${text}:</dim>`;
