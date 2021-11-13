@@ -8,7 +8,8 @@ let workspaceGid: Gid | null = null;
 
 let customFieldGid: Gid | null = null;
 
-const saveCustomFieldGidIfRightName = (customField, resolve: () => void) => {
+const saveCustomFieldGidIfRightName = (customField: Asana.resources.CustomField,
+  resolve: () => void) => {
   if (customField.name === customFieldName) {
     customFieldGid = customField.gid;
     console.log(`Found custom field GID as ${customFieldGid}`);
@@ -19,7 +20,7 @@ const saveCustomFieldGidIfRightName = (customField, resolve: () => void) => {
 const findAndSaveCustomFieldGid = (customFieldsResult) => new Promise((resolve, reject) => {
   // https://stackoverflow.com/questions/44013020/using-promises-with-streams-in-node-js
   const stream = customFieldsResult.stream();
-  stream.on('data', (customField) => saveCustomFieldGidIfRightName(customField, resolve));
+  stream.on('data', (customField: Asana.resources.CustomField) => saveCustomFieldGidIfRightName(customField, resolve));
   stream.on('end', () => resolve());
   stream.on('finish', () => resolve());
   stream.on('error', () => reject());

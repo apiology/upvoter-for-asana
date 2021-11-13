@@ -10,6 +10,18 @@ import {
   client, logSuccess, pullCustomFieldFn,
 } from './upvoter.ts';
 
+// extends https://github.com/DefinitelyTyped/DefinitelyTyped/blob/01906126b2ced50d3119dc09aa64fbe5f4bb9ff2/types/asana/index.d.ts#L2857
+declare module 'asana' {
+  namespace resources { // eslint-disable-line @typescript-eslint/no-namespace
+    interface CustomField extends Resource {
+      enabled: boolean; // eslint-disable-line camelcase
+      enum_options: EnumValue[] | null; // eslint-disable-line camelcase
+      enum_value: EnumValue | null; // eslint-disable-line camelcase
+      number_value: number | null; // eslint-disable-line camelcase
+    }
+  }
+}
+
 const passOnTypeaheadResultToOmnibox = (text: string) => ({ suggest, typeaheadResult }:
   { suggest: SuggestFunction, typeaheadResult }) => {
   chrome.omnibox.setDefaultSuggestion({
@@ -22,9 +34,10 @@ const passOnTypeaheadResultToOmnibox = (text: string) => ({ suggest, typeaheadRe
       .filter((task: Asana.resources.Tasks.Type) => task.parent == null)
       .filter((task: Asana.resources.Tasks.Type) => task.name.length > 0)
       .map(pullCustomFieldFn(customFieldGid))
-      .filter(({ customField }) => customField != null)
+      .filter(({ customField }:
+        { customField: Asana.resources.CustomField }) => customField != null)
       .map(({ task, customField }:
-        { task: Asana.resources.Tasks.Type, customField }) => (
+        { task: Asana.resources.Tasks.Type, customField: Asana.resources.CustomField }) => (
         {
           content: task.gid,
           description: escapeHTML(`${customField.number_value}: ${task.name}`),
