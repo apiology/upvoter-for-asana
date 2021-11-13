@@ -1,6 +1,6 @@
 import {
   upvoteTask, client, logSuccess, pullCustomFieldGid, pullCustomFieldFn,
-} from './upvoter';
+} from './upvoter.ts';
 
 const updateLinkMarker = (link, indicator) => {
   link.innerHTML = link.innerHTML.replace(/ \[.*\]$/, ` [${indicator}]`);
