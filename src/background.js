@@ -1,11 +1,11 @@
 // https://github.com/GoogleChrome/chrome-extensions-samples/blob/1d8d137d20fad5972292377dc22498529d2a4039/api/omnibox/simple-example/background.js
 
-const _ = require('lodash');
+import _ from 'lodash';
 
-const {
+import {
   pullCustomFieldGid, escapeHTML, pullTypeaheadSuggestions, upvoteTask,
   client, logSuccess, pullCustomFieldFn,
-} = require('./upvoter');
+} from './upvoter';
 
 const passOnTypeaheadResultToOmnibox = (text) => ({ suggest, typeaheadResult }) => {
   chrome.omnibox.setDefaultSuggestion({
