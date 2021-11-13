@@ -1,6 +1,6 @@
-const {
+import {
   upvoteTask, client, logSuccess, pullCustomFieldGid, pullCustomFieldFn,
-} = require('./upvoter');
+} from './upvoter';
 
 const updateLinkMarker = (link, indicator) => {
   link.innerHTML = link.innerHTML.replace(/ \[.*\]$/, ` [${indicator}]`);
