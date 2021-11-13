@@ -41,6 +41,8 @@
     "webpack-cli": "^4.5.0"
   },
   "dependencies": {
+    "@types/asana": "^0.18.4",
+    "@types/chrome": "^0.0.163",
     "asana": "^0.18.5",
     "buffer": "^6.0.3",
     "lodash": "^4.17.21",
