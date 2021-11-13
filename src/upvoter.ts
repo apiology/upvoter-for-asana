@@ -1,10 +1,11 @@
-import Asana from 'asana';
+import * as Asana from 'asana';
+import { Gid } from './asana-types.ts';
 
 export const client = Asana.Client.create().useAccessToken(asanaAccessToken);
 
-let workspaceGid = null;
+let workspaceGid: Gid | null = null;
 
-let customFieldGid = null;
+let customFieldGid: Gid | null = null;
 
 const saveCustomFieldGidIfRightName = (customField, resolve) => {
   if (customField.name === customFieldName) {
@@ -51,7 +52,7 @@ export const pullCustomFieldGid = () => gidFetch.then(() => customFieldGid);
 // How on God's green earth is there no built-in function to do this?
 //
 // https://stackoverflow.com/questions/40263803/native-javascript-or-es6-way-to-encode-and-decode-html-entities
-export const escapeHTML = (str) => str.replace(/[&<>'"]/g,
+export const escapeHTML = (str: string) => str.replace(/[&<>'"]/g,
   (tag) => ({
     '&': '&amp;',
     '<': '&lt;',
@@ -60,9 +61,9 @@ export const escapeHTML = (str) => str.replace(/[&<>'"]/g,
     '"': '&quot;',
   }[tag]));
 
-class NotInitializedError extends Error {}
+class NotInitializedError extends Error { }
 
-export const pullTypeaheadSuggestions = (text, suggest) => {
+export const pullTypeaheadSuggestions = (text: string, suggest) => {
   const query = {
     resource_type: 'task',
     query: text,
@@ -89,7 +90,7 @@ export const pullTypeaheadSuggestions = (text, suggest) => {
 
 export const upvoteTask = (task) => {
   console.log('upvoteTask got task', task);
-  return pullCustomFieldGid().then((upvotesCustomFieldGid) => {
+  return pullCustomFieldGid().then((upvotesCustomFieldGid: Gid) => {
     const customField = task.custom_fields.find((field) => field.gid === upvotesCustomFieldGid);
     const currentValue = customField.number_value;
     // https://developers.asana.com/docs/update-a-task
@@ -103,7 +104,7 @@ export const upvoteTask = (task) => {
 
 export const logSuccess = (result) => console.log('Upvoted task:', result);
 
-export const pullCustomFieldFn = (upvotesCustomFieldGid) => (task) => {
+export const pullCustomFieldFn = (upvotesCustomFieldGid: Gid) => (task) => {
   const customField = task.custom_fields.find((field) => field.gid === upvotesCustomFieldGid);
 
   return { task, customField };

@@ -2,6 +2,8 @@ import {
   upvoteTask, client, logSuccess, pullCustomFieldGid, pullCustomFieldFn,
 } from './upvoter.ts';
 
+import { Gid } from './asana-types.ts';
+
 const updateLinkMarker = (link, indicator) => {
   link.innerHTML = link.innerHTML.replace(/ \[.*\]$/, ` [${indicator}]`);
 };
@@ -24,7 +26,7 @@ const upvote = (dependentTaskGid, link) => {
     .then(() => populateCurrentCount(dependentTaskGid, link));
 };
 
-const onDependentTaskClickFn = (dependentTaskGid, link) => (event) => {
+const onDependentTaskClickFn = (dependentTaskGid: Gid, link) => (event) => {
   upvote(dependentTaskGid, link);
   event.stopPropagation();
 };
