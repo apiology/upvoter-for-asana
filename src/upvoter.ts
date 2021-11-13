@@ -1,5 +1,6 @@
 import * as Asana from 'asana';
 import { Gid } from './asana-types.ts';
+import { SuggestFunction } from './chrome-types.ts';
 
 export const client = Asana.Client.create().useAccessToken(asanaAccessToken);
 
@@ -7,7 +8,7 @@ let workspaceGid: Gid | null = null;
 
 let customFieldGid: Gid | null = null;
 
-const saveCustomFieldGidIfRightName = (customField, resolve) => {
+const saveCustomFieldGidIfRightName = (customField, resolve: () => void) => {
   if (customField.name === customFieldName) {
     customFieldGid = customField.gid;
     console.log(`Found custom field GID as ${customFieldGid}`);
@@ -63,7 +64,7 @@ export const escapeHTML = (str: string) => str.replace(/[&<>'"]/g,
 
 class NotInitializedError extends Error { }
 
-export const pullTypeaheadSuggestions = (text: string, suggest) => {
+export const pullTypeaheadSuggestions = (text: string, suggest: SuggestFunction) => {
   const query = {
     resource_type: 'task',
     query: text,

@@ -2,13 +2,12 @@
 
 import * as _ from 'lodash';
 import { Gid } from './asana-types.ts';
+import { SuggestFunction } from './chrome-types.ts';
 
 import {
   pullCustomFieldGid, escapeHTML, pullTypeaheadSuggestions, upvoteTask,
   client, logSuccess, pullCustomFieldFn,
 } from './upvoter.ts';
-
-type SuggestFunction = (suggestResults: chrome.omnibox.SuggestResult[]) => void;
 
 const passOnTypeaheadResultToOmnibox = (text: string) => ({ suggest, typeaheadResult }:
   { suggest: SuggestFunction, typeaheadResult }) => {
