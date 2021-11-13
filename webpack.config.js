@@ -13,6 +13,7 @@ module.exports = {
       },
     ],
   },
+  mode: 'development', // override with webpack --mode=production on CLI builds
   output: {
     filename: '[name].js',
   },

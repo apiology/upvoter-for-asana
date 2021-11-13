@@ -5,7 +5,7 @@ const _ = require('lodash');
 const {
   pullCustomFieldGid, escapeHTML, pullTypeaheadSuggestions, upvoteTask,
   client, logSuccess, pullCustomFieldFn,
-} = require('./upvoter.ts');
+} = require('./upvoter');
 
 const passOnTypeaheadResultToOmnibox = (text) => ({ suggest, typeaheadResult }) => {
   chrome.omnibox.setDefaultSuggestion({
