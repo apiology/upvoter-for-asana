@@ -4,21 +4,21 @@ import {
 
 import { Gid } from './asana-types.ts';
 
-const updateLinkMarker = (link, indicator) => {
+const updateLinkMarker = (link: Element, indicator: string) => {
   link.innerHTML = link.innerHTML.replace(/ \[.*\]$/, ` [${indicator}]`);
 };
 
 const upvoteLinkClassName = 'upvoter-upvote-link';
 
-const populateCurrentCount = (dependentTaskGid, link) => pullCustomFieldGid()
-  .then((customFieldGid) => {
+const populateCurrentCount = (dependentTaskGid: Gid, link: Element) => pullCustomFieldGid()
+  .then((customFieldGid: Gid) => {
     const pullCustomField = pullCustomFieldFn(customFieldGid);
     return client.tasks.getTask(dependentTaskGid)
       .then(pullCustomField)
       .then(({ customField }) => updateLinkMarker(link, customField.number_value));
   });
 
-const upvote = (dependentTaskGid, link) => {
+const upvote = (dependentTaskGid: Gid, link: Element) => {
   updateLinkMarker(link, '^^');
   client.tasks.getTask(dependentTaskGid)
     .then(upvoteTask)
@@ -26,12 +26,12 @@ const upvote = (dependentTaskGid, link) => {
     .then(() => populateCurrentCount(dependentTaskGid, link));
 };
 
-const onDependentTaskClickFn = (dependentTaskGid: Gid, link) => (event) => {
+const onDependentTaskClickFn = (dependentTaskGid: Gid, link: Element) => (event) => {
   upvote(dependentTaskGid, link);
   event.stopPropagation();
 };
 
-const fixUpLinkToDependency = (link) => {
+const fixUpLinkToDependency = (link: Element) => {
   const url = link.getAttribute('href');
   const dependentTaskGid = url.split('/').at(-1);
   link.removeAttribute('href');

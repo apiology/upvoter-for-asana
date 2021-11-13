@@ -102,7 +102,7 @@ export const upvoteTask = (task) => {
   });
 };
 
-export const logSuccess = (result) => console.log('Upvoted task:', result);
+export const logSuccess = (result: string) => console.log('Upvoted task:', result);
 
 export const pullCustomFieldFn = (upvotesCustomFieldGid: Gid) => (task) => {
   const customField = task.custom_fields.find((field) => field.gid === upvotesCustomFieldGid);

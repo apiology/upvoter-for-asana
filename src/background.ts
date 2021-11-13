@@ -8,7 +8,10 @@ import {
   client, logSuccess, pullCustomFieldFn,
 } from './upvoter.ts';
 
-const passOnTypeaheadResultToOmnibox = (text: string) => ({ suggest, typeaheadResult }) => {
+type SuggestFunction = (suggestResults: chrome.omnibox.SuggestResult[]) => void;
+
+const passOnTypeaheadResultToOmnibox = (text: string) => ({ suggest, typeaheadResult }:
+  { suggest: SuggestFunction, typeaheadResult }) => {
   chrome.omnibox.setDefaultSuggestion({
     description: '<dim>Processing results...</dim>',
   });
@@ -30,12 +33,12 @@ const passOnTypeaheadResultToOmnibox = (text: string) => ({ suggest, typeaheadRe
   });
 };
 
-const logError = (err) => {
+const logError = (err: string) => {
   alert(err);
   throw err;
 };
 
-const pullAndReportTypeaheadSuggestions = (text: string, suggest) => {
+const pullAndReportTypeaheadSuggestions = (text: string, suggest: SuggestFunction) => {
   pullTypeaheadSuggestions(text, suggest).then(passOnTypeaheadResultToOmnibox(text))
     .catch(logError);
 };
@@ -43,7 +46,7 @@ const pullAndReportTypeaheadSuggestions = (text: string, suggest) => {
 const pullAndReportTypeaheadSuggestionsDebounced = _.debounce(pullAndReportTypeaheadSuggestions,
   500);
 
-const omniboxInputChangedListener = (text: string, suggest) => {
+const omniboxInputChangedListener = (text: string, suggest: SuggestFunction) => {
   chrome.omnibox.setDefaultSuggestion({
     description: `<dim>Waiting for results from ${text}...</dim>`,
   });
