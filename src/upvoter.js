@@ -43,7 +43,8 @@ const findAndSaveWorkspaceAndCustomFieldGids = (workspacesResult) => new Promise
   stream.on('error', () => reject());
 });
 
-export const gidFetch = client.workspaces.getWorkspaces().then(findAndSaveWorkspaceAndCustomFieldGids);
+export const gidFetch = client.workspaces.getWorkspaces()
+  .then(findAndSaveWorkspaceAndCustomFieldGids);
 
 export const pullCustomFieldGid = () => gidFetch.then(() => customFieldGid);
 
