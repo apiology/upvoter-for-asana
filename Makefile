@@ -41,6 +41,7 @@ Gemfile.lock.installed: Gemfile.lock
 bundle_install: Gemfile.lock.installed ## Install Ruby dependencies
 
 clean: ## remove all built artifacts
+	rm dist/* || true
 
 test: webpack ## run tests quickly
 
