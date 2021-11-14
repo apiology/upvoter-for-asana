@@ -5,6 +5,7 @@ import { SuggestFunction } from './chrome-types.ts';
 /* eslint-disable @typescript-eslint/no-namespace */
 /* eslint-disable camelcase */
 /* eslint-disable max-len */
+/* eslint-disable no-use-before-define */
 // extends https://github.com/DefinitelyTyped/DefinitelyTyped/blob/01906126b2ced50d3119dc09aa64fbe5f4bb9ff2/types/asana/index.d.ts#L2857
 declare module 'asana' {
   namespace resources {
@@ -63,6 +64,27 @@ declare module 'asana' {
         dispatchOptions?: any
       ): Promise<TypeaheadResults>
     }
+
+    interface Workspaces extends Resource {
+      // https://github.com/Asana/node-asana/blob/6bf00fb3257847744bf0ebe2dc0e95c445477282/lib/resources/gen/workspaces.js#L57-L74
+      /**
+       * Get multiple workspaces
+       * @param {Object} params: Parameters for the request
+       - offset {String}:  Offset token. An offset to the next page returned by the API. A pagination request will return an offset token, which can be used as an input parameter to the next request. If an offset is not passed in, the API will return the first page of results. 'Note: You can only pass in an offset that was returned to you via a previously paginated request.'
+       - limit {Number}:  Results per page. The number of objects to return per page. The value must be between 1 and 100.
+       - optFields {[String]}:  Defines fields to return. Some requests return *compact* representations of objects in order to conserve resources and complete the request more efficiently. Other times requests return more information than you may need. This option allows you to list the exact set of fields that the API should be sure to return for the objects. The field names should be provided as paths, described below. The id of included objects will always be returned, regardless of the field options.
+       - optPretty {Boolean}:  Provides "pretty" output. Provides the response in a "pretty" format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
+       * @param {Object} [dispatchOptions]: Options, if any, to pass the dispatcher for the request
+       * @return {Promise} The requested resource
+       */
+      getWorkspaces(
+        params?: any,
+        dispatchOptions?: any
+      ): Promise<WorkspacesResults>
+    }
+
+    // https://developers.asana.com/docs/workspace-membership-compact
+    type WorkspacesResults = ResourceList<Workspaces.Type>
   }
 
   interface Client {
@@ -72,6 +94,7 @@ declare module 'asana' {
 /* eslint-enable @typescript-eslint/no-namespace */
 /* eslint-enable camelcase */
 /* eslint-enable max-len */
+/* eslint-enable no-use-before-define */
 
 export const client = Asana.Client.create().useAccessToken(asanaAccessToken);
 
@@ -97,7 +120,8 @@ const findAndSaveCustomFieldGid = (customFieldsResult) => new Promise((resolve, 
   stream.on('error', () => reject());
 });
 
-const saveWorkspaceAndCustomFieldGidsIfRightNames = (workspace, resolve) => {
+const saveWorkspaceAndCustomFieldGidsIfRightNames = (workspace: Asana.resources.Workspaces.Type,
+  resolve) => {
   if (workspace.name === workspaceName) {
     workspaceGid = workspace.gid;
     console.log(`Found workspace GID as ${workspaceGid}`);
@@ -106,12 +130,14 @@ const saveWorkspaceAndCustomFieldGidsIfRightNames = (workspace, resolve) => {
   }
 };
 
-const findAndSaveWorkspaceAndCustomFieldGids = (workspacesResult) => new Promise((resolve,
-  reject) => {
+const findAndSaveWorkspaceAndCustomFieldGids = (
+  workspacesResult: Asana.resources.WorkspacesResults
+) => new Promise((resolve, reject) => {
   // https://stackoverflow.com/questions/44013020/using-promises-with-streams-in-node-js
   const stream = workspacesResult.stream();
-  stream.on('data',
-    (workspace) => saveWorkspaceAndCustomFieldGidsIfRightNames(workspace, resolve));
+  stream.on('data', (
+    workspace: Asana.resources.Workspaces.Type
+  ) => saveWorkspaceAndCustomFieldGidsIfRightNames(workspace, resolve));
   stream.on('end', () => resolve());
   stream.on('finish', () => resolve());
   stream.on('error', () => reject());
