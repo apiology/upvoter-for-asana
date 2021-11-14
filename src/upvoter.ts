@@ -148,17 +148,36 @@ export const gidFetch = client.workspaces.getWorkspaces()
 
 export const pullCustomFieldGid = (): Promise<Gid> => gidFetch.then(() => customFieldGid);
 
+const logErrorOrig = (err: string): never => {
+  alert(err);
+  throw err;
+};
+
+// As of 4.4.4, TypeScript's control flow analysis is wonky with
+// narrowing and functions that return never.  This is a workaround:
+//
+// https://github.com/microsoft/TypeScript/issues/36753
+export const logError: (err: string) => never = logErrorOrig;
+
 // How on God's green earth is there no built-in function to do this?
 //
 // https://stackoverflow.com/questions/40263803/native-javascript-or-es6-way-to-encode-and-decode-html-entities
-export const escapeHTML = (str: string) => str.replace(/[&<>'"]/g,
-  (tag) => ({
-    '&': '&amp;',
-    '<': '&lt;',
-    '>': '&gt;',
-    "'": '&#39;',
-    '"': '&quot;',
-  }[tag]));
+export const escapeHTML = (str: string) => {
+  const escape = (tag: string): string => {
+    const s = ({
+      '&': '&amp;',
+      '<': '&lt;',
+      '>': '&gt;',
+      "'": '&#39;',
+      '"': '&quot;',
+    }[tag]);
+    if (s == null) {
+      logError('Error in regexp logic!');
+    }
+    return s;
+  };
+  str.replace(/[&<>'"]/g, escape);
+};
 
 class NotInitializedError extends Error { }
 
@@ -209,9 +228,4 @@ export const pullCustomFieldFn = (upvotesCustomFieldGid: Gid) => (task: Asana
   const customField = task.custom_fields.find((field) => field.gid === upvotesCustomFieldGid);
 
   return { task, customField };
-};
-
-export const logError = (err: string): never => {
-  alert(err);
-  throw err;
 };
