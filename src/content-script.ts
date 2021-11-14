@@ -104,7 +104,13 @@ const dependencyLinks = () => {
   const bodyNodes = Array.from(document.getElementsByClassName(bodyNodesClassName));
   for (const bodyNode of bodyNodes) {
     const linkClassName = 'CompleteTaskWithIncompletePrecedentTasksConfirmationModal-primaryNavigationLink';
-    links.push(...Array.from(bodyNode.getElementsByClassName(linkClassName)));
+    for (const element of Array.from(bodyNode.getElementsByClassName(linkClassName))) {
+      if (element instanceof HTMLElement) {
+        links.push(element);
+      } else {
+        logError('Element is not an HTMLElement!');
+      }
+    }
   }
   return links;
 };
