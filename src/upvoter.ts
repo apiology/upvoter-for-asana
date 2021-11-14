@@ -34,6 +34,21 @@ declare module 'asana' {
         params?: any,
         dispatchOptions?: any,
       ): Promise<Tasks.Type>;
+
+      // https://developers.asana.com/docs/update-a-task
+      // https://github.com/Asana/node-asana/blob/6bf00fb3257847744bf0ebe2dc0e95c445477282/lib/resources/gen/tasks.js#L563-L578
+      /**
+       * Update a task
+       * @param {String} taskGid: (required) The task to operate on.
+       * @param {Object} data: Data for the request
+       * @param {Object} [dispatchOptions]: Options, if any, to pass the dispatcher for the request
+       * @return {Promise} The requested resource
+       */
+      updateTask(
+        taskGid: string,
+        data?: any,
+        dispatchOptions?: any
+      ): Promise<void>
     }
 
     interface CustomField extends Resource {
@@ -57,7 +72,7 @@ declare module 'asana' {
            - optPretty {Boolean}:  Provides “pretty” output. Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
        * @param {Object} [dispatchOptions]: Options, if any, to pass the dispatcher for the request
        * @return {Promise} The requested resource
- */
+       */
       typeaheadForWorkspace(
         workspaceGid: string,
         params?: TypeaheadParams,
@@ -255,7 +270,9 @@ export const pullTypeaheadSuggestions = (text: string, suggest: SuggestFunction)
   });
 };
 
-export const upvoteTask = (task: Asana.resources.Tasks.Type) => {
+export const upvoteTask = (
+  task: Asana.resources.Tasks.Type
+): Promise<Asana.resources.Tasks.Type> => {
   console.log('upvoteTask got task', task);
   return pullCustomFieldGid().then((upvotesCustomFieldGid: Gid) => {
     const customField = task.custom_fields.find((field) => field.gid === upvotesCustomFieldGid);
@@ -271,11 +288,11 @@ export const upvoteTask = (task: Asana.resources.Tasks.Type) => {
     const updatedCustomFields: { [index: string]: number } = {};
     updatedCustomFields[upvotesCustomFieldGid] = newValue;
     return client.tasks.updateTask(task.gid,
-      { custom_fields: updatedCustomFields });
+      { custom_fields: updatedCustomFields }).then(() => task);
   });
 };
 
-export const logSuccess = (result: string) => console.log('Upvoted task:', result);
+export const logSuccess = (result: string | object): void => console.log('Upvoted task:', result);
 
 export const pullCustomFieldFn = (upvotesCustomFieldGid: Gid) => (task: Asana
   .resources.Tasks.Type) => {
