@@ -43,9 +43,6 @@ declare module 'asana' {
       number_value: number | null;
     }
 
-    // https://developers.asana.com/docs/get-objects-via-typeahead
-    type TypeaheadResults = ResourceList<Tasks.Type>
-
     interface Typeahead extends Resource {
       // https://github.com/Asana/node-asana/blob/6bf00fb3257847744bf0ebe2dc0e95c445477282/lib/resources/gen/typeahead.js#L19-L40
       /**
@@ -65,7 +62,7 @@ declare module 'asana' {
         workspaceGid: string,
         params?: TypeaheadParams,
         dispatchOptions?: any
-      ): Promise<TypeaheadResults>
+      ): Promise<ResourceList<Tasks.Type>>
     }
 
     interface Workspaces extends Resource {
@@ -83,11 +80,8 @@ declare module 'asana' {
       getWorkspaces(
         params?: any,
         dispatchOptions?: any
-      ): Promise<WorkspacesResults>
+      ): Promise<ResourceList<Workspaces.Type>>
     }
-
-    // https://developers.asana.com/docs/workspace-membership-compact
-    type WorkspacesResults = ResourceList<Workspaces.Type>
 
     interface CustomFieldsStatic {
       /**
@@ -178,7 +172,7 @@ const saveWorkspaceAndCustomFieldGidsIfRightNames = (workspace: Asana.resources.
 };
 
 const findAndSaveWorkspaceAndCustomFieldGids = (
-  workspacesResult: Asana.resources.WorkspacesResults
+  workspacesResult: Asana.resources.ResourceList<Asana.resources.Workspaces.Type>
 ) => new Promise<void>((resolve, reject) => {
   // https://stackoverflow.com/questions/44013020/using-promises-with-streams-in-node-js
   const stream = workspacesResult.stream();
@@ -255,7 +249,9 @@ export const pullTypeaheadSuggestions = (text: string, suggest: SuggestFunction)
 
     // https://developers.asana.com/docs/typeahead
     return client.typeahead.typeaheadForWorkspace(workspaceGid, query)
-      .then((typeaheadResult: Asana.resources.TypeaheadResults) => ({ suggest, typeaheadResult }));
+      .then((
+        typeaheadResult: Asana.resources.ResourceList<Asana.resources.Tasks.Type>
+      ) => ({ suggest, typeaheadResult }));
   });
 };
 
