@@ -1,6 +1,9 @@
 import * as Asana from 'asana';
 import { Gid } from './asana-types.ts';
 import { SuggestFunction } from './chrome-types.ts';
+import {
+  asanaAccessToken, customFieldName, increment, workspaceName,
+} from './config.ts';
 
 /* eslint-disable @typescript-eslint/no-namespace */
 /* eslint-disable camelcase */
