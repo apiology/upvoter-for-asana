@@ -44,6 +44,14 @@ clean: ## remove all built artifacts
 
 test: webpack ## run tests quickly
 
+src/config.ts:
+	echo "export const asanaAccessToken = 'abc';" > src/config.ts
+	echo "export const workspaceName = 'def';" >> src/config.ts
+	echo "export const customFieldName = 'upvotes';" >> src/config.ts
+	echo "export const increment = false;" >> src/config.ts
+
+dummyconfig: src/config.ts
+
 overcommit: ## run precommit quality checks
 	bundle exec overcommit --run
 

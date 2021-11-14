@@ -115,7 +115,7 @@ jobs:
       - set_up_environment
       - run_with_languages:
           label: Test
-          command: make test
+          command: make dummyconfig test
 
 workflows:
   version: 2
