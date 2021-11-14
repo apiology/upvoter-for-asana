@@ -29,6 +29,7 @@ module.exports = {
     // @ multi ./src/background.js ./src/upvoter.js
     fs: 'empty',
   },
-  // https://stackoverflow.com/questions/48047150/chrome-extension-compiled-by-webpack-throws-unsafe-eval-error
+  // 'inline-source-map' is suggested by https://webpack.js.org/guides/typescript/
+  // 'cheap-module-source-map' is suggested by https://stackoverflow.com/questions/48047150/chrome-extension-compiled-by-webpack-throws-unsafe-eval-error
   devtool: 'cheap-module-source-map',
 };
