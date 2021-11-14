@@ -88,10 +88,52 @@ declare module 'asana' {
 
     // https://developers.asana.com/docs/workspace-membership-compact
     type WorkspacesResults = ResourceList<Workspaces.Type>
+
+    interface CustomFieldsStatic {
+      /**
+       * @param dispatcher
+       */
+      new(dispatcher: Dispatcher): CustomFields;
+    }
+
+    namespace CustomFields {
+      interface Type extends Resource {
+        readonly gid: string;
+        // readonly created_at: string;
+        // readonly download_url: string;
+        // readonly view_url: string;
+        // readonly name: string;
+        // readonly host: string;
+        // readonly parent: Resource;
+      }
+    }
+
+    const CustomFields: CustomFieldsStatic;
+
+    interface CustomFields extends Resource {
+      // https://github.com/Asana/node-asana/blob/6bf00fb3257847744bf0ebe2dc0e95c445477282/lib/resources/gen/custom_fields.js#L91-L110
+      /**
+       * Get a workspace's custom fields
+       * @param {String} workspaceGid: (required) Globally unique identifier for the workspace or organization.
+       * @param {Object} params: Parameters for the request
+       - offset {String}:  Offset token. An offset to the next page returned by the API. A pagination request will return an offset token, which can be used as an input parameter to the next request. If an offset is not passed in, the API will return the first page of results. 'Note: You can only pass in an offset that was returned to you via a previously paginated request.'
+       - limit {Number}:  Results per page. The number of objects to return per page. The value must be between 1 and 100.
+       - optFields {[String]}:  Defines fields to return. Some requests return *compact* representations of objects in order to conserve resources and complete the request more efficiently. Other times requests return more information than you may need. This option allows you to list the exact set of fields that the API should be sure to return for the objects. The field names should be provided as paths, described below. The id of included objects will always be returned, regardless of the field options.
+       - optPretty {Boolean}:  Provides "pretty" output. Provides the response in a "pretty" format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
+       * @param {Object} [dispatchOptions]: Options, if any, to pass the dispatcher for the request
+       * @return {Promise} The requested resource
+       */
+      getCustomFieldsForWorkspace(
+        workspaceGid: string,
+        params?: any,
+        dispatchOptions?: any
+      ): Promise<ResourceList<CustomFields.Type>>
+    }
   }
 
   interface Client {
     typeahead: resources.Typeahead;
+    customFields: resources.CustomFields;
   }
 }
 /* eslint-enable @typescript-eslint/no-namespace */
@@ -114,7 +156,9 @@ const saveCustomFieldGidIfRightName = (customField: Asana.resources.CustomField,
   }
 };
 
-const findAndSaveCustomFieldGid = (customFieldsResult) => new Promise<void>((resolve, reject) => {
+const findAndSaveCustomFieldGid = (
+  customFieldsResult: Asana.resources.ResourceList<Asana.resources.CustomFields.Type>
+) => new Promise<void>((resolve, reject) => {
   // https://stackoverflow.com/questions/44013020/using-promises-with-streams-in-node-js
   const stream = customFieldsResult.stream();
   stream.on('data', (customField: Asana.resources.CustomField) => saveCustomFieldGidIfRightName(customField, resolve));
