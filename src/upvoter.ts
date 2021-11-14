@@ -146,7 +146,7 @@ const findAndSaveWorkspaceAndCustomFieldGids = (
 export const gidFetch = client.workspaces.getWorkspaces()
   .then(findAndSaveWorkspaceAndCustomFieldGids);
 
-export const pullCustomFieldGid = () => gidFetch.then(() => customFieldGid);
+export const pullCustomFieldGid = (): Promise<Gid> => gidFetch.then(() => customFieldGid);
 
 // How on God's green earth is there no built-in function to do this?
 //
