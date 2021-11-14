@@ -176,7 +176,7 @@ export const escapeHTML = (str: string) => {
     }
     return s;
   };
-  str.replace(/[&<>'"]/g, escape);
+  return str.replace(/[&<>'"]/g, escape);
 };
 
 class NotInitializedError extends Error { }
@@ -211,11 +211,17 @@ export const upvoteTask = (task: Asana.resources.Tasks.Type) => {
   console.log('upvoteTask got task', task);
   return pullCustomFieldGid().then((upvotesCustomFieldGid: Gid) => {
     const customField = task.custom_fields.find((field) => field.gid === upvotesCustomFieldGid);
-    const currentValue = customField.number_value;
+    if (customField == null) {
+      logError('Expected to find custom field on task!');
+    }
+    let currentValue = customField.number_value;
+    if (currentValue == null) {
+      currentValue = 1;
+    }
     // https://developers.asana.com/docs/update-a-task
-    const newValue = increment ? currentValue + 1 : currentValue - 1;
-    const updatedCustomFields = {};
-    updatedCustomFields[customFieldGid] = newValue;
+    const newValue: number = increment ? currentValue + 1 : currentValue - 1;
+    const updatedCustomFields: { [index: string]: number } = {};
+    updatedCustomFields[upvotesCustomFieldGid] = newValue;
     return client.tasks.updateTask(task.gid,
       { custom_fields: updatedCustomFields });
   });
