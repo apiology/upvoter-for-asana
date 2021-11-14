@@ -210,3 +210,8 @@ export const pullCustomFieldFn = (upvotesCustomFieldGid: Gid) => (task: Asana
 
   return { task, customField };
 };
+
+export const logError = (err: string): never => {
+  alert(err);
+  throw err;
+};

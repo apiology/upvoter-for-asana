@@ -1,10 +1,14 @@
 import * as Asana from 'asana';
-
+import { Gid } from './asana-types.ts';
 import {
-  upvoteTask, client, logSuccess, pullCustomFieldGid, pullCustomFieldFn,
+  upvoteTask, client, logError as logErrorOrig, logSuccess, pullCustomFieldGid, pullCustomFieldFn,
 } from './upvoter.ts';
 
-import { Gid } from './asana-types.ts';
+// As of 4.4.4, TypeScript's control flow analysis is wonky with
+// narrowing and functions that return never.  This is a workaround:
+//
+// https://github.com/microsoft/TypeScript/issues/36753
+const logError: (err: string) => never = logErrorOrig;
 
 /* eslint-disable @typescript-eslint/no-namespace */
 /* eslint-disable camelcase */
@@ -41,8 +45,12 @@ declare module 'asana' {
 /* eslint-enable camelcase */
 /* eslint-enable max-len */
 
-const updateLinkMarker = (link: Element, indicator: string) => {
-  link.innerHTML = link.innerHTML.replace(/ \[.*\]$/, ` [${indicator}]`);
+const updateLinkMarker = (link: Element, indicator: number | string | null | undefined) => {
+  let message = indicator;
+  if (message == null) {
+    message = 'N/A';
+  }
+  link.innerHTML = link.innerHTML.replace(/ \[.*\]$/, ` [${message}]`);
 };
 
 const upvoteLinkClassName = 'upvoter-upvote-link';
@@ -55,8 +63,10 @@ const populateCurrentCount = (dependentTaskGid: Gid, link: Element) => pullCusto
       .then(({ customField }:
         {
           customField:
-          Asana.resources.CustomField
-        }) => updateLinkMarker(link, customField.number_value));
+          Asana.resources.CustomField | undefined
+        }) => {
+        updateLinkMarker(link, customField?.number_value);
+      });
   });
 
 const upvote = (dependentTaskGid: Gid, link: Element) => {
@@ -76,6 +86,9 @@ const fixUpLinkToDependency = (link: HTMLElement) => {
   const url = link.getAttribute('href');
   if (url != null) {
     const dependentTaskGid = url.split('/').at(-1);
+    if (dependentTaskGid == null) {
+      logError(`Could not parse URL: ${url}`);
+    }
     link.removeAttribute('href');
     link.innerHTML += ' [...]';
     populateCurrentCount(dependentTaskGid, link);

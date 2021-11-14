@@ -6,9 +6,15 @@ import { Gid } from './asana-types.ts';
 import { SuggestFunction } from './chrome-types.ts';
 
 import {
-  pullCustomFieldGid, escapeHTML, pullTypeaheadSuggestions, upvoteTask,
+  logError as logErrorOrig, pullCustomFieldGid, escapeHTML, pullTypeaheadSuggestions, upvoteTask,
   client, logSuccess, pullCustomFieldFn,
 } from './upvoter.ts';
+
+// As of 4.4.4, TypeScript's control flow analysis is wonky with
+// narrowing and functions that return never.  This is a workaround:
+//
+// https://github.com/microsoft/TypeScript/issues/36753
+const logError: (err: string) => never = logErrorOrig;
 
 /* eslint-disable @typescript-eslint/no-namespace */
 /* eslint-disable camelcase */
@@ -77,6 +83,23 @@ declare module 'asana' {
 /* eslint-enable camelcase */
 /* eslint-enable max-len */
 
+const createSuggestResult = ({
+  task,
+  customField,
+}: {
+  task: Asana.resources.Tasks.Type,
+  customField: Asana.resources.CustomField | undefined
+}): chrome.omnibox.SuggestResult => {
+  if (customField === undefined) {
+    logError('customField should never be undefined here!');
+  }
+
+  return {
+    content: task.gid,
+    description: escapeHTML(`${customField.number_value}: ${task.name}`),
+  };
+};
+
 const passOnTypeaheadResultToOmnibox = (text: string) => ({ suggest, typeaheadResult }:
   { suggest: SuggestFunction, typeaheadResult: Asana.resources.TypeaheadResults }) => {
   chrome.omnibox.setDefaultSuggestion({
@@ -90,24 +113,16 @@ const passOnTypeaheadResultToOmnibox = (text: string) => ({ suggest, typeaheadRe
       .filter((task: Asana.resources.Tasks.Type) => task.name.length > 0)
       .map(pullCustomFieldFn(customFieldGid))
       // TODO: understand the | undefined below - why not null?
-      .filter(({ customField }:
-        { customField: Asana.resources.CustomField | undefined }) => customField != null)
-      .map(({ task, customField }:
-        { task: Asana.resources.Tasks.Type, customField: Asana.resources.CustomField }) => (
-        {
-          content: task.gid,
-          description: escapeHTML(`${customField.number_value}: ${task.name}`),
-        }));
+      .filter(({ customField }: {
+        customField: Asana.resources.CustomField | undefined
+      }) => customField != null)
+      .map(createSuggestResult);
+
     console.log(`${suggestions.length} suggestions from ${text}:`, suggestions);
     suggest(suggestions);
     const description = `<dim>${suggestions.length} results for ${text}:</dim>`;
     chrome.omnibox.setDefaultSuggestion({ description });
   });
-};
-
-const logError = (err: string) => {
-  alert(err);
-  throw err;
 };
 
 const pullAndReportTypeaheadSuggestions = (text: string, suggest: SuggestFunction) => {
