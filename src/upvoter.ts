@@ -111,7 +111,7 @@ const saveCustomFieldGidIfRightName = (customField: Asana.resources.CustomField,
   }
 };
 
-const findAndSaveCustomFieldGid = (customFieldsResult) => new Promise((resolve, reject) => {
+const findAndSaveCustomFieldGid = (customFieldsResult) => new Promise<void>((resolve, reject) => {
   // https://stackoverflow.com/questions/44013020/using-promises-with-streams-in-node-js
   const stream = customFieldsResult.stream();
   stream.on('data', (customField: Asana.resources.CustomField) => saveCustomFieldGidIfRightName(customField, resolve));
@@ -121,7 +121,7 @@ const findAndSaveCustomFieldGid = (customFieldsResult) => new Promise((resolve, 
 });
 
 const saveWorkspaceAndCustomFieldGidsIfRightNames = (workspace: Asana.resources.Workspaces.Type,
-  resolve) => {
+  resolve: ((value: void | PromiseLike<void>) => void)) => {
   if (workspace.name === workspaceName) {
     workspaceGid = workspace.gid;
     console.log(`Found workspace GID as ${workspaceGid}`);
@@ -132,7 +132,7 @@ const saveWorkspaceAndCustomFieldGidsIfRightNames = (workspace: Asana.resources.
 
 const findAndSaveWorkspaceAndCustomFieldGids = (
   workspacesResult: Asana.resources.WorkspacesResults
-) => new Promise((resolve, reject) => {
+) => new Promise<void>((resolve, reject) => {
   // https://stackoverflow.com/questions/44013020/using-promises-with-streams-in-node-js
   const stream = workspacesResult.stream();
   stream.on('data', (
@@ -146,8 +146,6 @@ const findAndSaveWorkspaceAndCustomFieldGids = (
 export const gidFetch = client.workspaces.getWorkspaces()
   .then(findAndSaveWorkspaceAndCustomFieldGids);
 
-export const pullCustomFieldGid = (): Promise<Gid> => gidFetch.then(() => customFieldGid);
-
 const logErrorOrig = (err: string): never => {
   alert(err);
   throw err;
@@ -158,6 +156,13 @@ const logErrorOrig = (err: string): never => {
 //
 // https://github.com/microsoft/TypeScript/issues/36753
 export const logError: (err: string) => never = logErrorOrig;
+
+export const pullCustomFieldGid = (): Promise<Gid> => gidFetch.then(() => {
+  if (customFieldGid == null) {
+    logError('customFieldGid fetch failed!');
+  }
+  return customFieldGid;
+});
 
 // How on God's green earth is there no built-in function to do this?
 //
