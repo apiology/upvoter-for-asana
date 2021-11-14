@@ -138,6 +138,38 @@ declare module 'asana' {
         dispatchOptions?: any
       ): Promise<ResourceList<CustomFields.Type>>
     }
+
+    interface ResourceStream<T extends Resource> {
+      on(command: 'data', callback: (resource: T) => any): void
+      on(command: 'end', callback: () => void): void
+      on(command: 'finish', callback: () => void): void
+      on(command: 'error', callback: () => void): void
+    }
+
+    interface ResourceList<T extends Resource> {
+      /**
+       * Get the next page of results in a collection.
+       *
+       * @returns {Promise<Collection?>} Resolves to either a collection representing
+       *     the next page of results, or null if no more pages.
+       */
+      nextPage(): Promise<ResourceList<T> | null>;
+      stream(): ResourceStream<T>
+      data: T[];
+      _response: {
+        data: T[];
+        next_page?: NextPage | undefined;
+      };
+      _dispatcher: {
+        authenticator: {
+          apiKey: string;
+        };
+        asanaBaseUrl: string;
+        retryOnRateLimit: boolean;
+        requestTimeout: number;
+        _cachedVersionInfo: VersionInfo;
+      };
+    }
   }
 
   interface Client {
@@ -156,7 +188,7 @@ let workspaceGid: Gid | null = null;
 
 let customFieldGid: Gid | null = null;
 
-const saveCustomFieldGidIfRightName = (customField: Asana.resources.CustomField,
+const saveCustomFieldGidIfRightName = (customField: Asana.resources.CustomFields.Type,
   resolve: () => void) => {
   if (customField.name === customFieldName) {
     customFieldGid = customField.gid;
@@ -170,7 +202,7 @@ const findAndSaveCustomFieldGid = (
 ) => new Promise<void>((resolve, reject) => {
   // https://stackoverflow.com/questions/44013020/using-promises-with-streams-in-node-js
   const stream = customFieldsResult.stream();
-  stream.on('data', (customField: Asana.resources.CustomField) => saveCustomFieldGidIfRightName(customField, resolve));
+  stream.on('data', (customField: Asana.resources.CustomFields.Type) => saveCustomFieldGidIfRightName(customField, resolve));
   stream.on('end', () => resolve());
   stream.on('finish', () => resolve());
   stream.on('error', () => reject());
