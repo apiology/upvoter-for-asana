@@ -80,7 +80,7 @@
 
 "@types/asana@^0.18.4":
   version "0.18.4"
-  resolved "https://registry.npmjs.org/@types/asana/-/asana-0.18.4.tgz"
+  resolved "https://registry.yarnpkg.com/@types/asana/-/asana-0.18.4.tgz#e840e0f98434f0e3266a82346c861a450b32aab8"
   integrity sha512-vyuwpwXDcdrv4mQrMYF0MIMCOfBUKHCkNgMihMNseMdk9CGg5aDJqV0rZsHAp3dmCsbb/7K3G9XhkT9KcrIZRQ==
   dependencies:
     "@types/bluebird" "*"
@@ -92,7 +92,7 @@
 
 "@types/chrome@^0.0.163":
   version "0.0.163"
-  resolved "https://registry.npmjs.org/@types/chrome/-/chrome-0.0.163.tgz"
+  resolved "https://registry.yarnpkg.com/@types/chrome/-/chrome-0.0.163.tgz#6ff2fc9e8a160ea0655f6c62b4c2210757c42aab"
   integrity sha512-g+3E2tg/ukFsEgH+tB3a/b+J1VSvq/8gh2Jwih9eq+T3Idrz7ngj97u+/ya58Bfei2TQtPlRivj1FsCaSnukDA==
   dependencies:
     "@types/filesystem" "*"
