@@ -107,6 +107,11 @@ declare module 'asana' {
          */
         attachments: resources.Attachments;
         /**
+         * An instance of the CustomFields resource.
+         * @type {CustomFields}
+         */
+         customFields: resources.CustomFields;
+        /**
          * An instance of the Events resource.
          * @type {Events}
          */
@@ -151,6 +156,11 @@ declare module 'asana' {
          * @type {Users}
          */
         users: resources.Users;
+        /**
+         * An instance of the Typeahead resource.
+         * @type {Typeahead}
+         */
+        typeahead: resources.Typeahead;
         /**
          * An instance of the Workspaces resource.
          * @type {Workspaces}
@@ -2017,6 +2027,37 @@ declare module 'asana' {
              * @return
              */
             addComment(task: string | number, data: Tasks.CommentParams, dispatchOptions?: any): Promise<Stories.Type>;
+
+            // https://github.com/Asana/node-asana/blob/6bf00fb3257847744bf0ebe2dc0e95c445477282/lib/resources/gen/tasks.js#L245-L262
+            /**
+             * Get a task
+             * @param {String} taskGid: (required) The task to operate on.
+             * @param {Object} params: Parameters for the request
+             - optFields {[String]}:  Defines fields to return. Some requests return *compact* representations of objects in order to conserve resources and complete the request more efficiently. Other times requests return more information than you may need. This option allows you to list the exact set of fields that the API should be sure to return for the objects. The field names should be provided as paths, described below. The id of included objects will always be returned, regardless of the field options.
+             - optPretty {Boolean}:  Provides “pretty” output. Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
+             * @param {Object} [dispatchOptions]: Options, if any, to pass the dispatcher for the request
+             * @return {Promise} The requested resource
+             */
+            getTask(
+                taskGid: string,
+                params?: any,
+                dispatchOptions?: any,
+            ): Promise<Tasks.Type>;
+
+            // https://developers.asana.com/docs/update-a-task
+            // https://github.com/Asana/node-asana/blob/6bf00fb3257847744bf0ebe2dc0e95c445477282/lib/resources/gen/tasks.js#L563-L578
+            /**
+             * Update a task
+             * @param {String} taskGid: (required) The task to operate on.
+             * @param {Object} data: Data for the request
+             * @param {Object} [dispatchOptions]: Options, if any, to pass the dispatcher for the request
+             * @return {Promise} The requested resource
+             */
+            updateTask(
+                taskGid: string,
+                data?: any,
+                dispatchOptions?: any
+            ): Promise<void>
         }
 
         interface SectionsStatic {
@@ -2574,6 +2615,22 @@ declare module 'asana' {
              * @return
              */
             removeUser(workspace: string | number, data: UserParams, dispatchOptions?: any): Promise<any>;
+
+            // https://github.com/Asana/node-asana/blob/6bf00fb3257847744bf0ebe2dc0e95c445477282/lib/resources/gen/workspaces.js#L57-L74
+            /**
+             * Get multiple workspaces
+             * @param {Object} params: Parameters for the request
+             - offset {String}:  Offset token. An offset to the next page returned by the API. A pagination request will return an offset token, which can be used as an input parameter to the next request. If an offset is not passed in, the API will return the first page of results. 'Note: You can only pass in an offset that was returned to you via a previously paginated request.'
+             - limit {Number}:  Results per page. The number of objects to return per page. The value must be between 1 and 100.
+             - optFields {[String]}:  Defines fields to return. Some requests return *compact* representations of objects in order to conserve resources and complete the request more efficiently. Other times requests return more information than you may need. This option allows you to list the exact set of fields that the API should be sure to return for the objects. The field names should be provided as paths, described below. The id of included objects will always be returned, regardless of the field options.
+             - optPretty {Boolean}:  Provides "pretty" output. Provides the response in a "pretty" format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
+             * @param {Object} [dispatchOptions]: Options, if any, to pass the dispatcher for the request
+             * @return {Promise} The requested resource
+             */
+            getWorkspaces(
+                params?: any,
+                dispatchOptions?: any
+            ): Promise<ResourceList<Workspaces.Type>>
         }
 
         interface UserTaskListsStatic {
@@ -2778,6 +2835,13 @@ declare module 'asana' {
             dispatchDelete(path: string, dispatchOptions?: any): Promise<any>;
         }
 
+        interface ResourceStream<T extends Resource> {
+            on(command: 'data', callback: (resource: T) => any): void
+            on(command: 'end', callback: () => void): void
+            on(command: 'finish', callback: () => void): void
+            on(command: 'error', callback: () => void): void
+        }
+
         interface ResourceList<T extends Resource> {
             /**
              * Get the next page of results in a collection.
@@ -2786,6 +2850,7 @@ declare module 'asana' {
              *     the next page of results, or null if no more pages.
              */
             nextPage(): Promise<ResourceList<T> | null>;
+            stream(): ResourceStream<T>
             data: T[];
             _response: {
                 data: T[];
@@ -2856,10 +2921,76 @@ declare module 'asana' {
             enabled: boolean;
         }
 
+        namespace CustomFields {
+            interface Type extends Resource {
+                readonly gid: string;
+            }
+        }
+
+        interface CustomFields extends Resource {
+            // https://github.com/Asana/node-asana/blob/6bf00fb3257847744bf0ebe2dc0e95c445477282/lib/resources/gen/custom_fields.js#L91-L110
+            /**
+             * Get a workspace's custom fields
+             * @param {String} workspaceGid: (required) Globally unique identifier for the workspace or organization.
+             * @param {Object} params: Parameters for the request
+             - offset {String}:    Offset token. An offset to the next page returned by the API. A pagination request will return an offset token, which can be used as an input parameter to the next request. If an offset is not passed in, the API will return the first page of results. 'Note: You can only pass in an offset that was returned to you via a previously paginated request.'
+             - limit {Number}:    Results per page. The number of objects to return per page. The value must be between 1 and 100.
+             - optFields {[String]}:    Defines fields to return. Some requests return *compact* representations of objects in order to conserve resources and complete the request more efficiently. Other times requests return more information than you may need. This option allows you to list the exact set of fields that the API should be sure to return for the objects. The field names should be provided as paths, described below. The id of included objects will always be returned, regardless of the field options.
+             - optPretty {Boolean}:    Provides "pretty" output. Provides the response in a "pretty" format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
+             * @param {Object} [dispatchOptions]: Options, if any, to pass the dispatcher for the request
+             * @return {Promise} The requested resource
+             */
+            getCustomFieldsForWorkspace(
+                workspaceGid: string,
+                params?: any,
+                dispatchOptions?: any
+            ): Promise<ResourceList<CustomFields.Type>>
+        }
+
         interface CustomField extends Resource {
             enabled: boolean;
             enum_options: EnumValue[] | null;
             enum_value: EnumValue | null;
+            number_value: number | null;
+        }
+
+        interface CustomFieldsStatic {
+            /**
+             * @param dispatcher
+             */
+            new(dispatcher: Dispatcher): CustomFields;
+        }
+
+        var CustomFields: CustomFieldsStatic;
+
+        namespace Typeahead {
+            interface TypeaheadParams {
+                resource_type: string;
+                query?: string | undefined;
+                count?: number | undefined;
+            }
+        }
+
+        interface Typeahead extends Resource {
+            // https://github.com/Asana/node-asana/blob/6bf00fb3257847744bf0ebe2dc0e95c445477282/lib/resources/gen/typeahead.js#L19-L40
+            /**
+             * Get objects via typeahead
+             * @param {String} workspaceGid: (required) Globally unique identifier for the workspace or organization.
+             * @param {Object} params: Parameters for the request
+                     - resourceType {String}:  (required) The type of values the typeahead should return. You can choose from one of the following: `custom_field`, `project`, `portfolio`, `tag`, `task`, and `user`. Note that unlike in the names of endpoints, the types listed here are in singular form (e.g. `task`). Using multiple types is not yet supported.
+                     - type {String}:  *Deprecated: new integrations should prefer the resource_type field.*
+                     - query {String}:  The string that will be used to search for relevant objects. If an empty string is passed in, the API will currently return an empty result set.
+                     - count {Number}:  The number of results to return. The default is 20 if this parameter is omitted, with a minimum of 1 and a maximum of 100. If there are fewer results found than requested, all will be returned.
+                     - optFields {[String]}:  Defines fields to return. Some requests return *compact* representations of objects in order to conserve resources and complete the request more efficiently. Other times requests return more information than you may need. This option allows you to list the exact set of fields that the API should be sure to return for the objects. The field names should be provided as paths, described below. The id of included objects will always be returned, regardless of the field options.
+                     - optPretty {Boolean}:  Provides “pretty” output. Provides the response in a “pretty” format. In the case of JSON this means doing proper line breaking and indentation to make it readable. This will take extra time and increase the response size so it is advisable only to use this during debugging.
+             * @param {Object} [dispatchOptions]: Options, if any, to pass the dispatcher for the request
+             * @return {Promise} The requested resource
+             */
+            typeaheadForWorkspace(
+                workspaceGid: string,
+                params?: Typeahead.TypeaheadParams,
+                dispatchOptions?: any
+            ): Promise<ResourceList<Tasks.Type>>
         }
     }
 
