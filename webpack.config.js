@@ -13,6 +13,13 @@ module.exports = {
       },
     ],
   },
+  // without this, I can't satisfy emacs TIDE's need for import lines to exclude
+  // the .ts suffix, as it calls into tsc without webpack preprocessing.
+  //
+  // https://stackoverflow.com/questions/43595555/webpack-cant-resolve-typescript-modules
+  resolve: {
+    extensions: ['.ts', '.js', '.json'],
+  },
   mode: 'development', // override with webpack --mode=production on CLI builds
   output: {
     filename: '[name].js',

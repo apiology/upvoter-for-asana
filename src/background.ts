@@ -2,13 +2,13 @@
 
 import * as _ from 'lodash';
 import * as Asana from 'asana';
-import { Gid } from './asana-types.ts';
-import { SuggestFunction } from './chrome-types.ts';
+import { Gid } from './asana-types';
+import { SuggestFunction } from './chrome-types';
 
 import {
   logError as logErrorOrig, pullCustomFieldGid, escapeHTML, pullTypeaheadSuggestions, upvoteTask,
   client, logSuccess, pullCustomFieldFn,
-} from './upvoter.ts';
+} from './upvoter';
 
 // As of 4.4.4, TypeScript's control flow analysis is wonky with
 // narrowing and functions that return never.  This is a workaround:
