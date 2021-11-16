@@ -1,0 +1,16 @@
+{
+  "_where_i_got_this_from": "https://webpack.js.org/guides/typescript/",
+  "compilerOptions": {
+    "outDir": "./dist/",
+    "strict": true,
+    "module": "es6",
+    "target": "es2015",
+    "jsx": "react",
+    "moduleResolution": "node",
+    "lib": ["es2015", "dom"],
+    "sourceMap": true
+  },
+  "include": [
+    "src"
+  ]
+}

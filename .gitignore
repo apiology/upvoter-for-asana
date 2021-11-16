@@ -56,4 +56,4 @@ requirements_dev.txt.installed
 /dist
 
 # Provided by user
-/config.js
+/src/config.ts

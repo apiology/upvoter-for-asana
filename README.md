@@ -26,11 +26,11 @@ for keyboard shortcuts to hit those links!
 This isn't in the Chrome App Store and doesn't have any cool config UI,
 so welcome to the Chrome Extension development experience!
 
-1. Create a config.js in this directory with a variable named
+1. Create a config.js in the src directory with a variable named
    'asanaAccessToken' with a new
    [Asana Personal Access Token](https://app.asana.com/0/developer-console)
    assigned to it.
-2. Add the name of your Asana workspace to config.js under the name
+2. Add the name of your Asana workspace to config.ts under the name
    'workspaceName'
 3. Add the name of the custom field you want to increment to config.js
    under the name 'customFieldName'
