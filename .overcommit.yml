@@ -21,6 +21,7 @@ PreCommit:
     required_executable: 'npx'
     command: ['npx', 'eslint']
     enabled: true
+    on_warn: fail
     include:
       - '**/*.js'
       - '**/*.ts'
