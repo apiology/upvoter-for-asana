@@ -5,6 +5,7 @@ import {
   asanaAccessToken, customFieldName, increment, workspaceName,
 } from './config';
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-namespace */
 /* eslint-disable camelcase */
 /* eslint-disable max-len */
@@ -177,6 +178,7 @@ declare module 'asana' {
     customFields: resources.CustomFields;
   }
 }
+/* eslint-enable @typescript-eslint/no-explicit-any */
 /* eslint-enable @typescript-eslint/no-namespace */
 /* eslint-enable camelcase */
 /* eslint-enable max-len */

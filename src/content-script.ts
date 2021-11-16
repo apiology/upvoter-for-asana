@@ -10,6 +10,7 @@ import {
 // https://github.com/microsoft/TypeScript/issues/36753
 const logError: (err: string) => never = logErrorOrig;
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-namespace */
 /* eslint-disable camelcase */
 /* eslint-disable max-len */
@@ -41,6 +42,7 @@ declare module 'asana' {
     }
   }
 }
+/* eslint-enable @typescript-eslint/no-explicit-any */
 /* eslint-enable @typescript-eslint/no-namespace */
 /* eslint-enable camelcase */
 /* eslint-enable max-len */
