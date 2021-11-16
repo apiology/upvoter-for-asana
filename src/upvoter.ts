@@ -289,7 +289,6 @@ export const pullTypeaheadSuggestions = (text: string, suggest: SuggestFunction)
       throw new NotInitializedError();
     }
 
-    // TODO: query should be typed
     console.log('requesting typeahead with workspaceGid', workspaceGid,
       ' and query of ', query);
     chrome.omnibox.setDefaultSuggestion({

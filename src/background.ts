@@ -120,7 +120,6 @@ const passOnTypeaheadResultToOmnibox = (text: string) => (
       .filter((task: Asana.resources.Tasks.Type) => task.parent == null)
       .filter((task: Asana.resources.Tasks.Type) => task.name.length > 0)
       .map(pullCustomFieldFn(customFieldGid))
-      // TODO: understand the | undefined below - why not null?
       .filter(({ customField }: {
         customField: Asana.resources.CustomField | undefined
       }) => customField != null)
