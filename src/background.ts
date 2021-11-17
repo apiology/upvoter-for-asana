@@ -33,7 +33,7 @@ const createSuggestResult = ({
   };
 };
 
-const passOnTypeaheadResultToOmnibox = (text: string) => (
+const passOnTypeaheadResultToOmnibox = (text: string) => async (
   { suggest, typeaheadResult }:
     {
       suggest: SuggestFunction,
@@ -44,22 +44,22 @@ const passOnTypeaheadResultToOmnibox = (text: string) => (
     description: '<dim>Processing results...</dim>',
   });
   console.log('typeaheadResult: ', typeaheadResult);
-  return pullCustomFieldGid().then((customFieldGid: Gid) => {
-    const suggestions = typeaheadResult.data
-      .filter((task: Asana.resources.Tasks.Type) => !task.completed)
-      .filter((task: Asana.resources.Tasks.Type) => task.parent == null)
-      .filter((task: Asana.resources.Tasks.Type) => task.name.length > 0)
-      .map(pullCustomFieldFn(customFieldGid))
-      .filter(({ customField }: {
-        customField: Asana.resources.CustomField | undefined
-      }) => customField != null)
-      .map(createSuggestResult);
 
-    console.log(`${suggestions.length} suggestions from ${text}:`, suggestions);
-    suggest(suggestions);
-    const description = `<dim>${suggestions.length} results for ${text}:</dim>`;
-    chrome.omnibox.setDefaultSuggestion({ description });
-  });
+  const customFieldGid = await pullCustomFieldGid();
+  const suggestions = typeaheadResult.data
+    .filter((task: Asana.resources.Tasks.Type) => !task.completed)
+    .filter((task: Asana.resources.Tasks.Type) => task.parent == null)
+    .filter((task: Asana.resources.Tasks.Type) => task.name.length > 0)
+    .map(pullCustomFieldFn(customFieldGid))
+    .filter(({ customField }: {
+      customField: Asana.resources.CustomField | undefined
+    }) => customField != null)
+    .map(createSuggestResult);
+
+  console.log(`${suggestions.length} suggestions from ${text}:`, suggestions);
+  suggest(suggestions);
+  const description = `<dim>${suggestions.length} results for ${text}:</dim>`;
+  chrome.omnibox.setDefaultSuggestion({ description });
 };
 
 const pullAndReportTypeaheadSuggestions = (text: string, suggest: SuggestFunction) => {

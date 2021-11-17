@@ -68,12 +68,13 @@ const logErrorOrig = (err: string): never => {
 // https://github.com/microsoft/TypeScript/issues/36753
 export const logError: (err: string) => never = logErrorOrig;
 
-export const pullCustomFieldGid = (): Promise<Gid> => gidFetch.then(() => {
+export const pullCustomFieldGid = async (): Promise<Gid> => {
+  await gidFetch;
   if (customFieldGid == null) {
     logError('customFieldGid fetch failed!');
   }
   return customFieldGid;
-});
+};
 
 // How on God's green earth is there no built-in function to do this?
 //
@@ -97,53 +98,54 @@ export const escapeHTML = (str: string) => {
 
 class NotInitializedError extends Error { }
 
-export const pullTypeaheadSuggestions = (text: string, suggest: SuggestFunction) => {
-  const query = {
+export const pullTypeaheadSuggestions = async (text: string, suggest: SuggestFunction) => {
+  const query: Asana.resources.Typeahead.TypeaheadParams = {
     resource_type: 'task',
     query: text,
     opt_pretty: true,
     opt_fields: ['name', 'completed', 'parent', 'custom_fields.gid', 'custom_fields.number_value'],
   };
-  return gidFetch.then(() => {
-    if (workspaceGid == null) {
-      alert('NOT INITIALIZED!');
-      throw new NotInitializedError();
-    }
+  await gidFetch;
 
-    console.log('requesting typeahead with workspaceGid', workspaceGid,
-      ' and query of ', query);
-    chrome.omnibox.setDefaultSuggestion({
-      description: `<dim>Searching for ${text}...</dim>`,
-    });
+  if (workspaceGid == null) {
+    alert('NOT INITIALIZED!');
+    throw new NotInitializedError();
+  }
 
-    // https://developers.asana.com/docs/typeahead
-    return client.typeahead.typeaheadForWorkspace(workspaceGid, query)
-      .then((
-        typeaheadResult: Asana.resources.ResourceList<Asana.resources.Tasks.Type>
-      ) => ({ suggest, typeaheadResult }));
+  console.log('requesting typeahead with workspaceGid', workspaceGid,
+    ' and query of ', query);
+  chrome.omnibox.setDefaultSuggestion({
+    description: `<dim>Searching for ${text}...</dim>`,
   });
+
+  // https://developers.asana.com/docs/typeahead
+  const typeaheadResult = await client.typeahead.typeaheadForWorkspace(workspaceGid, query);
+
+  return { suggest, typeaheadResult };
 };
 
-export const upvoteTask = (
+export const upvoteTask = async (
   task: Asana.resources.Tasks.Type
 ): Promise<Asana.resources.Tasks.Type> => {
   console.log('upvoteTask got task', task);
-  return pullCustomFieldGid().then((upvotesCustomFieldGid: Gid) => {
-    const customField = task.custom_fields.find((field) => field.gid === upvotesCustomFieldGid);
-    if (customField == null) {
-      logError('Expected to find custom field on task!');
-    }
-    let currentValue = customField.number_value;
-    if (currentValue == null) {
-      currentValue = 1;
-    }
-    // https://developers.asana.com/docs/update-a-task
-    const newValue: number = increment ? currentValue + 1 : currentValue - 1;
-    const updatedCustomFields: { [index: string]: number } = {};
-    updatedCustomFields[upvotesCustomFieldGid] = newValue;
-    return client.tasks.updateTask(task.gid,
-      { custom_fields: updatedCustomFields }).then(() => task);
-  });
+  const upvotesCustomFieldGid = await pullCustomFieldGid();
+  const customField = task.custom_fields.find((field) => field.gid === upvotesCustomFieldGid);
+  if (customField == null) {
+    logError('Expected to find custom field on task!');
+  }
+  let currentValue = customField.number_value;
+  if (currentValue == null) {
+    currentValue = 1;
+  }
+  // https://developers.asana.com/docs/update-a-task
+  const newValue: number = increment ? currentValue + 1 : currentValue - 1;
+  const updatedCustomFields: { [index: string]: number } = {};
+  updatedCustomFields[upvotesCustomFieldGid] = newValue;
+  const updatedTask = await client.tasks.updateTask(
+    task.gid,
+    { custom_fields: updatedCustomFields }
+  );
+  return updatedTask;
 };
 
 export const logSuccess = (result: string | object): void => console.log('Upvoted task:', result);

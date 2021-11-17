@@ -1,4 +1,3 @@
-import * as Asana from 'asana';
 import { Gid } from './asana-types';
 import {
   upvoteTask, client, logError as logErrorOrig, logSuccess, pullCustomFieldGid, pullCustomFieldFn,
@@ -20,26 +19,23 @@ const updateLinkMarker = (link: Element, indicator: number | string | null | und
 
 const upvoteLinkClassName = 'upvoter-upvote-link';
 
-const populateCurrentCount = (dependentTaskGid: Gid, link: Element) => pullCustomFieldGid()
-  .then((customFieldGid: Gid) => {
-    const pullCustomField = pullCustomFieldFn(customFieldGid);
-    return client.tasks.getTask(dependentTaskGid)
-      .then(pullCustomField)
-      .then(({ customField }:
-        {
-          customField:
-          Asana.resources.CustomField | undefined
-        }) => {
-        updateLinkMarker(link, customField?.number_value);
-      });
-  });
+const populateCurrentCount = async (dependentTaskGid: Gid, link: Element) => {
+  const customFieldGid = await pullCustomFieldGid();
 
-const upvote = (dependentTaskGid: Gid, link: Element) => {
+  const pullCustomField = pullCustomFieldFn(customFieldGid);
+
+  const task = await client.tasks.getTask(dependentTaskGid);
+  const { customField } = pullCustomField(task);
+
+  updateLinkMarker(link, customField?.number_value);
+};
+
+const upvote = async (dependentTaskGid: Gid, link: Element) => {
   updateLinkMarker(link, '^^');
-  client.tasks.getTask(dependentTaskGid)
+  await client.tasks.getTask(dependentTaskGid)
     .then(upvoteTask)
-    .then(logSuccess)
-    .then(() => populateCurrentCount(dependentTaskGid, link));
+    .then(logSuccess);
+  populateCurrentCount(dependentTaskGid, link);
 };
 
 const onDependentTaskClickFn = (dependentTaskGid: Gid, link: Element) => (event: MouseEvent) => {
