@@ -2068,7 +2068,7 @@ declare module 'asana' {
              * @param {String} taskGid: (required) The task to operate on.
              * @param {Object} data: Data for the request
              * @param {Object} [dispatchOptions]: Options, if any, to pass the dispatcher for the request
-             * @returnC {Promise} The requested resource
+             * @return {Promise} The requested resource
              */
             updateTask(taskGid: string, data?: Tasks.UpdateParams, dispatchOptions?: any): Promise<Tasks.Type>;
         }
@@ -2982,7 +2982,6 @@ declare module 'asana' {
         var CustomFields: CustomFieldsStatic;
 
         namespace Typeahead {
-            //
             interface TypeaheadParams {
                 resource_type: string;
                 query?: string | undefined;
