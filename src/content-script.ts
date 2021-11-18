@@ -1,6 +1,6 @@
 import { Gid } from './asana-types';
 import {
-  upvoteTask, client, logError as logErrorOrig, logSuccess, pullCustomFieldGid, pullCustomFieldFn,
+  upvoteTask, client, logError as logErrorOrig, logSuccess, pullCustomField,
 } from './upvoter';
 
 // As of 4.4.4, TypeScript's control flow analysis is wonky with
@@ -20,12 +20,8 @@ const updateLinkMarker = (link: Element, indicator: number | string | null | und
 const upvoteLinkClassName = 'upvoter-upvote-link';
 
 const populateCurrentCount = async (dependentTaskGid: Gid, link: Element) => {
-  const customFieldGid = await pullCustomFieldGid();
-
-  const pullCustomField = pullCustomFieldFn(customFieldGid);
-
   const task = await client.tasks.getTask(dependentTaskGid);
-  const { customField } = pullCustomField(task);
+  const customField = await pullCustomField(task);
 
   updateLinkMarker(link, customField?.number_value);
 };

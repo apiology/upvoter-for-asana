@@ -6,8 +6,8 @@ import { Gid } from './asana-types';
 import { SuggestFunction } from './chrome-types';
 
 import {
-  logError as logErrorOrig, pullCustomFieldGid, escapeHTML, pullTypeaheadSuggestions, upvoteTask,
-  client, logSuccess, pullCustomFieldFn,
+  logError as logErrorOrig, escapeHTML, pullTypeaheadSuggestions, upvoteTask,
+  client, logSuccess, pullCustomField,
 } from './upvoter';
 
 // As of 4.4.4, TypeScript's control flow analysis is wonky with
@@ -16,15 +16,13 @@ import {
 // https://github.com/microsoft/TypeScript/issues/36753
 const logError: (err: string) => never = logErrorOrig;
 
-const createSuggestResult = ({
-  task,
-  customField,
-}: {
-  task: Asana.resources.Tasks.Type,
-  customField: Asana.resources.CustomField | undefined
-}): chrome.omnibox.SuggestResult => {
+const createSuggestResult = async (
+  task: Asana.resources.Tasks.Type
+): Promise<chrome.omnibox.SuggestResult | null> => {
+  const customField = await pullCustomField(task);
+
   if (customField === undefined) {
-    logError('customField should never be undefined here!');
+    return null;
   }
 
   return {
@@ -32,6 +30,11 @@ const createSuggestResult = ({
     description: escapeHTML(`${customField.number_value}: ${task.name}`),
   };
 };
+
+// https://stackoverflow.com/questions/43118692/typescript-filter-out-nulls-from-an-array
+function notEmpty<TValue>(value: TValue | null | undefined): value is TValue {
+  return value !== null && value !== undefined;
+}
 
 const passOnTypeaheadResultToOmnibox = async (
   text: string,
@@ -43,16 +46,13 @@ const passOnTypeaheadResultToOmnibox = async (
   });
   console.log('typeaheadResult: ', typeaheadResult);
 
-  const customFieldGid = await pullCustomFieldGid();
-  const suggestions = typeaheadResult.data
+  const suggestionPromises = typeaheadResult.data
     .filter((task: Asana.resources.Tasks.Type) => !task.completed)
     .filter((task: Asana.resources.Tasks.Type) => task.parent == null)
     .filter((task: Asana.resources.Tasks.Type) => task.name.length > 0)
-    .map(pullCustomFieldFn(customFieldGid))
-    .filter(({ customField }: {
-      customField: Asana.resources.CustomField | undefined
-    }) => customField != null)
     .map(createSuggestResult);
+
+  const suggestions = (await Promise.all(suggestionPromises)).filter(notEmpty);
 
   console.log(`${suggestions.length} suggestions from ${text}:`, suggestions);
   suggest(suggestions);

@@ -149,9 +149,12 @@ export const upvoteTask = async (
 
 export const logSuccess = (result: string | object): void => console.log('Upvoted task:', result);
 
-export const pullCustomFieldFn = (upvotesCustomFieldGid: Gid) => (task: Asana
-  .resources.Tasks.Type) => {
+export const pullCustomField = async (
+  task: Asana.resources.Tasks.Type
+) => {
+  const upvotesCustomFieldGid = await pullCustomFieldGid();
+
   const customField = task.custom_fields.find((field) => field.gid === upvotesCustomFieldGid);
 
-  return { task, customField };
+  return customField;
 };
