@@ -22,7 +22,24 @@ const saveCustomFieldGidIfRightName = (customField: Asana.resources.CustomFields
 const findAndSaveCustomFieldGid = (
   customFieldsResult: Asana.resources.ResourceList<Asana.resources.CustomFields.Type>
 ) => new Promise<void>((resolve, reject) => {
+  // If I had esnext.asynciterable in
+  // tsconfig.json#compilerOptions.lib, and if node-asana's
+  // BufferedReadable supported async iterators, I could do:
+  //
+  // for await (const customField of customFieldsResult.stream()) {
+  //   if (saveCustomFieldGidIfRightName(customField)) {
+  //     return;
+  //   }
+  // }
+  //
+  // as-is, that gives me this error from tsc: Type
+  // 'ResourceStream<Type>' must have a '[Symbol.asyncIterator]()'
+  // method that returnsan async
+  // iterator. [2504]
+  //
+  // https://github.com/Asana/node-asana/blob/8db5f44ff9acb8df04317c5c4db0ac4a300ba8b0/lib/util/buffered_readable.js
   // https://stackoverflow.com/questions/44013020/using-promises-with-streams-in-node-js
+  // https://stackoverflow.com/questions/47219503/how-do-async-iterators-work-error-ts2504-type-must-have-a-symbol-asynciterat
   const stream = customFieldsResult.stream();
   stream.on('data', (customField: Asana.resources.CustomFields.Type) => saveCustomFieldGidIfRightName(customField, resolve));
   stream.on('end', () => resolve());
