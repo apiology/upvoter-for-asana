@@ -33,12 +33,10 @@ const createSuggestResult = ({
   };
 };
 
-const passOnTypeaheadResultToOmnibox = (text: string) => async (
-  { suggest, typeaheadResult }:
-    {
-      suggest: SuggestFunction,
-      typeaheadResult: Asana.resources.ResourceList<Asana.resources.Tasks.Type>
-    }
+const passOnTypeaheadResultToOmnibox = async (
+  text: string,
+  suggest: SuggestFunction,
+  typeaheadResult: Asana.resources.ResourceList<Asana.resources.Tasks.Type>
 ) => {
   chrome.omnibox.setDefaultSuggestion({
     description: '<dim>Processing results...</dim>',
@@ -62,9 +60,13 @@ const passOnTypeaheadResultToOmnibox = (text: string) => async (
   chrome.omnibox.setDefaultSuggestion({ description });
 };
 
-const pullAndReportTypeaheadSuggestions = (text: string, suggest: SuggestFunction) => {
-  pullTypeaheadSuggestions(text, suggest).then(passOnTypeaheadResultToOmnibox(text))
-    .catch(logError);
+const pullAndReportTypeaheadSuggestions = async (text: string, suggest: SuggestFunction) => {
+  try {
+    const typeaheadResult = await pullTypeaheadSuggestions(text);
+    await passOnTypeaheadResultToOmnibox(text, suggest, typeaheadResult);
+  } catch (err) {
+    logError(`Problem getting suggestions for ${text}: ${err}`);
+  }
 };
 
 const pullAndReportTypeaheadSuggestionsDebounced = _.debounce(pullAndReportTypeaheadSuggestions,
@@ -81,11 +83,14 @@ const omniboxInputChangedListener = (text: string, suggest: SuggestFunction) => 
 // as long as the extension's keyword mode is still active.
 chrome.omnibox.onInputChanged.addListener(omniboxInputChangedListener);
 
-const omniboxInputEnteredListener = (taskGid: Gid) => {
-  client.tasks.getTask(taskGid)
-    .then(upvoteTask)
-    .then(logSuccess)
-    .catch(logError);
+const omniboxInputEnteredListener = async (taskGid: Gid) => {
+  try {
+    let task = await client.tasks.getTask(taskGid);
+    task = await upvoteTask(task);
+    logSuccess(task);
+  } catch (err) {
+    logError(`Failed to upvote ${taskGid}: ${err}`);
+  }
 };
 
 // This event is fired with the user accepts the input in the omnibox.

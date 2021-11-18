@@ -1,6 +1,5 @@
 import * as Asana from 'asana';
 import { Gid } from './asana-types';
-import { SuggestFunction } from './chrome-types';
 import {
   asanaAccessToken, customFieldName, increment, workspaceName,
 } from './config';
@@ -98,7 +97,7 @@ export const escapeHTML = (str: string) => {
 
 class NotInitializedError extends Error { }
 
-export const pullTypeaheadSuggestions = async (text: string, suggest: SuggestFunction) => {
+export const pullTypeaheadSuggestions = async (text: string) => {
   const query: Asana.resources.Typeahead.TypeaheadParams = {
     resource_type: 'task',
     query: text,
@@ -121,7 +120,7 @@ export const pullTypeaheadSuggestions = async (text: string, suggest: SuggestFun
   // https://developers.asana.com/docs/typeahead
   const typeaheadResult = await client.typeahead.typeaheadForWorkspace(workspaceGid, query);
 
-  return { suggest, typeaheadResult };
+  return typeaheadResult;
 };
 
 export const upvoteTask = async (

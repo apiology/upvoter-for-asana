@@ -32,10 +32,10 @@ const populateCurrentCount = async (dependentTaskGid: Gid, link: Element) => {
 
 const upvote = async (dependentTaskGid: Gid, link: Element) => {
   updateLinkMarker(link, '^^');
-  await client.tasks.getTask(dependentTaskGid)
-    .then(upvoteTask)
-    .then(logSuccess);
-  populateCurrentCount(dependentTaskGid, link);
+  const task = await client.tasks.getTask(dependentTaskGid);
+  await upvoteTask(task);
+  logSuccess(task);
+  await populateCurrentCount(dependentTaskGid, link);
 };
 
 const onDependentTaskClickFn = (dependentTaskGid: Gid, link: Element) => (event: MouseEvent) => {
