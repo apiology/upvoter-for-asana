@@ -34,11 +34,6 @@ const upvote = async (dependentTaskGid: Gid, link: Element) => {
   await populateCurrentCount(dependentTaskGid, link);
 };
 
-const onDependentTaskClickFn = (dependentTaskGid: Gid, link: Element) => (event: MouseEvent) => {
-  upvote(dependentTaskGid, link);
-  event.stopPropagation();
-};
-
 const fixUpLinkToDependency = (link: HTMLElement) => {
   const url = link.getAttribute('href');
   if (url != null) {
@@ -49,7 +44,10 @@ const fixUpLinkToDependency = (link: HTMLElement) => {
     link.removeAttribute('href');
     link.innerHTML += ' [...]';
     populateCurrentCount(dependentTaskGid, link);
-    link.onclick = onDependentTaskClickFn(dependentTaskGid, link);
+    link.onclick = (event: MouseEvent) => {
+      upvote(dependentTaskGid, link);
+      event.stopPropagation();
+    };
     link.classList.add(upvoteLinkClassName);
   }
 };
