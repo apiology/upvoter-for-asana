@@ -47,9 +47,9 @@ const passOnTypeaheadResultToOmnibox = async (
   console.log('typeaheadResult: ', typeaheadResult);
 
   const suggestionPromises = typeaheadResult.data
-    .filter((task: Asana.resources.Tasks.Type) => !task.completed)
-    .filter((task: Asana.resources.Tasks.Type) => task.parent == null)
-    .filter((task: Asana.resources.Tasks.Type) => task.name.length > 0)
+    .filter((task) => !task.completed)
+    .filter((task) => task.parent == null)
+    .filter((task) => task.name.length > 0)
     .map(createSuggestResult);
 
   const suggestions = (await Promise.all(suggestionPromises)).filter(notEmpty);
