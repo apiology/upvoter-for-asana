@@ -70,6 +70,8 @@ const findAndSaveWorkspaceAndCustomFieldGids = (
   stream.on('error', () => reject());
 });
 
+// start this fetch as soon as this file is evaluated, to avoid delay
+// on first use.
 export const gidFetch = client.workspaces.getWorkspaces()
   .then(findAndSaveWorkspaceAndCustomFieldGids);
 
