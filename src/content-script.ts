@@ -1,7 +1,6 @@
-import * as Asana from 'asana';
 import { Gid } from './asana-types';
 import {
-  upvoteTask, client, logError as logErrorOrig, logSuccess, pullCustomFieldGid, pullCustomFieldFn,
+  upvoteTask, client, logError as logErrorOrig, logSuccess, pullCustomField,
 } from './upvoter';
 
 // As of 4.4.4, TypeScript's control flow analysis is wonky with
@@ -20,31 +19,19 @@ const updateLinkMarker = (link: Element, indicator: number | string | null | und
 
 const upvoteLinkClassName = 'upvoter-upvote-link';
 
-const populateCurrentCount = (dependentTaskGid: Gid, link: Element) => pullCustomFieldGid()
-  .then((customFieldGid: Gid) => {
-    const pullCustomField = pullCustomFieldFn(customFieldGid);
-    return client.tasks.getTask(dependentTaskGid)
-      .then(pullCustomField)
-      .then(({ customField }:
-        {
-          customField:
-          Asana.resources.CustomField | undefined
-        }) => {
-        updateLinkMarker(link, customField?.number_value);
-      });
-  });
+const populateCurrentCount = async (dependentTaskGid: Gid, link: Element) => {
+  const task = await client.tasks.getTask(dependentTaskGid);
+  const customField = await pullCustomField(task);
 
-const upvote = (dependentTaskGid: Gid, link: Element) => {
-  updateLinkMarker(link, '^^');
-  client.tasks.getTask(dependentTaskGid)
-    .then(upvoteTask)
-    .then(logSuccess)
-    .then(() => populateCurrentCount(dependentTaskGid, link));
+  updateLinkMarker(link, customField?.number_value);
 };
 
-const onDependentTaskClickFn = (dependentTaskGid: Gid, link: Element) => (event: MouseEvent) => {
-  upvote(dependentTaskGid, link);
-  event.stopPropagation();
+const upvote = async (dependentTaskGid: Gid, link: Element) => {
+  updateLinkMarker(link, '^^');
+  const task = await client.tasks.getTask(dependentTaskGid);
+  await upvoteTask(task);
+  logSuccess(task);
+  await populateCurrentCount(dependentTaskGid, link);
 };
 
 const fixUpLinkToDependency = (link: HTMLElement) => {
@@ -57,7 +44,10 @@ const fixUpLinkToDependency = (link: HTMLElement) => {
     link.removeAttribute('href');
     link.innerHTML += ' [...]';
     populateCurrentCount(dependentTaskGid, link);
-    link.onclick = onDependentTaskClickFn(dependentTaskGid, link);
+    link.onclick = (event: MouseEvent) => {
+      upvote(dependentTaskGid, link);
+      event.stopPropagation();
+    };
     link.classList.add(upvoteLinkClassName);
   }
 };
