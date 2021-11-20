@@ -4,7 +4,7 @@ import * as _ from 'lodash';
 import { SuggestFunction } from './chrome-types';
 
 import {
-  actOnInputData, logError as logErrorOrig, pullResult, logSuccess, passOnResultToOmnibox,
+  actOnInputData, logError as logErrorOrig, logSuccess, pullOmniboxSuggestions,
 } from './upvoter';
 
 // As of 4.4.4, TypeScript's control flow analysis is wonky with
@@ -13,10 +13,17 @@ import {
 // https://github.com/microsoft/TypeScript/issues/36753
 const logError: (err: string) => never = logErrorOrig;
 
+const populateOmnibox = async (text: string, suggest: SuggestFunction) => {
+  const suggestions = await pullOmniboxSuggestions(text);
+  suggest(suggestions);
+  console.log(`${suggestions.length} suggestions from ${text}:`, suggestions);
+  const description = `<dim>${suggestions.length} results for ${text}:</dim>`;
+  chrome.omnibox.setDefaultSuggestion({ description });
+};
+
 const pullAndReportSuggestions = async (text: string, suggest: SuggestFunction) => {
   try {
-    const result = await pullResult(text);
-    await passOnResultToOmnibox(text, suggest, result);
+    await populateOmnibox(text, suggest);
   } catch (err) {
     logError(`Problem getting suggestions for ${text}: ${err}`);
   }
