@@ -3,6 +3,7 @@ import { Gid } from './asana-types';
 import {
   asanaAccessToken, customFieldName, increment, workspaceName,
 } from './config';
+import { SuggestFunction } from './chrome-types';
 
 export const client = Asana.Client.create().useAccessToken(asanaAccessToken);
 
@@ -116,7 +117,7 @@ export const escapeHTML = (str: string) => {
 
 class NotInitializedError extends Error { }
 
-export const pullTypeaheadSuggestions = async (text: string) => {
+export const pullResult = async (text: string) => {
   const query: Asana.resources.Typeahead.TypeaheadParams = {
     resource_type: 'task',
     query: text,
@@ -176,4 +177,66 @@ export const pullCustomField = async (
   const customField = task.custom_fields.find((field) => field.gid === upvotesCustomFieldGid);
 
   return customField;
+};
+
+const createSuggestResult = async (
+  task: Asana.resources.Tasks.Type
+): Promise<chrome.omnibox.SuggestResult | null> => {
+  const customField = await pullCustomField(task);
+
+  if (customField === undefined) {
+    return null;
+  }
+
+  const project = task.memberships[0]?.project;
+
+  let membership = '';
+  if (task.parent != null) {
+    membership += ` / ${escapeHTML(task.parent.name)}`;
+  }
+  if (project != null) {
+    membership += ` <dim>${project.name}</dim>`;
+  }
+
+  const description = `<dim>${customField.number_value}</dim>: ${escapeHTML(task.name)}${membership}`;
+
+  return {
+    content: task.gid,
+    description,
+  };
+};
+
+// https://stackoverflow.com/questions/43118692/typescript-filter-out-nulls-from-an-array
+function notEmpty<TValue>(value: TValue | null | undefined): value is TValue {
+  return value !== null && value !== undefined;
+}
+
+export const actOnInputData = async (taskGid: Gid) => {
+  let task = await client.tasks.getTask(taskGid);
+  task = await upvoteTask(task);
+  return task;
+};
+
+export const passOnResultToOmnibox = async (
+  text: string,
+  suggest: SuggestFunction,
+  typeaheadResult: Asana.resources.ResourceList<Asana.resources.Tasks.Type>
+) => {
+  chrome.omnibox.setDefaultSuggestion({
+    description: '<dim>Processing results...</dim>',
+  });
+  console.log('typeaheadResult: ', typeaheadResult);
+
+  const suggestionPromises = typeaheadResult.data
+    .filter((task) => !task.completed)
+    .filter((task) => task.parent == null)
+    .filter((task) => task.name.length > 0)
+    .map(createSuggestResult);
+
+  const suggestions = (await Promise.all(suggestionPromises)).filter(notEmpty);
+
+  console.log(`${suggestions.length} suggestions from ${text}:`, suggestions);
+  suggest(suggestions);
+  const description = `<dim>${suggestions.length} results for ${text}:</dim>`;
+  chrome.omnibox.setDefaultSuggestion({ description });
 };
