@@ -3,7 +3,6 @@ import { Gid } from './asana-types';
 import {
   asanaAccessToken, customFieldName, increment, workspaceName,
 } from './config';
-import { SuggestFunction } from './chrome-types';
 
 export const client = Asana.Client.create().useAccessToken(asanaAccessToken);
 
@@ -217,11 +216,8 @@ export const actOnInputData = async (taskGid: Gid) => {
   return task;
 };
 
-export const passOnResultToOmnibox = async (
-  text: string,
-  suggest: SuggestFunction,
-  typeaheadResult: Asana.resources.ResourceList<Asana.resources.Tasks.Type>
-) => {
+export const pullOmniboxSuggestions = async (text: string) => {
+  const typeaheadResult = await pullResult(text);
   chrome.omnibox.setDefaultSuggestion({
     description: '<dim>Processing results...</dim>',
   });
@@ -234,9 +230,5 @@ export const passOnResultToOmnibox = async (
     .map(createSuggestResult);
 
   const suggestions = (await Promise.all(suggestionPromises)).filter(notEmpty);
-
-  console.log(`${suggestions.length} suggestions from ${text}:`, suggestions);
-  suggest(suggestions);
-  const description = `<dim>${suggestions.length} results for ${text}:</dim>`;
-  chrome.omnibox.setDefaultSuggestion({ description });
+  return suggestions;
 };
