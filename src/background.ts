@@ -25,9 +25,21 @@ const createSuggestResult = async (
     return null;
   }
 
+  const project = task.memberships[0]?.project;
+
+  let membership = '';
+  if (task.parent != null) {
+    membership += ` / ${escapeHTML(task.parent.name)}`;
+  }
+  if (project != null) {
+    membership += ` <dim>${project.name}</dim>`;
+  }
+
+  const description = `<dim>${customField.number_value}</dim>: ${escapeHTML(task.name)}${membership}`;
+
   return {
     content: task.gid,
-    description: escapeHTML(`${customField.number_value}: ${task.name}`),
+    description,
   };
 };
 

@@ -121,7 +121,7 @@ export const pullTypeaheadSuggestions = async (text: string) => {
     resource_type: 'task',
     query: text,
     opt_pretty: true,
-    opt_fields: ['name', 'completed', 'parent', 'custom_fields.gid', 'custom_fields.number_value'],
+    opt_fields: ['name', 'completed', 'parent.name', 'custom_fields.gid', 'custom_fields.number_value', 'memberships.project.name'],
   };
   await gidFetch;
 
