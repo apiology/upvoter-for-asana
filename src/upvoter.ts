@@ -6,22 +6,20 @@ import {
 
 export const client = Asana.Client.create().useAccessToken(asanaAccessToken);
 
-let workspaceGid: Gid | null = null;
-
-let customFieldGid: Gid | null = null;
-
-const saveCustomFieldGidIfRightName = (customField: Asana.resources.CustomFields.Type,
-  resolve: () => void) => {
-  if (customField.name === customFieldName) {
-    customFieldGid = customField.gid;
-    console.log(`Found custom field GID as ${customFieldGid}`);
-    resolve();
-  }
+const logErrorOrig = (err: string): never => {
+  alert(err);
+  throw err;
 };
+
+// As of 4.4.4, TypeScript's control flow analysis is wonky with
+// narrowing and functions that return never.  This is a workaround:
+//
+// https://github.com/microsoft/TypeScript/issues/36753
+export const logError: (err: string) => never = logErrorOrig;
 
 const findAndSaveCustomFieldGid = (
   customFieldsResult: Asana.resources.ResourceList<Asana.resources.CustomFields.Type>
-) => new Promise<void>((resolve, reject) => {
+) => new Promise<string | null>((resolve, reject) => {
   // If I had esnext.asynciterable in
   // tsconfig.json#compilerOptions.lib, and if node-asana's
   // BufferedReadable supported async iterators, I could do:
@@ -41,58 +39,52 @@ const findAndSaveCustomFieldGid = (
   // https://stackoverflow.com/questions/44013020/using-promises-with-streams-in-node-js
   // https://stackoverflow.com/questions/47219503/how-do-async-iterators-work-error-ts2504-type-must-have-a-symbol-asynciterat
   const stream = customFieldsResult.stream();
-  stream.on('data', (customField: Asana.resources.CustomFields.Type) => saveCustomFieldGidIfRightName(customField, resolve));
-  stream.on('end', () => resolve());
-  stream.on('finish', () => resolve());
+  stream.on('data', (customField: Asana.resources.CustomFields.Type) => {
+    if (customField.name === customFieldName) {
+      console.log(`Found custom field GID as ${customField.gid}`);
+      resolve(customField.gid);
+    }
+  });
+  stream.on('end', () => resolve(null));
+  stream.on('finish', () => resolve(null));
   stream.on('error', () => reject());
 });
 
-const saveWorkspaceAndCustomFieldGidsIfRightNames = (workspace: Asana.resources.Workspaces.Type,
-  resolve: ((value: void | PromiseLike<void>) => void)) => {
-  if (workspace.name === workspaceName) {
-    workspaceGid = workspace.gid;
-    console.log(`Found workspace GID as ${workspaceGid}`);
-    resolve(client.customFields.getCustomFieldsForWorkspace(workspaceGid, {})
-      .then(findAndSaveCustomFieldGid));
-  }
-};
-
-const findAndSaveWorkspaceAndCustomFieldGids = (
+const findAndSaveWorkspaceGid = (
   workspacesResult: Asana.resources.ResourceList<Asana.resources.Workspaces.Type>
-) => new Promise<void>((resolve, reject) => {
+) => new Promise<string | null>((resolve, reject) => {
   // https://stackoverflow.com/questions/44013020/using-promises-with-streams-in-node-js
   const stream = workspacesResult.stream();
-  stream.on('data', (
-    workspace: Asana.resources.Workspaces.Type
-  ) => saveWorkspaceAndCustomFieldGidsIfRightNames(workspace, resolve));
-  stream.on('end', () => resolve());
-  stream.on('finish', () => resolve());
+  stream.on('data', (workspace: Asana.resources.Workspaces.Type) => {
+    if (workspace.name === workspaceName) {
+      console.log(`Found workspace GID as ${workspace.gid}`);
+      resolve(workspace.gid);
+    }
+  });
+  stream.on('end', () => resolve(null));
+  stream.on('finish', () => resolve(null));
   stream.on('error', () => reject());
 });
 
-// start this fetch as soon as this file is evaluated, to avoid delay
-// on first use.
-export const gidFetch = client.workspaces.getWorkspaces()
-  .then(findAndSaveWorkspaceAndCustomFieldGids);
-
-const logErrorOrig = (err: string): never => {
-  alert(err);
-  throw err;
-};
-
-// As of 4.4.4, TypeScript's control flow analysis is wonky with
-// narrowing and functions that return never.  This is a workaround:
-//
-// https://github.com/microsoft/TypeScript/issues/36753
-export const logError: (err: string) => never = logErrorOrig;
-
-export const pullCustomFieldGid = async (): Promise<Gid> => {
-  await gidFetch;
-  if (customFieldGid == null) {
-    logError('customFieldGid fetch failed!');
+export const gidFetch: Promise<{ customFieldGid: Gid, workspaceGid: Gid }> = (async () => {
+  const workspaces = await client.workspaces.getWorkspaces();
+  const workspaceGid = await findAndSaveWorkspaceGid(workspaces);
+  if (workspaceGid == null) {
+    logError('Could not find workspace GID!');
   }
-  return customFieldGid;
-};
+
+  const customFields = await client.customFields.getCustomFieldsForWorkspace(workspaceGid, {});
+  const customFieldGid = await findAndSaveCustomFieldGid(customFields);
+  if (customFieldGid == null) {
+    logError('Could not find custom field GID!');
+  }
+
+  return { customFieldGid, workspaceGid };
+})();
+
+export const pullCustomFieldGid = async (): Promise<Gid> => (await gidFetch).customFieldGid;
+
+export const pullWorkspaceGid = async (): Promise<Gid> => (await gidFetch).workspaceGid;
 
 // How on God's green earth is there no built-in function to do this?
 //
@@ -114,8 +106,6 @@ export const escapeHTML = (str: string) => {
   return str.replace(/[&<>'"]/g, escape);
 };
 
-class NotInitializedError extends Error { }
-
 export const pullResult = async (text: string) => {
   const query: Asana.resources.Typeahead.TypeaheadParams = {
     resource_type: 'task',
@@ -125,10 +115,7 @@ export const pullResult = async (text: string) => {
   };
   await gidFetch;
 
-  if (workspaceGid == null) {
-    alert('NOT INITIALIZED!');
-    throw new NotInitializedError();
-  }
+  const workspaceGid = await pullWorkspaceGid();
 
   console.log('requesting typeahead with workspaceGid', workspaceGid,
     ' and query of ', query);
