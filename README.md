@@ -26,7 +26,7 @@ for keyboard shortcuts to hit those links!
 This isn't in the Chrome App Store and doesn't have any cool config UI,
 so welcome to the Chrome Extension development experience!
 
-1. Create a config.js in the src directory with a variable named
+1. Create a config.ts in the src directory with a variable named
    'asanaAccessToken' with a new
    [Asana Personal Access Token](https://app.asana.com/0/developer-console)
    assigned to it.
