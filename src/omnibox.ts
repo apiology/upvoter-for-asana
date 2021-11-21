@@ -19,3 +19,5 @@ export const escapeHTML = (str: string) => {
   };
   return str.replace(/[&<>'"]/g, escape);
 };
+
+export default 'escapeHTML';
