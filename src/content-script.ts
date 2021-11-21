@@ -1,7 +1,7 @@
 import { Gid } from './asana-types';
-import {
-  upvoteTask, client, logError as logErrorOrig, logSuccess, pullCustomField,
-} from './upvoter';
+import { client } from './asana-typeahead';
+import { logError as logErrorOrig } from './error';
+import { upvoteTask, logSuccess, pullCustomField } from './upvoter';
 
 // As of 4.4.4, TypeScript's control flow analysis is wonky with
 // narrowing and functions that return never.  This is a workaround:

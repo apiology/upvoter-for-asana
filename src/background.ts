@@ -4,8 +4,9 @@ import * as _ from 'lodash';
 import { SuggestFunction } from './chrome-types';
 
 import {
-  actOnInputData, logError as logErrorOrig, logSuccess, pullOmniboxSuggestions,
+  actOnInputData, logSuccess, pullOmniboxSuggestions,
 } from './upvoter';
+import { logError as logErrorOrig } from './error';
 
 // As of 4.4.4, TypeScript's control flow analysis is wonky with
 // narrowing and functions that return never.  This is a workaround:

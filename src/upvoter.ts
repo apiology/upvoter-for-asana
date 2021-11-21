@@ -1,21 +1,9 @@
 import * as Asana from 'asana';
+
+import { client, workspaceGidFetch } from './asana-typeahead';
 import { Gid } from './asana-types';
-import {
-  asanaAccessToken, customFieldName, increment, workspaceName,
-} from './config';
-
-export const client = Asana.Client.create().useAccessToken(asanaAccessToken);
-
-const logErrorOrig = (err: string): never => {
-  alert(err);
-  throw err;
-};
-
-// As of 4.4.4, TypeScript's control flow analysis is wonky with
-// narrowing and functions that return never.  This is a workaround:
-//
-// https://github.com/microsoft/TypeScript/issues/36753
-export const logError: (err: string) => never = logErrorOrig;
+import { customFieldName, increment } from './config';
+import { logError } from './error';
 
 const findAndSaveCustomFieldGid = (
   customFieldsResult: Asana.resources.ResourceList<Asana.resources.CustomFields.Type>
@@ -50,41 +38,16 @@ const findAndSaveCustomFieldGid = (
   stream.on('error', () => reject());
 });
 
-const findAndSaveWorkspaceGid = (
-  workspacesResult: Asana.resources.ResourceList<Asana.resources.Workspaces.Type>
-) => new Promise<string | null>((resolve, reject) => {
-  // https://stackoverflow.com/questions/44013020/using-promises-with-streams-in-node-js
-  const stream = workspacesResult.stream();
-  stream.on('data', (workspace: Asana.resources.Workspaces.Type) => {
-    if (workspace.name === workspaceName) {
-      console.log(`Found workspace GID as ${workspace.gid}`);
-      resolve(workspace.gid);
-    }
-  });
-  stream.on('end', () => resolve(null));
-  stream.on('finish', () => resolve(null));
-  stream.on('error', () => reject());
-});
-
-export const gidFetch: Promise<{ customFieldGid: Gid, workspaceGid: Gid }> = (async () => {
-  const workspaces = await client.workspaces.getWorkspaces();
-  const workspaceGid = await findAndSaveWorkspaceGid(workspaces);
-  if (workspaceGid == null) {
-    logError('Could not find workspace GID!');
-  }
-
+export const customFieldGidFetch: Promise<Gid> = (async () => {
+  const workspaceGid = await workspaceGidFetch;
   const customFields = await client.customFields.getCustomFieldsForWorkspace(workspaceGid, {});
   const customFieldGid = await findAndSaveCustomFieldGid(customFields);
   if (customFieldGid == null) {
     logError('Could not find custom field GID!');
   }
 
-  return { customFieldGid, workspaceGid };
+  return customFieldGid;
 })();
-
-export const pullCustomFieldGid = async (): Promise<Gid> => (await gidFetch).customFieldGid;
-
-export const pullWorkspaceGid = async (): Promise<Gid> => (await gidFetch).workspaceGid;
 
 // How on God's green earth is there no built-in function to do this?
 //
@@ -113,9 +76,7 @@ export const pullResult = async (text: string) => {
     opt_pretty: true,
     opt_fields: ['name', 'completed', 'parent.name', 'custom_fields.gid', 'custom_fields.number_value', 'memberships.project.name'],
   };
-  await gidFetch;
-
-  const workspaceGid = await pullWorkspaceGid();
+  const workspaceGid = await workspaceGidFetch;
 
   console.log('requesting typeahead with workspaceGid', workspaceGid,
     ' and query of ', query);
@@ -133,7 +94,7 @@ export const upvoteTask = async (
   task: Asana.resources.Tasks.Type
 ): Promise<Asana.resources.Tasks.Type> => {
   console.log('upvoteTask got task', task);
-  const upvotesCustomFieldGid = await pullCustomFieldGid();
+  const upvotesCustomFieldGid = await customFieldGidFetch;
   const customField = task.custom_fields.find((field) => field.gid === upvotesCustomFieldGid);
   if (customField == null) {
     logError('Expected to find custom field on task!');
@@ -158,7 +119,7 @@ export const logSuccess = (result: string | object): void => console.log('Upvote
 export const pullCustomField = async (
   task: Asana.resources.Tasks.Type
 ) => {
-  const upvotesCustomFieldGid = await pullCustomFieldGid();
+  const upvotesCustomFieldGid = await customFieldGidFetch;
 
   const customField = task.custom_fields.find((field) => field.gid === upvotesCustomFieldGid);
 
