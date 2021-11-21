@@ -1,6 +1,8 @@
 import * as Asana from 'asana';
 
-import { client, workspaceGidFetch } from './asana-typeahead';
+import {
+  client, workspaceGidFetch, pullResult, formatTask,
+} from './asana-typeahead';
 import { Gid } from './asana-types';
 import { customFieldName, increment } from './config';
 import { logError } from './error';
@@ -49,47 +51,6 @@ export const customFieldGidFetch: Promise<Gid> = (async () => {
   return customFieldGid;
 })();
 
-// How on God's green earth is there no built-in function to do this?
-//
-// https://stackoverflow.com/questions/40263803/native-javascript-or-es6-way-to-encode-and-decode-html-entities
-export const escapeHTML = (str: string) => {
-  const escape = (tag: string): string => {
-    const s = ({
-      '&': '&amp;',
-      '<': '&lt;',
-      '>': '&gt;',
-      "'": '&#39;',
-      '"': '&quot;',
-    }[tag]);
-    if (s == null) {
-      logError('Error in regexp logic!');
-    }
-    return s;
-  };
-  return str.replace(/[&<>'"]/g, escape);
-};
-
-export const pullResult = async (text: string) => {
-  const query: Asana.resources.Typeahead.TypeaheadParams = {
-    resource_type: 'task',
-    query: text,
-    opt_pretty: true,
-    opt_fields: ['name', 'completed', 'parent.name', 'custom_fields.gid', 'custom_fields.number_value', 'memberships.project.name'],
-  };
-  const workspaceGid = await workspaceGidFetch;
-
-  console.log('requesting typeahead with workspaceGid', workspaceGid,
-    ' and query of ', query);
-  chrome.omnibox.setDefaultSuggestion({
-    description: `<dim>Searching for ${text}...</dim>`,
-  });
-
-  // https://developers.asana.com/docs/typeahead
-  const typeaheadResult = await client.typeahead.typeaheadForWorkspace(workspaceGid, query);
-
-  return typeaheadResult;
-};
-
 export const upvoteTask = async (
   task: Asana.resources.Tasks.Type
 ): Promise<Asana.resources.Tasks.Type> => {
@@ -116,9 +77,7 @@ export const upvoteTask = async (
 
 export const logSuccess = (result: string | object): void => console.log('Upvoted task:', result);
 
-export const pullCustomField = async (
-  task: Asana.resources.Tasks.Type
-) => {
+export const pullCustomField = async (task: Asana.resources.Tasks.Type) => {
   const upvotesCustomFieldGid = await customFieldGidFetch;
 
   const customField = task.custom_fields.find((field) => field.gid === upvotesCustomFieldGid);
@@ -135,17 +94,7 @@ const createSuggestResult = async (
     return null;
   }
 
-  const project = task.memberships[0]?.project;
-
-  let membership = '';
-  if (task.parent != null) {
-    membership += ` / ${escapeHTML(task.parent.name)}`;
-  }
-  if (project != null) {
-    membership += ` <dim>${project.name}</dim>`;
-  }
-
-  const description = `<dim>${customField.number_value}</dim>: ${escapeHTML(task.name)}${membership}`;
+  const description = `<dim>${customField.number_value}</dim>: ${formatTask(task)}`;
 
   return {
     content: task.gid,
@@ -153,16 +102,16 @@ const createSuggestResult = async (
   };
 };
 
-// https://stackoverflow.com/questions/43118692/typescript-filter-out-nulls-from-an-array
-function notEmpty<TValue>(value: TValue | null | undefined): value is TValue {
-  return value !== null && value !== undefined;
-}
-
 export const actOnInputData = async (taskGid: Gid) => {
   let task = await client.tasks.getTask(taskGid);
   task = await upvoteTask(task);
   return task;
 };
+
+// https://stackoverflow.com/questions/43118692/typescript-filter-out-nulls-from-an-array
+function notEmpty<TValue>(value: TValue | null | undefined): value is TValue {
+  return value !== null && value !== undefined;
+}
 
 export const pullOmniboxSuggestions = async (text: string) => {
   const typeaheadResult = await pullResult(text);
