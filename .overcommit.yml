@@ -21,6 +21,10 @@ PreCommit:
     required_executable: 'npx'
     command: ['npx', 'eslint']
     enabled: true
+    on_warn: fail
+    include:
+      - '**/*.js'
+      - '**/*.ts'
   PythonFlake8:
     enabled: true
     on_warn: fail

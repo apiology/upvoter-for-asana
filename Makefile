@@ -21,7 +21,9 @@ webpack: ## run webpack and tie together modules for use by browser
 start: ## run webpack continuously and watch files
 	npm start
 
-default: webpack test quality ## run default tests and quality
+default: webpack test quality ## run default webpack, typechecking, tests and quality
+
+typecheck: webpack  ## typecheck by running webpack
 
 requirements_dev.txt.installed: requirements_dev.txt
 	pip install -q --disable-pip-version-check -r requirements_dev.txt

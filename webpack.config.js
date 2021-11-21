@@ -1,7 +1,27 @@
 module.exports = {
-  entry: ['./src/background.js', './src/upvoter_for_asana.js'],
+  entry: {
+    background: ['./src/background.ts', './src/upvoter_for_asana.ts'],
+  },
+  // https://webpack.js.org/guides/typescript/
+  module: {
+    rules: [
+      {
+        test: /\.tsx?$/,
+        use: 'ts-loader',
+        exclude: /node_modules/,
+      },
+    ],
+  },
+  // without this, I can't satisfy emacs TIDE's need for import lines to exclude
+  // the .ts suffix, as it calls into tsc without webpack preprocessing.
+  //
+  // https://stackoverflow.com/questions/43595555/webpack-cant-resolve-typescript-modules
+  resolve: {
+    extensions: ['.ts', '.js', '.json'],
+  },
+  mode: 'development', // override with webpack --mode=production on CLI builds
   output: {
-    filename: 'background.js',
+    filename: '[name].js',
   },
   node: {
     // https://github.com/webpack-contrib/css-loader/issues/447
@@ -15,6 +35,7 @@ module.exports = {
     // @ multi ./src/background.js ./src/upvoter.js
     fs: 'empty',
   },
-  // https://stackoverflow.com/questions/48047150/chrome-extension-compiled-by-webpack-throws-unsafe-eval-error
+  // 'cheap-module-source-map' is suggested by https://stackoverflow.com/questions/48047150/chrome-extension-compiled-by-webpack-throws-unsafe-eval-error
+
   devtool: 'cheap-module-source-map',
 };
