@@ -1,8 +1,12 @@
+/**
+ * background module.
+ *
+ * Registers listeners with chrome.omnibox API.
+ */
+
 // https://github.com/GoogleChrome/chrome-extensions-samples/blob/1d8d137d20fad5972292377dc22498529d2a4039/api/omnibox/simple-example/background.js
 
 import * as _ from 'lodash';
-import { SuggestFunction } from './chrome-types';
-
 import {
   actOnInputData, logSuccess, pullOmniboxSuggestions,
 } from './upvoter';
@@ -13,6 +17,8 @@ import { logError as logErrorOrig } from './error';
 //
 // https://github.com/microsoft/TypeScript/issues/36753
 const logError: (err: string) => never = logErrorOrig;
+
+type SuggestFunction = (suggestResults: chrome.omnibox.SuggestResult[]) => void;
 
 const populateOmnibox = async (text: string, suggest: SuggestFunction) => {
   const suggestions = await pullOmniboxSuggestions(text);

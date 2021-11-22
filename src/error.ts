@@ -1,3 +1,10 @@
+/**
+ * error module.
+ *
+ * Defines methods for dealing with errors that are compatible with
+ * type narrowing in TypeScript.
+ */
+
 const logErrorOrig = (err: string): never => {
   alert(err);
   throw err;
