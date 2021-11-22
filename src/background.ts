@@ -1,7 +1,8 @@
 /**
  * background module.
  *
- * Registers listeners with chrome.omnibox API.
+ * Registers listeners with chrome.omnibox API.  Initialized when
+ * browser extension is loaded.
  */
 
 // https://github.com/GoogleChrome/chrome-extensions-samples/blob/1d8d137d20fad5972292377dc22498529d2a4039/api/omnibox/simple-example/background.js
