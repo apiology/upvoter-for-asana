@@ -1,3 +1,9 @@
+/**
+ * upvoter_for_asana module.
+ *
+ * Chrome extension which quickly finds and increments integer custom fields in Asana tasks from the Chrome Omnibox.
+ */
+
 import { escapeHTML } from './omnibox';
 
 export const logSuccess = (result: string | object): void => console.log('Upvoted task:', result);
