@@ -1,4 +1,11 @@
-import { Gid } from './asana-types';
+/**
+ * content-script module.
+ *
+ * If you mark a task done which has dependent upvotable tasks in
+ * Asana, adds ability to click on the dependent task links to upvote
+ * those tasks.
+ */
+
 import { client } from './asana-typeahead';
 import { logError as logErrorOrig } from './error';
 import { upvoteTask, logSuccess, pullCustomField } from './upvoter';
@@ -19,14 +26,14 @@ const updateLinkMarker = (link: Element, indicator: number | string | null | und
 
 const upvoteLinkClassName = 'upvoter-upvote-link';
 
-const populateCurrentCount = async (dependentTaskGid: Gid, link: Element) => {
+const populateCurrentCount = async (dependentTaskGid: string, link: Element) => {
   const task = await client.tasks.getTask(dependentTaskGid);
   const customField = await pullCustomField(task);
 
   updateLinkMarker(link, customField?.number_value);
 };
 
-const upvote = async (dependentTaskGid: Gid, link: Element) => {
+const upvote = async (dependentTaskGid: string, link: Element) => {
   updateLinkMarker(link, '^^');
   const task = await client.tasks.getTask(dependentTaskGid);
   await upvoteTask(task);

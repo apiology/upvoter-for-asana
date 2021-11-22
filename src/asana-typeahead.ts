@@ -1,5 +1,11 @@
+/**
+ * asana-typeahead module.
+ *
+ * Contains functions useful to connect Asana typeahead feature with
+ * chrome.omnibox API
+ */
+
 import * as Asana from 'asana';
-import { Gid } from './asana-types';
 import { asanaAccessToken, workspaceName } from './config';
 import { logError } from './error';
 import { escapeHTML } from './omnibox';
@@ -22,7 +28,7 @@ export const findAndSaveWorkspaceGid = (
   stream.on('error', () => reject());
 });
 
-export const workspaceGidFetch: Promise<Gid> = (async () => {
+export const workspaceGidFetch: Promise<string> = (async () => {
   const workspaces = await client.workspaces.getWorkspaces();
   const workspaceGid = await findAndSaveWorkspaceGid(workspaces);
   if (workspaceGid == null) {

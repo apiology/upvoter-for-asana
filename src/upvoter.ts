@@ -1,9 +1,15 @@
+/**
+ * upvoter module.
+ *
+ * Quickly finds and increments integer custom fields in Asana tasks
+ * from the Chrome Omnibox.
+ */
+
 import * as Asana from 'asana';
 
 import {
   client, workspaceGidFetch, pullResult, formatTask,
 } from './asana-typeahead';
-import { Gid } from './asana-types';
 import { customFieldName, increment } from './config';
 import { logError } from './error';
 
@@ -40,7 +46,7 @@ const findAndSaveCustomFieldGid = (
   stream.on('error', () => reject());
 });
 
-export const customFieldGidFetch: Promise<Gid> = (async () => {
+export const customFieldGidFetch: Promise<string> = (async () => {
   const workspaceGid = await workspaceGidFetch;
   const customFields = await client.customFields.getCustomFieldsForWorkspace(workspaceGid, {});
   const customFieldGid = await findAndSaveCustomFieldGid(customFields);
@@ -102,7 +108,7 @@ const createSuggestResult = async (
   };
 };
 
-export const actOnInputData = async (taskGid: Gid) => {
+export const actOnInputData = async (taskGid: string) => {
   let task = await client.tasks.getTask(taskGid);
   task = await upvoteTask(task);
   return task;

@@ -1,3 +1,9 @@
+/**
+ * omnibox module.
+ *
+ * Contains functions useful to interact with chrome.omnibox API
+ */
+
 import { logError } from './error';
 
 // How on God's green earth is there no built-in function to do this?
