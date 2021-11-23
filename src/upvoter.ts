@@ -8,48 +8,16 @@
 import * as Asana from 'asana';
 
 import {
-  client, workspaceGidFetch, pullResult, formatTask,
+  client, findGid, workspaceGidFetch, pullResult, formatTask,
 } from './asana-typeahead';
 import { customFieldName, increment } from './config';
 import { logError } from './error';
 
-const findAndSaveCustomFieldGid = (
-  customFieldsResult: Asana.resources.ResourceList<Asana.resources.CustomFields.Type>
-) => new Promise<string | null>((resolve, reject) => {
-  // If I had esnext.asynciterable in
-  // tsconfig.json#compilerOptions.lib, and if node-asana's
-  // BufferedReadable supported async iterators, I could do:
-  //
-  // for await (const customField of customFieldsResult.stream()) {
-  //   if (saveCustomFieldGidIfRightName(customField)) {
-  //     return;
-  //   }
-  // }
-  //
-  // as-is, that gives me this error from tsc: Type
-  // 'ResourceStream<Type>' must have a '[Symbol.asyncIterator]()'
-  // method that returnsan async
-  // iterator. [2504]
-  //
-  // https://github.com/Asana/node-asana/blob/8db5f44ff9acb8df04317c5c4db0ac4a300ba8b0/lib/util/buffered_readable.js
-  // https://stackoverflow.com/questions/44013020/using-promises-with-streams-in-node-js
-  // https://stackoverflow.com/questions/47219503/how-do-async-iterators-work-error-ts2504-type-must-have-a-symbol-asynciterat
-  const stream = customFieldsResult.stream();
-  stream.on('data', (customField: Asana.resources.CustomFields.Type) => {
-    if (customField.name === customFieldName) {
-      console.log(`Found custom field GID as ${customField.gid}`);
-      resolve(customField.gid);
-    }
-  });
-  stream.on('end', () => resolve(null));
-  stream.on('finish', () => resolve(null));
-  stream.on('error', () => reject());
-});
-
 export const customFieldGidFetch: Promise<string> = (async () => {
   const workspaceGid = await workspaceGidFetch;
   const customFields = await client.customFields.getCustomFieldsForWorkspace(workspaceGid, {});
-  const customFieldGid = await findAndSaveCustomFieldGid(customFields);
+  const customFieldGid = await findGid(customFields,
+    (customField) => customField.name === customFieldName);
   if (customFieldGid == null) {
     logError('Could not find custom field GID!');
   }
