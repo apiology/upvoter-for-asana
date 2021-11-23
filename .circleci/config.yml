@@ -91,6 +91,7 @@ commands:
             bundle exec overcommit --sign
             bundle exec overcommit --sign pre-commit
 
+            make dummyconfig
             bundle exec overcommit --run
 
 jobs:
@@ -107,6 +108,7 @@ jobs:
           condition:
             equal: [<< pipeline.git.branch >>, "main"]
           steps:
+            - overcommit  # TODO
             - run: echo "overcommit only runs on main branch"
   build:
     docker:
