@@ -21,7 +21,9 @@ webpack: ## run webpack and tie together modules for use by browser
 start: ## run webpack continuously and watch files
 	npm start
 
-default: webpack test quality ## run default tests and quality
+default: webpack test quality ## run default webpack, typechecking, tests and quality
+
+typecheck: webpack  ## typecheck by running webpack
 
 requirements_dev.txt.installed: requirements_dev.txt
 	pip install -q --disable-pip-version-check -r requirements_dev.txt
@@ -41,8 +43,17 @@ Gemfile.lock.installed: Gemfile.lock
 bundle_install: Gemfile.lock.installed ## Install Ruby dependencies
 
 clean: ## remove all built artifacts
+	rm dist/* || true
 
 test: webpack ## run tests quickly
+
+src/config.ts:
+	echo "export const asanaAccessToken = 'abc';" > src/config.ts
+	echo "export const workspaceName = 'def';" >> src/config.ts
+	echo "export const customFieldName = 'upvotes';" >> src/config.ts
+	echo "export const increment = false;" >> src/config.ts
+
+dummyconfig: src/config.ts
 
 overcommit: ## run precommit quality checks
 	bundle exec overcommit --run

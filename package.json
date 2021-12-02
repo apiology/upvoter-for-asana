@@ -23,6 +23,12 @@
   "homepage": "https://github.com/apiology/upvoter_for_asana#readme",
   "_devDependenciesComments": "ansi-regex, glob-parent, path-parse, set-value are transitive deps; from dependabot security alerts",
   "devDependencies": {
+    "@types/bluebird": "^3.5.36",
+    "@types/chrome": "^0.0.163",
+    "@types/lodash": "^4.14.176",
+    "@types/node": "^16.11.7",
+    "@typescript-eslint/eslint-plugin": "^5.3.1",
+    "@typescript-eslint/parser": "^5.3.1",
     "ansi-regex": ">=5.0.1",
     "eslint": "^7.18.0",
     "eslint-config-airbnb-base": "^14.2.1",
@@ -30,6 +36,8 @@
     "glob-parent": ">=5.1.2",
     "path-parse": ">=1.0.7",
     "set-value": ">=4.0.1",
+    "ts-loader": "~8",
+    "typescript": "^4.4.4",
     "webpack": "^5",
     "webpack-cli": "^4.5.0"
   },

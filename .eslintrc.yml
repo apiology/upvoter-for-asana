@@ -6,6 +6,12 @@ env:
 extends:
   # https://github.com/airbnb/javascript/tree/master/packages/eslint-config-airbnb-base/rules
   - airbnb-base
+  - plugin:import/typescript
+  - plugin:@typescript-eslint/eslint-recommended
+  - plugin:@typescript-eslint/recommended
+parser: "@typescript-eslint/parser"
+plugins:
+  - "@typescript-eslint"
 parserOptions:
   ecmaVersion: 11
   sourceType: module
@@ -32,6 +38,13 @@ rules:
       imports: always-multiline
       exports: always-multiline
       functions: never
+  import/extensions:
+    - error
+    - pattern:
+        # I'm standardizing on no file extension, as it makes both
+        # tsc-via-webpack and tsc via emacs TIDE's tscserver equally
+        # happy
+        .ts: never
   # I don't know whether 'use strict' is the default in Chrome
   # extensions, so let's assume not.
   strict:

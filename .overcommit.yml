@@ -21,12 +21,20 @@ PreCommit:
     required_executable: 'npx'
     command: ['npx', 'eslint']
     enabled: true
+    on_warn: fail
+    include:
+      - '**/*.js'
+      - '**/*.ts'
+    exclude:
+      - src/asana.d.ts
   PythonFlake8:
     enabled: true
     on_warn: fail
   ShellCheck:
     enabled: true
     on_warn: fail
+    include:
+      - '.envrc'
   YamlLint:
     enabled: true
     on_warn: fail
