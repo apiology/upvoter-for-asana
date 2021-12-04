@@ -31,10 +31,10 @@ module.exports = {
       //
       // https://webpack.js.org/configuration/resolve/
       fs: false, // not particularly used by asana
-      url: require.resolve('url/'),
-      util: require.resolve('util/'),
+      url: require.resolve('url'),
+      util: require.resolve('util'),
       stream: require.resolve('stream-browserify'),
-      buffer: require.resolve('buffer/'),
+      buffer: require.resolve('buffer'),
     },
   },
   mode: 'development', // override with webpack --mode=production on CLI builds
