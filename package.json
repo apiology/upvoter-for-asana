@@ -23,7 +23,6 @@
   "homepage": "https://github.com/apiology/upvoter_for_asana#readme",
   "_devDependenciesComments": "ansi-regex, glob-parent, path-parse, set-value are transitive deps; from dependabot security alerts",
   "devDependencies": {
-    "@types/asana": "^0.18.5",
     "@types/bluebird": "^3.5.36",
     "@types/chrome": "^0.0.163",
     "@types/lodash": "^4.14.176",
@@ -44,7 +43,7 @@
   },
   "_dependenciesComments": "buffer, stream-browserify, url and util are node polyfills needed by asana library",
   "dependencies": {
-    "asana": "^0.18.5",
+    "apiology-fork-asana": "^0.18.5",
     "buffer": "^6.0.3",
     "lodash": "^4.17.21",
     "process": "^0.11.10",

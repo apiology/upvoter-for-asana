@@ -1,4 +1,4 @@
 config.js
 node_modules
 dist
-src/asana.d.ts
+src/apiology-fork-asana.d.ts

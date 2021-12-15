@@ -5,7 +5,7 @@
  * from the Chrome Omnibox.
  */
 
-import * as Asana from 'asana';
+import * as Asana from 'apiology-fork-asana';
 
 import {
   client, findGid, workspaceGidFetch, pullResult, formatTask,

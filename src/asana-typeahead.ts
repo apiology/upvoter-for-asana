@@ -5,7 +5,7 @@
  * chrome.omnibox API
  */
 
-import * as Asana from 'asana';
+import * as Asana from 'apiology-fork-asana';
 import { asanaAccessToken, workspaceName } from './config';
 import { logError } from './error';
 import { escapeHTML } from './omnibox';
