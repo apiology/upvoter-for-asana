@@ -51,5 +51,9 @@
     "stream-browserify": "^3.0.0",
     "url": "^0.11.0",
     "util": "^0.12.4"
+  },
+  "_resolutionsComments": "json-schema: CVE-2021-3918 (moderate)",
+  "resolutions": {
+    "asana/json-schema": "^0.4"
   }
 }
