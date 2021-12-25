@@ -10,6 +10,9 @@ just throw a backlog feature task a quick upvote in real time as you
 suffer through missing the feature, then go back later and take on the
 most upvoted tasks!
 
+Not created, maintained, reviewed, approved, or endorsed by Asana,
+Inc.
+
 ## Using
 
 Go to the URL bar ("Chrome Omnibox"), and type 'uv', a space, then
