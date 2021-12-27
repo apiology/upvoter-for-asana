@@ -1,5 +1,5 @@
 {
-  "name": "upvoter_for_asana",
+  "name": "upvoter-for-asana",
   "version": "0.1.0",
   "description": "Chrome extension which quickly finds and increments integer custom fields in Asana tasks from the Chrome Omnibox.",
   "private": true,
@@ -9,7 +9,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/apiology/upvoter_for_asana.git"
+    "url": "git+https://github.com/apiology/upvoter-for-asana.git"
   },
   "keywords": [
     "chrome-extension",
@@ -18,9 +18,9 @@
   "author": "Vince Broz <vince@broz.cc>",
   "license": "MIT license",
   "bugs": {
-    "url": "https://github.com/apiology/upvoter_for_asana/issues"
+    "url": "https://github.com/apiology/upvoter-for-asana/issues"
   },
-  "homepage": "https://github.com/apiology/upvoter_for_asana#readme",
+  "homepage": "https://github.com/apiology/upvoter-for-asana#readme",
   "_devDependenciesComments": "ansi-regex, glob-parent, path-parse, set-value are transitive deps; from dependabot security alerts",
   "devDependencies": {
     "@types/asana": "^0.18.5",
