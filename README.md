@@ -1,6 +1,6 @@
 # Upvoter for Asana
 
-[![CircleCI](https://circleci.com/gh/apiology/upvoter_for_asana.svg?style=svg)](https://circleci.com/gh/apiology/upvoter_for_asana)
+[![CircleCI](https://circleci.com/gh/apiology/upvoter-for-asana.svg?style=svg)](https://circleci.com/gh/apiology/upvoter-for-asana)
 
 Chrome extension which quickly finds and increments integer custom
 fields in Asana tasks from the Chrome Omnibox.
@@ -21,7 +21,7 @@ Pick one, and your custom field will be uploaded!
 
 Also, if you mark a task done which has dependent upvotable tasks, you
 can click on the dependent task links to upvote those tasks.  See
-[Shortcuts for Asana](https://github.com/apiology/shortcuts_for_asana)
+[Shortcuts for Asana](https://github.com/apiology/shortcuts-for-asana)
 for keyboard shortcuts to hit those links!
 
 ## Installing

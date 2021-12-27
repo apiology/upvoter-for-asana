@@ -348,7 +348,7 @@ ensure_python_versions() {
 
 ensure_pyenv_virtualenvs() {
   latest_python_version="$(cut -d' ' -f1 <<< "${python_versions}")"
-  virtualenv_name="upvoter_for_asana-${latest_python_version}"
+  virtualenv_name="upvoter-for-asana-${latest_python_version}"
   pyenv virtualenv "${latest_python_version}" "${virtualenv_name}" || true
   # You can use this for your global stuff!
   pyenv virtualenv "${latest_python_version}" mylibs || true
