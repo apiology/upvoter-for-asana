@@ -55,5 +55,8 @@ requirements_dev.txt.installed
 # From webpack
 /dist
 
+# From release process
+/package.zip
+
 # Provided by user
 /config.js

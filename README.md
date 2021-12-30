@@ -1,6 +1,6 @@
 # Upvoter for Asana
 
-[![CircleCI](https://circleci.com/gh/apiology/upvoter_for_asana.svg?style=svg)](https://circleci.com/gh/apiology/upvoter_for_asana)
+[![CircleCI](https://circleci.com/gh/apiology/upvoter-for-asana.svg?style=svg)](https://circleci.com/gh/apiology/upvoter-for-asana)
 
 WARNING: This is not ready for use yet!
 
@@ -18,4 +18,4 @@ development experience!
 2. Go to [chrome://extensions/](chrome://extensions/)
 3. Make sure 'Developer mode' is flipped on in the upper right.
 4. Click the 'Load unpacked' button.
-5. Choose this directory
+5. Choose the [dist](./dist) directory

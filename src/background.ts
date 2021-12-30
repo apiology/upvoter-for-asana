@@ -10,7 +10,7 @@
 import * as _ from 'lodash';
 import {
   actOnInputData, logSuccess, pullOmniboxSuggestions,
-} from './upvoter_for_asana';
+} from './upvoter-for-asana';
 import { logError as logErrorOrig } from './error';
 
 // As of 4.4.4, TypeScript's control flow analysis is wonky with

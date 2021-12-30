@@ -1,5 +1,5 @@
 /**
- * upvoter_for_asana module.
+ * upvoter-for-asana module.
  *
  * Chrome extension which quickly finds and increments integer custom fields in Asana tasks from the Chrome Omnibox.
  */
