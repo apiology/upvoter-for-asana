@@ -48,12 +48,31 @@ export function findGid<T extends Asana.resources.Resource>(
   });
 }
 
+export const chromeStorageSyncFetch = (key: string):
+  Promise<string | null> => new Promise<string | null>((resolve) => {
+    chrome.storage.sync.get([key], (result) => {
+      const output = result[key];
+      resolve(output);
+    });
+  });
+
+export const chromeStorageSyncStore = (key: string, value: string) => {
+  const settings: { [index: string]: string } = {};
+  settings[key] = value;
+  chrome.storage.sync.set(settings);
+};
+
 export const workspaceGidFetch: Promise<string> = (async () => {
+  let workspaceGid = await chromeStorageSyncFetch('workspaceGid');
+  if (workspaceGid != null) {
+    return workspaceGid;
+  }
   const workspaces = await client.workspaces.getWorkspaces();
-  const workspaceGid = await findGid(workspaces, (workspace) => workspace.name === workspaceName);
+  workspaceGid = await findGid(workspaces, (workspace) => workspace.name === workspaceName);
   if (workspaceGid == null) {
     logError('Could not find workspace GID!');
   }
+  chromeStorageSyncStore('workspaceGid', workspaceGid);
 
   return workspaceGid;
 })();

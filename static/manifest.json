@@ -8,6 +8,7 @@
     "128": "apiology-128x128.png"
   },
   "permissions": [
+    "storage"
   ],
   "omnibox": { "keyword": "uv" },
   "background": {
