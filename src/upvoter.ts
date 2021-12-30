@@ -8,19 +8,27 @@
 import * as Asana from 'asana';
 
 import {
-  client, findGid, workspaceGidFetch, pullResult, formatTask,
+  chromeStorageSyncFetch, chromeStorageSyncStore, client, findGid, workspaceGidFetch,
+  pullResult, formatTask,
 } from './asana-typeahead';
 import { customFieldName, increment } from './config';
 import { logError } from './error';
 
 export const customFieldGidFetch: Promise<string> = (async () => {
   const workspaceGid = await workspaceGidFetch;
+
+  let customFieldGid = await chromeStorageSyncFetch('customFieldGid');
+  if (customFieldGid != null) {
+    return customFieldGid;
+  }
+
   const customFields = await client.customFields.getCustomFieldsForWorkspace(workspaceGid, {});
-  const customFieldGid = await findGid(customFields,
+  customFieldGid = await findGid(customFields,
     (customField) => customField.name === customFieldName);
   if (customFieldGid == null) {
     logError('Could not find custom field GID!');
   }
+  chromeStorageSyncStore('customFieldGid', customFieldGid);
 
   return customFieldGid;
 })();
