@@ -6,16 +6,22 @@
  */
 
 import * as Asana from 'asana';
-import { asanaAccessTokenFetch, workspaceName } from './config';
+import { fetchAsanaAccessToken, workspaceName } from './config';
 import { chromeStorageSyncFetch, chromeStorageSyncStore } from './storage';
 import { logError } from './error';
 import { escapeHTML } from './omnibox';
 
-export const clientFetch = (async () => {
-  const asanaAccessToken = await asanaAccessTokenFetch;
+let fetchedClient: Asana.Client | null = null;
 
-  return Asana.Client.create().useAccessToken(asanaAccessToken);
-})();
+export const fetchClient = async () => {
+  if (fetchedClient != null) {
+    return fetchedClient;
+  }
+  const asanaAccessToken = await fetchAsanaAccessToken();
+
+  fetchedClient = Asana.Client.create().useAccessToken(asanaAccessToken);
+  return fetchedClient;
+};
 
 export function findGid<T extends Asana.resources.Resource>(
   resourceList: Asana.resources.ResourceList<T>,
@@ -53,21 +59,26 @@ export function findGid<T extends Asana.resources.Resource>(
   });
 }
 
-export const workspaceGidFetch: Promise<string> = (async () => {
-  let workspaceGid = await chromeStorageSyncFetch('workspaceGid');
-  if (workspaceGid != null) {
-    return workspaceGid;
+let fetchedWorkspaceGid: string | null = null;
+
+export const fetchWorkspaceGid = async () => {
+  if (fetchedWorkspaceGid != null) {
+    return fetchedWorkspaceGid;
   }
-  const client = await clientFetch;
+  fetchedWorkspaceGid = await chromeStorageSyncFetch('workspaceGid');
+  if (fetchedWorkspaceGid != null) {
+    return fetchedWorkspaceGid;
+  }
+  const client = await fetchClient();
   const workspaces = await client.workspaces.getWorkspaces();
-  workspaceGid = await findGid(workspaces, (workspace) => workspace.name === workspaceName);
-  if (workspaceGid == null) {
+  fetchedWorkspaceGid = await findGid(workspaces, (workspace) => workspace.name === workspaceName);
+  if (fetchedWorkspaceGid == null) {
     logError('Could not find workspace GID!');
   }
-  chromeStorageSyncStore('workspaceGid', workspaceGid);
+  chromeStorageSyncStore('workspaceGid', fetchedWorkspaceGid);
 
-  return workspaceGid;
-})();
+  return fetchedWorkspaceGid;
+};
 
 export const formatTask = (task: Asana.resources.Tasks.Type) => {
   const project = task.memberships[0]?.project;
@@ -91,7 +102,7 @@ export const pullResult = async (text: string) => {
     opt_pretty: true,
     opt_fields: ['name', 'completed', 'parent.name', 'custom_fields.gid', 'custom_fields.number_value', 'memberships.project.name'],
   };
-  const workspaceGid = await workspaceGidFetch;
+  const workspaceGid = await fetchWorkspaceGid();
 
   console.log('requesting typeahead with workspaceGid', workspaceGid,
     ' and query of ', query);
@@ -100,6 +111,6 @@ export const pullResult = async (text: string) => {
   });
 
   // https://developers.asana.com/docs/typeahead
-  const client = await clientFetch;
+  const client = await fetchClient();
   return client.typeahead.typeaheadForWorkspace(workspaceGid, query);
 };

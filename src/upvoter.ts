@@ -9,36 +9,42 @@ import * as Asana from 'asana';
 
 import { chromeStorageSyncFetch, chromeStorageSyncStore } from './storage';
 import {
-  clientFetch, findGid, workspaceGidFetch, pullResult, formatTask,
+  fetchClient, findGid, fetchWorkspaceGid, pullResult, formatTask,
 } from './asana-typeahead';
 import { customFieldName, increment } from './config';
 import { logError } from './error';
 
-export const customFieldGidFetch: Promise<string> = (async () => {
-  const workspaceGid = await workspaceGidFetch;
+let fetchedCustomFieldGid: string | null = null;
 
-  let customFieldGid = await chromeStorageSyncFetch('customFieldGid');
-  if (customFieldGid != null) {
-    return customFieldGid;
+export const fetchCustomFieldGid = async (): Promise<string> => {
+  const workspaceGid = await fetchWorkspaceGid();
+
+  if (fetchedCustomFieldGid != null) {
+    return fetchedCustomFieldGid;
   }
 
-  const client = await clientFetch;
+  fetchedCustomFieldGid = await chromeStorageSyncFetch('customFieldGid');
+  if (fetchedCustomFieldGid != null) {
+    return fetchedCustomFieldGid;
+  }
+
+  const client = await fetchClient();
   const customFields = await client.customFields.getCustomFieldsForWorkspace(workspaceGid, {});
-  customFieldGid = await findGid(customFields,
+  fetchedCustomFieldGid = await findGid(customFields,
     (customField) => customField.name === customFieldName);
-  if (customFieldGid == null) {
+  if (fetchedCustomFieldGid == null) {
     logError('Could not find custom field GID!');
   }
-  chromeStorageSyncStore('customFieldGid', customFieldGid);
+  chromeStorageSyncStore('customFieldGid', fetchedCustomFieldGid);
 
-  return customFieldGid;
-})();
+  return fetchedCustomFieldGid;
+};
 
 export const upvoteTask = async (
   task: Asana.resources.Tasks.Type
 ): Promise<Asana.resources.Tasks.Type> => {
   console.log('upvoteTask got task', task);
-  const upvotesCustomFieldGid = await customFieldGidFetch;
+  const upvotesCustomFieldGid = await fetchCustomFieldGid();
   const customField = task.custom_fields.find((field) => field.gid === upvotesCustomFieldGid);
   if (customField == null) {
     logError('Expected to find custom field on task!');
@@ -51,7 +57,7 @@ export const upvoteTask = async (
   const newValue: number = increment ? currentValue + 1 : currentValue - 1;
   const updatedCustomFields: { [index: string]: number } = {};
   updatedCustomFields[upvotesCustomFieldGid] = newValue;
-  const client = await clientFetch;
+  const client = await fetchClient();
   const updatedTask = await client.tasks.updateTask(
     task.gid,
     { custom_fields: updatedCustomFields }
@@ -62,7 +68,7 @@ export const upvoteTask = async (
 export const logSuccess = (result: string | object): void => console.log('Upvoted task:', result);
 
 export const pullCustomField = async (task: Asana.resources.Tasks.Type) => {
-  const upvotesCustomFieldGid = await customFieldGidFetch;
+  const upvotesCustomFieldGid = await fetchCustomFieldGid();
 
   const customField = task.custom_fields.find((field) => field.gid === upvotesCustomFieldGid);
 
@@ -87,7 +93,7 @@ const createSuggestResult = async (
 };
 
 export const actOnInputData = async (taskGid: string) => {
-  const client = await clientFetch;
+  const client = await fetchClient();
   let task = await client.tasks.getTask(taskGid);
   task = await upvoteTask(task);
   return task;
