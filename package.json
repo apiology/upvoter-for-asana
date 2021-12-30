@@ -21,7 +21,7 @@
     "url": "https://github.com/apiology/upvoter-for-asana/issues"
   },
   "homepage": "https://github.com/apiology/upvoter-for-asana#readme",
-  "_devDependenciesComments": "ansi-regex, glob-parent, path-parse, set-value are transitive deps; from dependabot security alerts",
+  "_devDependenciesNotes": "copy-webpack-plugin 10 failed with this - https://stackoverflow.com/questions/70080671/copy-webpack-plugin-error-invalid-host-defined-options",
   "devDependencies": {
     "@types/asana": "^0.18.5",
     "@types/bluebird": "^3.5.36",
@@ -30,13 +30,10 @@
     "@types/node": "^16.11.7",
     "@typescript-eslint/eslint-plugin": "^5.3.1",
     "@typescript-eslint/parser": "^5.3.1",
-    "ansi-regex": ">=5.0.1",
+    "copy-webpack-plugin": "^9",
     "eslint": "^7.18.0",
     "eslint-config-airbnb-base": "^14.2.1",
     "eslint-plugin-import": "^2.22.1",
-    "glob-parent": ">=5.1.2",
-    "path-parse": ">=1.0.7",
-    "set-value": ">=4.0.1",
     "ts-loader": "~8",
     "typescript": "^4.4.4",
     "webpack": "^5",
