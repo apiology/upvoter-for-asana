@@ -10,6 +10,7 @@ module.exports = {
   entry: {
     background: ['./src/background.ts', './src/upvoter.ts'],
     'content-script': ['./src/content-script.ts'],
+    options: ['./src/options.ts'],
   },
   // https://webpack.js.org/guides/typescript/
   module: {

@@ -7,9 +7,9 @@
 
 import * as Asana from 'asana';
 
+import { chromeStorageSyncFetch, chromeStorageSyncStore } from './storage';
 import {
-  chromeStorageSyncFetch, chromeStorageSyncStore, client, findGid, workspaceGidFetch,
-  pullResult, formatTask,
+  clientFetch, findGid, workspaceGidFetch, pullResult, formatTask,
 } from './asana-typeahead';
 import { customFieldName, increment } from './config';
 import { logError } from './error';
@@ -22,6 +22,7 @@ export const customFieldGidFetch: Promise<string> = (async () => {
     return customFieldGid;
   }
 
+  const client = await clientFetch;
   const customFields = await client.customFields.getCustomFieldsForWorkspace(workspaceGid, {});
   customFieldGid = await findGid(customFields,
     (customField) => customField.name === customFieldName);
@@ -50,6 +51,7 @@ export const upvoteTask = async (
   const newValue: number = increment ? currentValue + 1 : currentValue - 1;
   const updatedCustomFields: { [index: string]: number } = {};
   updatedCustomFields[upvotesCustomFieldGid] = newValue;
+  const client = await clientFetch;
   const updatedTask = await client.tasks.updateTask(
     task.gid,
     { custom_fields: updatedCustomFields }
@@ -85,6 +87,7 @@ const createSuggestResult = async (
 };
 
 export const actOnInputData = async (taskGid: string) => {
+  const client = await clientFetch;
   let task = await client.tasks.getTask(taskGid);
   task = await upvoteTask(task);
   return task;

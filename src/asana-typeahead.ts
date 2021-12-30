@@ -6,11 +6,16 @@
  */
 
 import * as Asana from 'asana';
-import { asanaAccessToken, workspaceName } from './config';
+import { asanaAccessTokenFetch, workspaceName } from './config';
+import { chromeStorageSyncFetch, chromeStorageSyncStore } from './storage';
 import { logError } from './error';
 import { escapeHTML } from './omnibox';
 
-export const client = Asana.Client.create().useAccessToken(asanaAccessToken);
+export const clientFetch = (async () => {
+  const asanaAccessToken = await asanaAccessTokenFetch;
+
+  return Asana.Client.create().useAccessToken(asanaAccessToken);
+})();
 
 export function findGid<T extends Asana.resources.Resource>(
   resourceList: Asana.resources.ResourceList<T>,
@@ -48,25 +53,12 @@ export function findGid<T extends Asana.resources.Resource>(
   });
 }
 
-export const chromeStorageSyncFetch = (key: string):
-  Promise<string | null> => new Promise<string | null>((resolve) => {
-    chrome.storage.sync.get([key], (result) => {
-      const output = result[key];
-      resolve(output);
-    });
-  });
-
-export const chromeStorageSyncStore = (key: string, value: string) => {
-  const settings: { [index: string]: string } = {};
-  settings[key] = value;
-  chrome.storage.sync.set(settings);
-};
-
 export const workspaceGidFetch: Promise<string> = (async () => {
   let workspaceGid = await chromeStorageSyncFetch('workspaceGid');
   if (workspaceGid != null) {
     return workspaceGid;
   }
+  const client = await clientFetch;
   const workspaces = await client.workspaces.getWorkspaces();
   workspaceGid = await findGid(workspaces, (workspace) => workspace.name === workspaceName);
   if (workspaceGid == null) {
@@ -108,5 +100,6 @@ export const pullResult = async (text: string) => {
   });
 
   // https://developers.asana.com/docs/typeahead
+  const client = await clientFetch;
   return client.typeahead.typeaheadForWorkspace(workspaceGid, query);
 };
