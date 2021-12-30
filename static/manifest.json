@@ -2,12 +2,17 @@
   "name": "Upvoter for Asana",
   "description": "Chrome extension which quickly finds and increments integer custom fields in Asana tasks from the Chrome Omnibox.",
   "version": "0.1.0",
+  "icons": {
+    "16": "apiology-16x16.png",
+    "48": "apiology-48x48.png",
+    "128": "apiology-128x128.png"
+  },
   "permissions": [
     "activeTab"
   ],
   "omnibox": { "keyword": "uv" },
   "background": {
-    "scripts": ["dist/background.js"],
+    "scripts": ["background.js"],
     "persistent": false
   },
   "content_scripts": [

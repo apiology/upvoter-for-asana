@@ -48,4 +48,4 @@ so welcome to the Chrome Extension development experience!
 6. Go to [chrome://extensions/](chrome://extensions/)
 7. Make sure 'Developer mode' is flipped on in the upper right.
 8. Click the 'Load unpacked' button.
-9. Choose this directory
+9. Choose the [dist](./dist) directory

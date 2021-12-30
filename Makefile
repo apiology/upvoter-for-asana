@@ -21,7 +21,10 @@ webpack: ## run webpack and tie together modules for use by browser
 start: ## run webpack continuously and watch files
 	npm start
 
-default: webpack test quality ## run default webpack, typechecking, tests and quality
+default: webpack package test quality ## run default webpack, typechecking, tests and quality, and package into a .zip file
+
+package:
+	cd dist && zip -r ../package.zip .
 
 typecheck: webpack  ## typecheck by running webpack
 
@@ -43,7 +46,7 @@ Gemfile.lock.installed: Gemfile.lock
 bundle_install: Gemfile.lock.installed ## Install Ruby dependencies
 
 clean: ## remove all built artifacts
-	rm dist/* || true
+	rm package.zip dist/* || true
 
 test: webpack ## run tests quickly
 
