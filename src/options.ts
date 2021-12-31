@@ -2,27 +2,25 @@
 
 import { logError } from './error';
 
-const htmlInputElement = (id: string) => {
+// https://2ality.com/2020/04/classes-as-values-typescript.html
+/* eslint-disable @typescript-eslint/no-explicit-any */
+type Class<T> = new (...args: any[]) => T;
+/* eslint-enable @typescript-eslint/no-explicit-any */
+
+const htmlElement = <T extends HTMLElement>(id: string, clazz: Class<T>): T => {
   const element = document.getElementById(id);
   if (element == null) {
     logError(`Couldn't find element with id ${id}`);
   }
-  if (!(element instanceof HTMLInputElement)) {
-    logError(`element with id ${id} not an HTMLInputElement as expected!`);
+  if (!(element instanceof clazz)) {
+    logError(`element with id ${id} not an ${clazz.name} as expected!`);
   }
   return element;
 };
 
-const htmlDivElement = (id: string) => {
-  const element = document.getElementById(id);
-  if (element == null) {
-    logError(`Couldn't find element with id ${id}`);
-  }
-  if (!(element instanceof HTMLDivElement)) {
-    logError(`element with id ${id} not an HTMLDivElement as expected!`);
-  }
-  return element;
-};
+const htmlInputElement = (id: string) => htmlElement(id, HTMLInputElement);
+
+const htmlDivElement = (id: string) => htmlElement(id, HTMLDivElement);
 
 const statusElement = () => htmlDivElement('status');
 
@@ -34,13 +32,7 @@ const workspaceElement = () => htmlInputElement('workspace');
 
 const customFieldElement = () => htmlInputElement('customField');
 
-const saveElement = () => {
-  const element = document.getElementById('save');
-  if (element == null) {
-    logError("Couldn't find saveElement");
-  }
-  return element;
-};
+const saveElement = () => htmlElement('save', HTMLButtonElement);
 
 // Saves options to chrome.storage
 const saveOptions = () => {
