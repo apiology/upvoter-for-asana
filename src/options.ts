@@ -2,46 +2,13 @@
 
 import { logError } from './error';
 
-const incrementElement = () => {
-  const element = document.getElementById('increment');
+const htmlInputElement = (id: string) => {
+  const element = document.getElementById(id);
   if (element == null) {
-    logError("Couldn't find incrementElement");
+    logError(`Couldn't find element with id ${id}`);
   }
   if (!(element instanceof HTMLInputElement)) {
-    logError('incrementElement not as expected!');
-  }
-  return element;
-};
-
-const tokenElement = () => {
-  const element = document.getElementById('token');
-  if (element == null) {
-    logError("Couldn't find token element");
-  }
-  if (!(element instanceof HTMLInputElement)) {
-    logError('token element not as expected!');
-  }
-  return element;
-};
-
-const workspaceElement = () => {
-  const element = document.getElementById('workspace');
-  if (element == null) {
-    logError("Couldn't find workspace element");
-  }
-  if (!(element instanceof HTMLInputElement)) {
-    logError('workspace element not as expected!');
-  }
-  return element;
-};
-
-const customFieldElement = () => {
-  const element = document.getElementById('customField');
-  if (element == null) {
-    logError("Couldn't find customField element");
-  }
-  if (!(element instanceof HTMLInputElement)) {
-    logError('customField element not as expected!');
+    logError(`element with id ${id} not an HTMLInputElement as expected!`);
   }
   return element;
 };
@@ -64,6 +31,14 @@ const saveElement = () => {
   }
   return element;
 };
+
+const incrementElement = () => htmlInputElement('increment');
+
+const tokenElement = () => htmlInputElement('token');
+
+const workspaceElement = () => htmlInputElement('workspace');
+
+const customFieldElement = () => htmlInputElement('customField');
 
 // Saves options to chrome.storage
 const saveOptions = () => {
