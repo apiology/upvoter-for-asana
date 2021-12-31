@@ -6,7 +6,7 @@
  * those tasks.
  */
 
-import { client } from './asana-typeahead';
+import { fetchClient } from './asana-typeahead';
 import { logError as logErrorOrig } from './error';
 import { upvoteTask, logSuccess, pullCustomField } from './upvoter';
 
@@ -27,6 +27,7 @@ const updateLinkMarker = (link: Element, indicator: number | string | null | und
 const upvoteLinkClassName = 'upvoter-upvote-link';
 
 const populateCurrentCount = async (dependentTaskGid: string, link: Element) => {
+  const client = await fetchClient();
   const task = await client.tasks.getTask(dependentTaskGid);
   const customField = await pullCustomField(task);
 
@@ -35,6 +36,7 @@ const populateCurrentCount = async (dependentTaskGid: string, link: Element) => 
 
 const upvote = async (dependentTaskGid: string, link: Element) => {
   updateLinkMarker(link, '^^');
+  const client = await fetchClient();
   const task = await client.tasks.getTask(dependentTaskGid);
   await upvoteTask(task);
   logSuccess(task);

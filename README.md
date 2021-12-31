@@ -29,23 +29,9 @@ for keyboard shortcuts to hit those links!
 This isn't in the Chrome App Store and doesn't have any cool config UI,
 so welcome to the Chrome Extension development experience!
 
-1. Create a config.ts in the src directory with a variable named
-   'asanaAccessToken' with a new
-   [Asana Personal Access Token](https://app.asana.com/0/developer-console)
-   assigned to it.
-2. Add the name of your Asana workspace to config.ts under the name
-   'workspaceName'
-3. Add the name of the custom field you want to increment to config.js
-   under the name 'customFieldName'
-4. Add a boolean value indicating whether you want upvoter to
-   increment values or decrement values to config.js under the name
-   'increment'.  Note that Asana doesn't let you sort an integer
-   custom with the highest values on top, so you may find it more
-   helpful to set 'increment' to 'false' and use negative values so
-   your most important thing show up at top by default.
-5. Run 'make' to create the bundle with webpack, or 'make start' to
+1. Run 'make' to create the bundle with webpack, or 'make start' to
    start webpack in watch mode.
-6. Go to [chrome://extensions/](chrome://extensions/)
-7. Make sure 'Developer mode' is flipped on in the upper right.
-8. Click the 'Load unpacked' button.
-9. Choose the [dist](./dist) directory
+1. Go to [chrome://extensions/](chrome://extensions/)
+1. Make sure 'Developer mode' is flipped on in the upper right.
+1. Click the 'Load unpacked' button.
+1. Choose the [dist](./dist) directory
