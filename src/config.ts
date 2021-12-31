@@ -38,8 +38,8 @@ async function fetchConfig<T>(key: string, name: string,
 
 export const fetchAsanaAccessToken = async () => fetchConfig('asanaAccessToken', 'Asana access token', 'string');
 
-export const fetchWorkspaceName = async () => fetchConfig('workspace', 'workspace name', String);
+export const fetchWorkspaceName = async () => fetchConfig('workspace', 'workspace name', 'string');
 
-export const fetchCustomFieldName = async () => fetchConfig('customField', 'custom field name', String);
+export const fetchCustomFieldName = async () => fetchConfig('customField', 'custom field name', 'string');
 
-export const fetchIncrement = async () => fetchConfig('increment', 'increment behavior', Boolean);
+export const fetchIncrement = async () => fetchConfig('increment', 'increment behavior', 'boolean');

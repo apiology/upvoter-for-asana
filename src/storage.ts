@@ -27,20 +27,24 @@ export function chromeStorageSyncFetch<T>(key: string,
   return new Promise((resolve) => {
     chrome.storage.sync.get([key], (result) => {
       const output = result[key];
-      if (clazz === 'string') {
+      if (output == null) {
+        resolve(output);
+      } else if (clazz === 'string') {
         if (isString(output)) {
           resolve(output);
+        } else {
+          logError(`config stored in chrome.storage.sync as ${key} not a string as expected (${typeof output}): ${output}`);
         }
-        logError(`config stored in chrome.storage.sync as ${key} not a string as expected!`);
       } else if (clazz === 'boolean') {
         if (isBoolean(output)) {
           resolve(output);
+        } else {
+          logError(`config stored in chrome.storage.sync as ${key} not a boolean as expected (${typeof output}): ${output}`);
         }
-        logError(`config stored in chrome.storage.sync as ${key} not an boolean as expected!`);
       } else if (output instanceof clazz) {
         resolve(output);
       } else {
-        logError(`config stored in chrome.storage.sync as ${key} not an ${clazz.name} as expected!`);
+        logError(`config stored in chrome.storage.sync as ${key} not an ${clazz.name} as expected (${typeof output}): ${output}`);
       }
     });
   });
