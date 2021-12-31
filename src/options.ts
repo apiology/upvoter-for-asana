@@ -13,24 +13,18 @@ const htmlInputElement = (id: string) => {
   return element;
 };
 
-const statusElement = () => {
-  const element = document.getElementById('status');
+const htmlDivElement = (id: string) => {
+  const element = document.getElementById(id);
   if (element == null) {
-    logError("Couldn't find statusElement");
+    logError(`Couldn't find element with id ${id}`);
   }
   if (!(element instanceof HTMLDivElement)) {
-    logError('statusElement not as expected!');
+    logError(`element with id ${id} not an HTMLDivElement as expected!`);
   }
   return element;
 };
 
-const saveElement = () => {
-  const element = document.getElementById('save');
-  if (element == null) {
-    logError("Couldn't find saveElement");
-  }
-  return element;
-};
+const statusElement = () => htmlDivElement('status');
 
 const incrementElement = () => htmlInputElement('increment');
 
@@ -39,6 +33,14 @@ const tokenElement = () => htmlInputElement('token');
 const workspaceElement = () => htmlInputElement('workspace');
 
 const customFieldElement = () => htmlInputElement('customField');
+
+const saveElement = () => {
+  const element = document.getElementById('save');
+  if (element == null) {
+    logError("Couldn't find saveElement");
+  }
+  return element;
+};
 
 // Saves options to chrome.storage
 const saveOptions = () => {
