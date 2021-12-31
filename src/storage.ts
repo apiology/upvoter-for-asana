@@ -1,10 +1,50 @@
-export const chromeStorageSyncFetch = (key: string):
-  Promise<string | null> => new Promise<string | null>((resolve) => {
+import { logError } from './error';
+
+// https://2ality.com/2020/04/classes-as-values-typescript.html
+/* eslint-disable @typescript-eslint/no-explicit-any */
+type Class<T> = new (...args: any[]) => T;
+
+// https://stackoverflow.com/a/67850394/2625807
+export function isString(value: any): value is string {
+  return typeof value === 'string' || value instanceof String;
+}
+
+// https://stackoverflow.com/a/67850394/2625807
+export function isBoolean(value: any): value is boolean {
+  return typeof value === 'boolean' || value instanceof Boolean;
+}
+/* eslint-enable @typescript-eslint/no-explicit-any */
+
+export function chromeStorageSyncFetch(key: string,
+  clazz: 'string'): Promise<string | null>;
+export function chromeStorageSyncFetch(key: string,
+  clazz: 'boolean'): Promise<boolean | null>;
+export function chromeStorageSyncFetch<T>(key: string,
+  clazz: Class<T>): Promise<T | null>;
+export function chromeStorageSyncFetch<T>(key: string,
+  clazz: Class<T> | 'string' | 'boolean'):
+  Promise<T | boolean | string | null> {
+  return new Promise((resolve) => {
     chrome.storage.sync.get([key], (result) => {
       const output = result[key];
-      resolve(output);
+      if (clazz === 'string') {
+        if (isString(output)) {
+          resolve(output);
+        }
+        logError(`config stored in chrome.storage.sync as ${key} not a string as expected!`);
+      } else if (clazz === 'boolean') {
+        if (isBoolean(output)) {
+          resolve(output);
+        }
+        logError(`config stored in chrome.storage.sync as ${key} not an boolean as expected!`);
+      } else if (output instanceof clazz) {
+        resolve(output);
+      } else {
+        logError(`config stored in chrome.storage.sync as ${key} not an ${clazz.name} as expected!`);
+      }
     });
   });
+}
 
 export const chromeStorageSyncStore = (key: string, value: string) => {
   const settings: { [index: string]: string } = {};

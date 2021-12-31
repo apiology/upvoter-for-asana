@@ -23,7 +23,7 @@ export const fetchCustomFieldGid = async (): Promise<string> => {
     return fetchedCustomFieldGid;
   }
 
-  fetchedCustomFieldGid = await chromeStorageSyncFetch('customFieldGid');
+  fetchedCustomFieldGid = await chromeStorageSyncFetch('customFieldGid', 'string');
   if (fetchedCustomFieldGid != null) {
     return fetchedCustomFieldGid;
   }

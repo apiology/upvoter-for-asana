@@ -65,7 +65,7 @@ export const fetchWorkspaceGid = async () => {
   if (fetchedWorkspaceGid != null) {
     return fetchedWorkspaceGid;
   }
-  fetchedWorkspaceGid = await chromeStorageSyncFetch('workspaceGid');
+  fetchedWorkspaceGid = await chromeStorageSyncFetch('workspaceGid', 'string');
   if (fetchedWorkspaceGid != null) {
     return fetchedWorkspaceGid;
   }
