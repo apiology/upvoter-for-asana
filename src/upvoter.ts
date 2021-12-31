@@ -11,7 +11,7 @@ import { chromeStorageSyncFetch, chromeStorageSyncStore } from './storage';
 import {
   fetchClient, findGid, fetchWorkspaceGid, pullResult, formatTask,
 } from './asana-typeahead';
-import { customFieldName, increment } from './config';
+import { fetchCustomFieldName, fetchIncrement } from './config';
 import { logError } from './error';
 
 let fetchedCustomFieldGid: string | null = null;
@@ -30,6 +30,7 @@ export const fetchCustomFieldGid = async (): Promise<string> => {
 
   const client = await fetchClient();
   const customFields = await client.customFields.getCustomFieldsForWorkspace(workspaceGid, {});
+  const customFieldName = await fetchCustomFieldName();
   fetchedCustomFieldGid = await findGid(customFields,
     (customField) => customField.name === customFieldName);
   if (fetchedCustomFieldGid == null) {
@@ -54,6 +55,7 @@ export const upvoteTask = async (
     currentValue = 1;
   }
   // https://developers.asana.com/docs/update-a-task
+  const increment = await fetchIncrement();
   const newValue: number = increment ? currentValue + 1 : currentValue - 1;
   const updatedCustomFields: { [index: string]: number } = {};
   updatedCustomFields[upvotesCustomFieldGid] = newValue;

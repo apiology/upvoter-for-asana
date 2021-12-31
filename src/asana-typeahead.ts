@@ -6,7 +6,7 @@
  */
 
 import * as Asana from 'asana';
-import { fetchAsanaAccessToken, workspaceName } from './config';
+import { fetchAsanaAccessToken, fetchWorkspaceName } from './config';
 import { chromeStorageSyncFetch, chromeStorageSyncStore } from './storage';
 import { logError } from './error';
 import { escapeHTML } from './omnibox';
@@ -71,6 +71,7 @@ export const fetchWorkspaceGid = async () => {
   }
   const client = await fetchClient();
   const workspaces = await client.workspaces.getWorkspaces();
+  const workspaceName = await fetchWorkspaceName();
   fetchedWorkspaceGid = await findGid(workspaces, (workspace) => workspace.name === workspaceName);
   if (fetchedWorkspaceGid == null) {
     logError('Could not find workspace GID!');

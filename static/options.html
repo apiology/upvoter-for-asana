@@ -2,9 +2,9 @@
 <html>
   <head><title>Upvoter for Asana Options</title></head>
   <body>
-    <h1>Asana API personal access token:</h1>
+    <h3>Asana API personal access token:</h3>
 
-    <div>You can generate this from the asana <a href="https://app.asana.com/0/my-apps">Developer App Console</a>.</div>
+    <div>You can generate this from the Asana <a href="https://app.asana.com/0/my-apps">Developer App Console</a>.</div>
 
 
     <div>
@@ -15,18 +15,41 @@
       </label>
     </div>
 
-    Favorite color:
 
-    <select id="color">
-      <option value="red">red</option>
-      <option value="green">green</option>
-      <option value="blue">blue</option>
-      <option value="yellow">yellow</option>
-    </select>
+    <h3>Workspace name:</h3>
+
+    <div>Enter the name of your Asana workspace</div>
+
+
+    <div>
+      <label>
+        Workspace name:
+
+        <input id="workspace">
+      </label>
+    </div>
+
+    <h3>Custom field name:</h3>
+
+    <div>Enter the name of your custom field</div>
+
+
+    <div>
+      <label>
+        Custom field name:
+
+        <input id="customField">
+      </label>
+    </div>
+
+
+    <h3>Increase or decrease:</h3>
+
+    <div>You may want to choose to decrement values--Asana is not so great at sorting projects with the most positive number on top, and using negative numbers instead can be a workaround.</div>
 
     <label>
-      <input type="checkbox" id="like">
-      I like colors.
+      <input type="checkbox" id="increment">
+      Increment numbers?
     </label>
 
     <div id="status"></div>
