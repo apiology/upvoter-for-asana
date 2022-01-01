@@ -12,7 +12,6 @@ import {
   fetchClient, findGid, fetchWorkspaceGid, pullResult, formatTask,
 } from './asana-typeahead';
 import { fetchCustomFieldName, fetchIncrement } from './config';
-import { logError } from './error';
 
 let fetchedCustomFieldGid: string | null = null;
 
@@ -34,7 +33,7 @@ export const fetchCustomFieldGid = async (): Promise<string> => {
   fetchedCustomFieldGid = await findGid(customFields,
     (customField) => customField.name === customFieldName);
   if (fetchedCustomFieldGid == null) {
-    logError('Could not find custom field GID!');
+    throw new Error('Could not find custom field GID!');
   }
   chromeStorageSyncStore('customFieldGid', fetchedCustomFieldGid);
 
@@ -48,7 +47,7 @@ export const upvoteTask = async (
   const upvotesCustomFieldGid = await fetchCustomFieldGid();
   const customField = task.custom_fields.find((field) => field.gid === upvotesCustomFieldGid);
   if (customField == null) {
-    logError('Expected to find custom field on task!');
+    throw new Error('Expected to find custom field on task!');
   }
   let currentValue = customField.number_value;
   if (currentValue == null) {

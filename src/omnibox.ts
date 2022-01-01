@@ -4,8 +4,6 @@
  * Contains functions useful to interact with chrome.omnibox API
  */
 
-import { logError } from './error';
-
 // How on God's green earth is there no built-in function to do this?
 //
 // https://stackoverflow.com/questions/40263803/native-javascript-or-es6-way-to-encode-and-decode-html-entities
@@ -19,7 +17,7 @@ export const escapeHTML = (str: string) => {
       '"': '&quot;',
     }[tag]);
     if (s == null) {
-      logError('Error in regexp logic!');
+      throw new Error('Error in regexp logic!');
     }
     return s;
   };
