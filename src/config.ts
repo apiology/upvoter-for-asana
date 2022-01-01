@@ -1,5 +1,4 @@
 import { chromeStorageSyncFetch } from './storage';
-import { logError } from './error';
 
 // https://2ality.com/2020/04/classes-as-values-typescript.html
 /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -9,7 +8,7 @@ type Class<T> = new (...args: any[]) => T;
 const ensureConfigNotNull = <T>(value: T | null, name: string): T => {
   if (value == null) {
     chrome.runtime.openOptionsPage();
-    logError(`Please configure ${name}`);
+    throw new Error(`Please configure ${name}`);
   }
   return value;
 };

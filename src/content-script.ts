@@ -7,14 +7,7 @@
  */
 
 import { fetchClient } from './asana-typeahead';
-import { logError as logErrorOrig } from './error';
 import { upvoteTask, logSuccess, pullCustomField } from './upvoter';
-
-// As of 4.4.4, TypeScript's control flow analysis is wonky with
-// narrowing and functions that return never.  This is a workaround:
-//
-// https://github.com/microsoft/TypeScript/issues/36753
-const logError: (err: string) => never = logErrorOrig;
 
 const updateLinkMarker = (link: Element, indicator: number | string | null | undefined) => {
   let message = indicator;
@@ -48,7 +41,7 @@ const fixUpLinkToDependency = (link: HTMLElement) => {
   if (url != null) {
     const dependentTaskGid = url.split('/').at(-1);
     if (dependentTaskGid == null) {
-      logError(`Could not parse URL: ${url}`);
+      throw new Error(`Could not parse URL: ${url}`);
     }
     link.removeAttribute('href');
     link.innerHTML += ' [...]';
@@ -72,7 +65,7 @@ const dependencyLinks = () => {
       if (element instanceof HTMLElement) {
         links.push(element);
       } else {
-        logError('Element is not an HTMLElement!');
+        throw new Error('Element is not an HTMLElement!');
       }
     }
   }

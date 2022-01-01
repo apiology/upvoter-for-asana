@@ -1,5 +1,3 @@
-import { logError } from './error';
-
 // https://2ality.com/2020/04/classes-as-values-typescript.html
 /* eslint-disable @typescript-eslint/no-explicit-any */
 type Class<T> = new (...args: any[]) => T;
@@ -33,18 +31,18 @@ export function chromeStorageSyncFetch<T>(key: string,
         if (isString(output)) {
           resolve(output);
         } else {
-          logError(`config stored in chrome.storage.sync as ${key} not a string as expected (${typeof output}): ${output}`);
+          throw new Error(`config stored in chrome.storage.sync as ${key} not a string as expected (${typeof output}): ${output}`);
         }
       } else if (clazz === 'boolean') {
         if (isBoolean(output)) {
           resolve(output);
         } else {
-          logError(`config stored in chrome.storage.sync as ${key} not a boolean as expected (${typeof output}): ${output}`);
+          throw new Error(`config stored in chrome.storage.sync as ${key} not a boolean as expected (${typeof output}): ${output}`);
         }
       } else if (output instanceof clazz) {
         resolve(output);
       } else {
-        logError(`config stored in chrome.storage.sync as ${key} not an ${clazz.name} as expected (${typeof output}): ${output}`);
+        throw new Error(`config stored in chrome.storage.sync as ${key} not an ${clazz.name} as expected (${typeof output}): ${output}`);
       }
     });
   });
