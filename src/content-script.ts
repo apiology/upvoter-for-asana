@@ -28,12 +28,22 @@ const populateCurrentCount = async (dependentTaskGid: string, link: Element) => 
 };
 
 const upvote = async (dependentTaskGid: string, link: Element) => {
-  updateLinkMarker(link, '^^');
-  const client = await fetchClient();
-  const task = await client.tasks.getTask(dependentTaskGid);
-  await upvoteTask(task);
-  logSuccess(task);
-  await populateCurrentCount(dependentTaskGid, link);
+  try {
+    console.log('updating link marker');
+    updateLinkMarker(link, '^^');
+    console.log('updated link marker');
+    const client = await fetchClient();
+    console.log('client', client);
+    const task = await client.tasks.getTask(dependentTaskGid);
+    console.log('task', task);
+    await upvoteTask(task);
+    console.log('upvoted task');
+    logSuccess(task);
+    await populateCurrentCount(dependentTaskGid, link);
+  } catch (err) {
+    alert(`Problem upvoting ${dependentTaskGid}: ${err}`);
+    throw err;
+  }
 };
 
 const fixUpLinkToDependency = (link: HTMLElement) => {
