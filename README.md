@@ -24,6 +24,17 @@ can click on the dependent task links to upvote those tasks.  See
 [Shortcuts for Asana](https://github.com/apiology/shortcuts-for-asana)
 for keyboard shortcuts to hit those links!
 
+## Configuration
+
+1. Create a new "Personal access token" in
+   [Asana](https://app.asana.com/0/my-apps)
+2. Set up options directly
+   [here](chrome-extension://olnbepiojfjbimgfnfdalnpkfbaphjjc/options.html)
+   or in Chrome | … | More Tools | Extensions | Upvoter for Asana |
+   Details | Extension options.
+3. Paste in your personal access token.
+4. Provide the rest of the configuration and hit 'Save'
+
 ## Installing
 
 This isn't in the Chrome App Store and doesn't have any cool config UI,
