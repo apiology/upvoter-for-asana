@@ -7,7 +7,9 @@ type Class<T> = new (...args: any[]) => T;
 
 const ensureConfigNotNull = <T>(value: T | null, name: string): T => {
   if (value == null) {
-    chrome.runtime.openOptionsPage();
+    if (chrome?.runtime?.openOptionsPage != null) {
+      chrome.runtime.openOptionsPage();
+    }
     throw new Error(`Please configure ${name}`);
   }
   return value;
