@@ -57,6 +57,3 @@ requirements_dev.txt.installed
 
 # From release process
 /package.zip
-
-# Provided by user
-/config.js

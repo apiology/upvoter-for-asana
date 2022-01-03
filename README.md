@@ -8,6 +8,21 @@ Chrome extension which quickly finds and increments integer custom fields in Asa
 
 ## Using
 
+## Configuration
+
+1. Create a new "Personal access token" in
+   [Asana](https://app.asana.com/0/my-apps)
+1. Set up options directly
+   [here](chrome-extension://TBD/options.html)
+   or in Chrome | … | More Tools | Extensions | Upvoter for Asana |
+   Details | Extension options.
+1. Paste in your personal access token.
+1. Provide the rest of the configuration and hit 'Save'
+## Legal
+
+Not created, maintained, reviewed, approved, or endorsed by Asana, Inc.
+
+
 ## Installing
 
 This isn't in the Chrome App Store, so welcome to the Chrome Extension

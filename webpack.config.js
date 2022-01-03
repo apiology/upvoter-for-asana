@@ -2,11 +2,13 @@
 // you know, the thing that provides import to begin with:
 //
 // SyntaxError: Cannot use import statement outside a module
+const webpack = require('webpack'); // eslint-disable-line @typescript-eslint/no-var-requires
 const CopyPlugin = require('copy-webpack-plugin'); // eslint-disable-line @typescript-eslint/no-var-requires
 
 module.exports = {
   entry: {
     background: ['./src/background.ts', './src/upvoter-for-asana.ts'],
+    options: ['./src/options.ts'],
   },
   // https://webpack.js.org/guides/typescript/
   module: {
@@ -33,6 +35,24 @@ module.exports = {
   // 'cheap-module-source-map' is suggested by https://stackoverflow.com/questions/48047150/chrome-extension-compiled-by-webpack-throws-unsafe-eval-error
   devtool: 'cheap-module-source-map',
   plugins: [
+    // node-asana uses process.nextTick, which this provides:
+    new webpack.ProvidePlugin({
+      process: 'process/browser',
+    }),
+    // The node-util polyfill looks up 'process.env.NODE_DEBUG' to
+    // toggle debugging without checking for process.env existing.
+    //
+    // The node-process polyfill doesn't provide process.env at all.
+    //
+    // There's no note of this on the webpack page recommending
+    // node polyfills.
+    //
+    // https://github.com/browserify/node-util/issues/43
+    new webpack.DefinePlugin({
+      process: {
+        env: '{}',
+      },
+    }),
     new CopyPlugin({
       patterns: [{ from: 'static' }],
     }),

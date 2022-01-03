@@ -11,13 +11,6 @@ import * as _ from 'lodash';
 import {
   actOnInputData, logSuccess, pullOmniboxSuggestions,
 } from './upvoter-for-asana';
-import { logError as logErrorOrig } from './error';
-
-// As of 4.4.4, TypeScript's control flow analysis is wonky with
-// narrowing and functions that return never.  This is a workaround:
-//
-// https://github.com/microsoft/TypeScript/issues/36753
-const logError: (err: string) => never = logErrorOrig;
 
 type SuggestFunction = (suggestResults: chrome.omnibox.SuggestResult[]) => void;
 
@@ -33,7 +26,8 @@ const pullAndReportSuggestions = async (text: string, suggest: SuggestFunction) 
   try {
     await populateOmnibox(text, suggest);
   } catch (err) {
-    logError(`Problem getting suggestions for ${text}: ${err}`);
+    alert(`Problem getting suggestions for ${text}: ${err}`);
+    throw err;
   }
 };
 
@@ -56,7 +50,8 @@ const omniboxInputEnteredListener = async (inputData: string) => {
     const out = await actOnInputData(inputData);
     logSuccess(out);
   } catch (err) {
-    logError(`Failed to process ${inputData}: ${err}`);
+    alert(`Failed to process ${inputData}: ${err}`);
+    throw err;
   }
 };
 

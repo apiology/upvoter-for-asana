@@ -1,5 +1,8 @@
 {
     "_template": "https://github.com/apiology/cookiecutter-multicli.git",
+    "asana_api": "yes",
+    "asana_related": "yes",
+    "chrome_extension_options": "yes",
     "email": "vince@broz.cc",
     "full_name": "Vince Broz",
     "github_username": "apiology",
