@@ -9,5 +9,8 @@
     "project_short_description": "Chrome extension which quickly finds and increments integer custom fields in Asana tasks from the Chrome Omnibox.",
     "project_slug": "upvoter-for-asana",
     "type_of_github_repo": "public",
-    "version": "0.1.0"
+    "version": "0.1.0",
+    "asana_related": "yes",
+    "asana_api": "yes",
+    "chrome_extension_options": "yes"
 }
