@@ -21,12 +21,13 @@ webpack: ## run webpack and tie together modules for use by browser
 start: ## run webpack continuously and watch files
 	npm start
 
-default: webpack package test quality ## run default webpack, typechecking, tests and quality, and package into a .zip file
+default: webpack typecheck package test quality ## run default webpack, typechecking, tests and quality, and package into a .zip file
 
 package:
 	cd dist && zip -r ../package.zip .
 
 typecheck: webpack  ## typecheck by running webpack
+	jsonschema --instance static/manifest.json docs/chrome-manifest-v3-schema.json
 
 requirements_dev.txt.installed: requirements_dev.txt
 	pip install -q --disable-pip-version-check -r requirements_dev.txt
