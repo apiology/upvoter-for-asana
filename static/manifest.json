@@ -20,5 +20,5 @@
     "default_title": "Make this page red"
   },
   "options_page": "options.html",
-  "manifest_version": 2
+  "manifest_version": 3
 }

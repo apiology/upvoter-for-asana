@@ -34,3 +34,15 @@ development experience!
 3. Make sure 'Developer mode' is flipped on in the upper right.
 4. Click the 'Load unpacked' button.
 5. Choose the [dist](./dist) directory
+
+## Contributions
+
+This project, as with all others, rests on the shoulders of a broad
+ecosystem supported by many volunteers doing thankless work, along
+with specific contributors.
+
+In particular I'd like to call out:
+
+* [Audrey Roy Greenfeld](https://github.com/audreyfeldroy) for the
+  cookiecutter tool and associated examples, which keep my many
+  projects building with shared boilerplate with a minimum of fuss.
