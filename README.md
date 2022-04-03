@@ -51,3 +51,15 @@ for keyboard shortcuts to hit those links!
 ## Legal
 
 Not created, maintained, reviewed, approved, or endorsed by Asana, Inc.
+
+## Contributions
+
+This project, as with all others, rests on the shoulders of a broad
+ecosystem supported by many volunteers doing thankless work, along
+with specific contributors.
+
+In particular I'd like to call out:
+
+* [Audrey Roy Greenfeld](https://github.com/audreyfeldroy) for the
+  cookiecutter tool and associated examples, which keep my many
+  projects building with shared boilerplate with a minimum of fuss.

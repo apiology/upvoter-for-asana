@@ -8,7 +8,7 @@ const CopyPlugin = require('copy-webpack-plugin'); // eslint-disable-line @types
 
 module.exports = {
   entry: {
-    background: ['./src/background.ts', './src/upvoter.ts'],
+    background: ['./src/background.ts'],
     'content-script': ['./src/content-script.ts'],
     options: ['./src/options.ts'],
   },
@@ -27,7 +27,7 @@ module.exports = {
   //
   // https://stackoverflow.com/questions/43595555/webpack-cant-resolve-typescript-modules
   resolve: {
-    extensions: ['.ts', '.js', '.json'],
+    extensions: ['.ts', '.tsx', '.js', '.jsx', '.json'],
     fallback: {
       // The node-asana library uses the node API and expects users to
       // use webpack to polyfill it when using BrowserJS:
