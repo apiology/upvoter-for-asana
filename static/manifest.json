@@ -12,7 +12,6 @@
   ],
   "omnibox": { "keyword": "uv" },
   "background": {
-    "persistent": false,
     "service_worker": "background.js"
   },
   "content_scripts": [
