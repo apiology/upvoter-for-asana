@@ -48,7 +48,7 @@ export const upvoteTask = async (
   const upvotesCustomFieldGid = await fetchCustomFieldGid();
   const customField = task.custom_fields.find((field) => field.gid === upvotesCustomFieldGid);
   if (customField == null) {
-    throw new Error('Expected to find custom field on task!');
+    throw new Error(`Expected to find custom field on task with gid ${upvotesCustomFieldGid}!`);
   }
   let currentValue = customField.number_value;
   if (currentValue == null) {
