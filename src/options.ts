@@ -30,19 +30,31 @@ const workspaceElement = () => htmlInputElement('workspace');
 
 const customFieldElement = () => htmlInputElement('customField');
 
+const omniboxIncrementAmountElement = () => htmlInputElement('omniboxIncrementAmount');
+
 const saveElement = () => htmlElement('save', HTMLButtonElement);
+
+const ensureInt = (s: string): number => {
+  const parsed = Number.parseInt(s, 10);
+  if (Number.isNaN(parsed)) {
+    throw new Error('Got non-integer parsed from HTML form');
+  }
+  return parsed;
+};
 
 // Saves options to chrome.storage
 const saveOptions = () => {
   const asanaAccessToken = tokenElement().value;
   const workspace = workspaceElement().value;
   const customField = customFieldElement().value;
+  const omniboxIncrementAmount: number = ensureInt(omniboxIncrementAmountElement().value);
   const increment = incrementElement().checked;
   chrome.storage.sync.set({
     asanaAccessToken,
     workspace,
     customField,
     increment,
+    omniboxIncrementAmount,
   }, () => {
     // Update status to let user know options were saved.
     statusElement().textContent = 'Options saved.';
@@ -60,11 +72,13 @@ const restoreOptions = () => {
     workspace: null,
     customField: 'votes',
     increment: true,
+    omniboxIncrementAmount: 1,
   }, (items) => {
     tokenElement().value = items.asanaAccessToken;
     workspaceElement().value = items.workspace;
     customFieldElement().value = items.customField;
     incrementElement().checked = items.increment;
+    omniboxIncrementAmountElement().value = items.omniboxIncrementAmount;
   });
 };
 

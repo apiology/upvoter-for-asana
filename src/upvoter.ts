@@ -11,7 +11,7 @@ import { chromeStorageSyncFetch, chromeStorageSyncStore } from './storage';
 import {
   fetchClient, findGid, fetchWorkspaceGid, pullResult, formatTask,
 } from './asana-typeahead';
-import { fetchCustomFieldName, fetchIncrement } from './config';
+import { fetchCustomFieldName, fetchIncrement, fetchOmniboxIncrementAmount } from './config';
 
 let fetchedCustomFieldGid: string | null = null;
 
@@ -41,7 +41,8 @@ export const fetchCustomFieldGid = async (): Promise<string> => {
 };
 
 export const upvoteTask = async (
-  task: Asana.resources.Tasks.Type
+  task: Asana.resources.Tasks.Type,
+  amountToUpvote = 1
 ): Promise<Asana.resources.Tasks.Type> => {
   console.log('upvoteTask got task', task);
   const upvotesCustomFieldGid = await fetchCustomFieldGid();
@@ -55,7 +56,8 @@ export const upvoteTask = async (
   }
   // https://developers.asana.com/docs/update-a-task
   const increment = await fetchIncrement();
-  const newValue: number = increment ? currentValue + 1 : currentValue - 1;
+  const newValue: number = increment
+    ? currentValue + amountToUpvote : currentValue - amountToUpvote;
   const updatedCustomFields: { [index: string]: number } = {};
   updatedCustomFields[upvotesCustomFieldGid] = newValue;
   const client = await fetchClient();
@@ -96,7 +98,8 @@ const createSuggestResult = async (
 export const actOnInputData = async (taskGid: string) => {
   const client = await fetchClient();
   let task = await client.tasks.getTask(taskGid);
-  task = await upvoteTask(task);
+  const omniboxIncrementAmount = await fetchOmniboxIncrementAmount();
+  task = await upvoteTask(task, omniboxIncrementAmount);
   return task;
 };
 
