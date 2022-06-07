@@ -1,4 +1,4 @@
-import { chromeStorageSyncFetch } from './storage';
+import { chromeStorageSyncFetch } from './storage.js';
 
 // https://2ality.com/2020/04/classes-as-values-typescript.html
 /* eslint-disable @typescript-eslint/no-explicit-any */

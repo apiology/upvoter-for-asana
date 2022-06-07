@@ -7,11 +7,10 @@
 
 import * as Asana from 'asana';
 
-import { chromeStorageSyncFetch, chromeStorageSyncStore } from './storage';
-import {
-  fetchClient, findGid, fetchWorkspaceGid, pullResult, formatTask,
-} from './asana-typeahead';
-import { fetchCustomFieldName, fetchIncrement, fetchOmniboxIncrementAmount } from './config';
+import { chromeStorageSyncFetch, chromeStorageSyncStore } from './storage.js';
+import { fetchClient, findGid, fetchWorkspaceGid } from './asana-base.js';
+import { pullResult, formatTask } from './asana-typeahead.js';
+import { fetchCustomFieldName, fetchIncrement, fetchOmniboxIncrementAmount } from './config.js';
 
 let fetchedCustomFieldGid: string | null = null;
 

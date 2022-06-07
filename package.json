@@ -7,6 +7,7 @@
     "start": "webpack --mode=development --watch",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "type": "module",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/apiology/upvoter-for-asana.git"
@@ -32,14 +33,17 @@
     "copy-webpack-plugin": "^9",
     "eslint": "^7.18.0",
     "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-import-resolver-typescript": "^2.7.1",
     "eslint-plugin-import": "^2.22.1",
+    "resolve-typescript-plugin": "^1.2.0",
     "ts-loader": "~8",
-    "typescript": "^4.4.4",
+    "typescript": "^4.7.3",
     "webpack": "^5",
     "webpack-cli": "^4.5.0"
   },
   "_dependenciesComments": "buffer, process, stream-browserify, url and util are node polyfills needed by asana library",
   "dependencies": {
+    "alfy": "^1.0.0",
     "asana": "^0.18.5",
     "buffer": "^6.0.3",
     "process": "^0.11.10",

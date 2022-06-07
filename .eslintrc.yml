@@ -15,11 +15,12 @@ plugins:
 parserOptions:
   ecmaVersion: 11
   sourceType: module
-globals:
-  asanaAccessToken: readonly
-  workspaceName: readonly
-  customFieldName: readonly
-  increment: readonly
+settings:
+  # https://newbedev.com/using-eslint-with-typescript-unable-to-resolve-path-to-module
+  # https://stackoverflow.com/a/63451047/2625807
+  # https://stackoverflow.com/a/61065416/2625807
+  import/resolver:
+    typescript: {}
 rules:
   # might be worth bringing no-console back or stripping as part of
   # the build once this is more mature - right now it's helpful in
@@ -39,12 +40,12 @@ rules:
       exports: always-multiline
       functions: never
   import/extensions:
-    - error
-    - pattern:
-        # I'm standardizing on no file extension, as it makes both
-        # tsc-via-webpack and tsc via emacs TIDE's tscserver equally
-        # happy
-        .ts: never
+    # doesn't seem compatible with esm support in node and typescript,
+    # where I import a .js filename that is satisfied by the
+    # .ts filename in my source
+    #
+    # https://stackoverflow.com/a/60675852/2625807
+    - "off"
   # I don't know whether 'use strict' is the default in Chrome
   # extensions, so let's assume not.
   strict:

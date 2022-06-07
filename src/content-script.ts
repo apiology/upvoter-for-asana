@@ -6,8 +6,8 @@
  * those tasks.
  */
 
-import { fetchClient } from './asana-typeahead';
-import { upvoteTask, logSuccess, pullCustomField } from './upvoter';
+import { fetchClient } from './asana-base.js';
+import { upvoteTask, logSuccess, pullCustomField } from './upvoter.js';
 
 const updateLinkMarker = (link: Element, indicator: number | string | null | undefined) => {
   let message = indicator;
