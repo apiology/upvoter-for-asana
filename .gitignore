@@ -53,7 +53,7 @@ requirements_dev.txt.installed
 /node_modules
 
 # From webpack
-/dist
+/extension-dist
 
 # From release process
 /package.zip
