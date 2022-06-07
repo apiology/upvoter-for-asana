@@ -10,7 +10,7 @@
 import * as _ from 'lodash';
 import {
   actOnInputData, logSuccess, pullOmniboxSuggestions,
-} from './upvoter-for-asana';
+} from './upvoter-for-asana.js';
 
 type SuggestFunction = (suggestResults: chrome.omnibox.SuggestResult[]) => void;
 

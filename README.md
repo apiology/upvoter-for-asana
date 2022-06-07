@@ -33,7 +33,7 @@ development experience!
 2. Go to [chrome://extensions/](chrome://extensions/)
 3. Make sure 'Developer mode' is flipped on in the upper right.
 4. Click the 'Load unpacked' button.
-5. Choose the [dist](./dist) directory
+5. Choose the [extension-dist](./extension-dist) directory
 
 ## Contributions
 

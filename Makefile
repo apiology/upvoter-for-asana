@@ -21,10 +21,18 @@ webpack: ## run webpack and tie together modules for use by browser
 start: ## run webpack continuously and watch files
 	npm start
 
-default: webpack typecheck package test quality ## run default webpack, typechecking, tests and quality, and package into a .zip file
+build-chrome-extension: webpack
 
-package:
-	cd dist && zip -r ../package.zip .
+build: build-chrome-extension
+
+package: package-chrome-extension
+
+default: build package quality ## run build and package up for the Chrome Extension
+
+package: package-chrome-extension
+
+package-chrome-extension: build-chrome-extension
+	cd extension-dist && zip -r ../package.zip .
 
 typecheck: webpack  ## typecheck by running webpack
 	jsonschema --instance static/manifest.json docs/chrome-manifest-v3-schema.json
@@ -47,7 +55,7 @@ Gemfile.lock.installed: Gemfile.lock
 bundle_install: Gemfile.lock.installed ## Install Ruby dependencies
 
 clean: ## remove all built artifacts
-	rm package.zip dist/* || true
+	rm package.zip extension-dist/* || true
 
 test: webpack ## run tests quickly
 
