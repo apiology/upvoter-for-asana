@@ -48,8 +48,13 @@ export function chromeStorageSyncFetch<T>(key: string,
   });
 }
 
-export const chromeStorageSyncStore = (key: string, value: string) => {
-  const settings: { [index: string]: string } = {};
-  settings[key] = value;
-  chrome.storage.sync.set(settings);
-};
+export default class ChromeExtensionCache {
+  cacheFetch = async (key: string,
+    clazz: 'string'): Promise<string | null> => chromeStorageSyncFetch(key, clazz);
+
+  cacheStore = async (key: string, value: string): Promise<void> => {
+    const settings: { [index: string]: string } = {};
+    settings[key] = value;
+    chrome.storage.sync.set(settings);
+  }
+}

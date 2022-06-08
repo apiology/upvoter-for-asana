@@ -4,14 +4,30 @@
  * Chrome extension which quickly finds and increments integer custom fields in Asana tasks from the Chrome Omnibox.
  */
 
-import { escapeHTML } from './omnibox.js';
+import { platform } from './platform.js';
 
-export const logSuccess = (result: string | object): void => console.log('Upvoted task:', result);
+export const logSuccess = (result: string | object): void => {
+  const logger = platform().logger();
+  logger.log('Upvoted task:', result);
+};
 
-export const pullOmniboxSuggestions = async (text: string) => [{
-  content: `some input data for next step, maybe containing ${text}`,
-  description: escapeHTML('some human readable text'),
-}];
+export type Suggestion = {
+  url: string
+  text: string;
+  description: string;
+}
+
+export const pullSuggestions = async (text: string): Promise<Suggestion[]> => {
+  const url = `upvoter-for-asana:${encodeURIComponent(text)}`;
+  const description = `Do some random action on "${text}"`;
+  return [
+    {
+      url,
+      text,
+      description,
+    },
+  ];
+};
 
 export const actOnInputData = async (text: string) => {
   console.log(`Acting upon ${text}`);

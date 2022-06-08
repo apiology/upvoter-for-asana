@@ -55,5 +55,8 @@ requirements_dev.txt.installed
 # From webpack
 /extension-dist
 
+# From tsc
+/alfred-dist
+
 # From release process
 /package.zip
