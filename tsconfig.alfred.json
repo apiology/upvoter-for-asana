@@ -1,0 +1,7 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "rootDirs": ["src/common", "src/alfred"],
+    "outDir": "./alfred-dist/"
+  }
+}

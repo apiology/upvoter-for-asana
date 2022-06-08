@@ -21,13 +21,14 @@ webpack: ## run webpack and tie together modules for use by browser
 start: ## run webpack continuously and watch files
 	npm start
 
+build-alfy:
+	npm run build-alfy
+
 build-chrome-extension: webpack
 
-build: build-chrome-extension
+build: build-alfy build-chrome-extension
 
-package: package-chrome-extension
-
-default: build package quality ## run build and package up for the Chrome Extension
+default: build package quality ## build and package up for both Alfred and the Chrome Extension
 
 package: package-chrome-extension
 
@@ -55,7 +56,7 @@ Gemfile.lock.installed: Gemfile.lock
 bundle_install: Gemfile.lock.installed ## Install Ruby dependencies
 
 clean: ## remove all built artifacts
-	rm package.zip extension-dist/* || true
+	rm package.zip alfred-dist/* extension-dist/* || true
 
 test: webpack ## run tests quickly
 

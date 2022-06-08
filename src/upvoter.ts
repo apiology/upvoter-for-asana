@@ -7,34 +7,36 @@
 
 import * as Asana from 'asana';
 
-import { chromeStorageSyncFetch, chromeStorageSyncStore } from './storage.js';
 import { fetchClient, findGid, fetchWorkspaceGid } from './asana-base.js';
-import { pullResult, formatTask } from './asana-typeahead.js';
-import { fetchCustomFieldName, fetchIncrement, fetchOmniboxIncrementAmount } from './config.js';
+import { pullResult } from './asana-typeahead.js';
+import { platform } from './platform.js';
 
 let fetchedCustomFieldGid: string | null = null;
 
 export const fetchCustomFieldGid = async (): Promise<string> => {
+  const p = platform();
+  const cache = p.cache();
+  const config = p.config();
   const workspaceGid = await fetchWorkspaceGid();
 
   if (fetchedCustomFieldGid != null) {
     return fetchedCustomFieldGid;
   }
 
-  fetchedCustomFieldGid = await chromeStorageSyncFetch('customFieldGid', 'string');
+  fetchedCustomFieldGid = await cache.cacheFetch('customFieldGid', 'string');
   if (fetchedCustomFieldGid != null) {
     return fetchedCustomFieldGid;
   }
 
   const client = await fetchClient();
   const customFields = await client.customFields.getCustomFieldsForWorkspace(workspaceGid, {});
-  const customFieldName = await fetchCustomFieldName();
+  const customFieldName = await config.fetchCustomFieldName();
   fetchedCustomFieldGid = await findGid(customFields,
     (customField) => customField.name === customFieldName);
   if (fetchedCustomFieldGid == null) {
     throw new Error('Could not find custom field GID!');
   }
-  chromeStorageSyncStore('customFieldGid', fetchedCustomFieldGid);
+  cache.cacheStore('customFieldGid', fetchedCustomFieldGid);
 
   return fetchedCustomFieldGid;
 };
@@ -43,6 +45,7 @@ export const upvoteTask = async (
   task: Asana.resources.Tasks.Type,
   amountToUpvote = 1
 ): Promise<Asana.resources.Tasks.Type> => {
+  const config = platform().config();
   console.log('upvoteTask got task', task);
   const upvotesCustomFieldGid = await fetchCustomFieldGid();
   const customField = task.custom_fields.find((field) => field.gid === upvotesCustomFieldGid);
@@ -54,7 +57,7 @@ export const upvoteTask = async (
     currentValue = 1;
   }
   // https://developers.asana.com/docs/update-a-task
-  const increment = await fetchIncrement();
+  const increment = await config.fetchIncrement();
   const newValue: number = increment
     ? currentValue + amountToUpvote : currentValue - amountToUpvote;
   const updatedCustomFields: { [index: string]: number } = {};
@@ -77,27 +80,28 @@ export const pullCustomField = async (task: Asana.resources.Tasks.Type) => {
   return customField;
 };
 
-const createSuggestResult = async (
-  task: Asana.resources.Tasks.Type
-): Promise<chrome.omnibox.SuggestResult | null> => {
-  const customField = await pullCustomField(task);
+// const createSuggestResult = async (
+//   task: Asana.resources.Tasks.Type
+// ): Promise<chrome.omnibox.SuggestResult | null> => {
+//   const customField = await pullCustomField(task);
 
-  if (customField === undefined) {
-    return null;
-  }
+//   if (customField === undefined) {
+//     return null;
+//   }
 
-  const description = `<dim>${customField.number_value}</dim>: ${formatTask(task)}`;
+//   const description = `<dim>${customField.number_value}</dim>: ${formatTask(task)}`;
 
-  return {
-    content: task.gid,
-    description,
-  };
-};
+//   return {
+//     content: task.gid,
+//     description,
+//   };
+// };
 
 export const actOnInputData = async (taskGid: string) => {
+  const config = platform().config();
   const client = await fetchClient();
   let task = await client.tasks.getTask(taskGid);
-  const omniboxIncrementAmount = await fetchOmniboxIncrementAmount();
+  const omniboxIncrementAmount = await config.fetchOmniboxIncrementAmount();
   task = await upvoteTask(task, omniboxIncrementAmount);
   return task;
 };
@@ -107,7 +111,32 @@ function notEmpty<TValue>(value: TValue | null | undefined): value is TValue {
   return value !== null && value !== undefined;
 }
 
-export const pullOmniboxSuggestions = async (text: string) => {
+export type Suggestion = {
+  url: string;
+  description: string;
+}
+
+const createSuggestResult = async (
+  task: Asana.resources.Tasks.Type
+): Promise<Suggestion | null> => {
+  const formatter = platform().formatter();
+  const customField = await pullCustomField(task);
+
+  if (customField === undefined) {
+    return null;
+  }
+
+  const upvotes = customField.number_value || 0;
+
+  const url = `{{cookiecutter.project_slug}}:${encodeURIComponent(task.gid)}`;
+
+  return {
+    url,
+    description: formatter.formatUpvotedTask(upvotes, task),
+  };
+};
+
+export const pullSuggestions = async (text: string): Promise<Suggestion[]> => {
   const typeaheadResult = await pullResult(text);
   chrome.omnibox.setDefaultSuggestion({
     description: '<dim>Processing results...</dim>',

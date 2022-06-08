@@ -6,16 +6,16 @@
  */
 
 import * as Asana from 'asana';
-import { fetchAsanaAccessToken, fetchWorkspaceName } from './config.js';
-import { chromeStorageSyncFetch, chromeStorageSyncStore } from './storage.js';
+import { platform } from './platform.js';
 
 let fetchedClient: Asana.Client | null = null;
 
 export const fetchClient = async () => {
+  const config = platform().config();
   if (fetchedClient != null) {
     return fetchedClient;
   }
-  const asanaAccessToken = await fetchAsanaAccessToken();
+  const asanaAccessToken = await config.fetchAsanaAccessToken();
 
   fetchedClient = Asana.Client.create().useAccessToken(asanaAccessToken);
   return fetchedClient;
@@ -25,6 +25,7 @@ export function findGid<T extends Asana.resources.Resource>(
   resourceList: Asana.resources.ResourceList<T>,
   isCorrectResource: (resource: T) => boolean
 ) {
+  const logger = platform().logger();
   return new Promise<string | null>((resolve, reject) => {
     // If I had esnext.asynciterable in
     // tsconfig.json#compilerOptions.lib, and if node-asana's
@@ -47,7 +48,7 @@ export function findGid<T extends Asana.resources.Resource>(
     const stream = resourceList.stream();
     stream.on('data', (resource: T): void => {
       if (isCorrectResource(resource)) {
-        console.log(`Found ${resource.gid}`);
+        logger.log(`Found ${resource.gid}`);
         resolve(resource.gid);
       }
     });
@@ -60,21 +61,25 @@ export function findGid<T extends Asana.resources.Resource>(
 let fetchedWorkspaceGid: string | null = null;
 
 export const fetchWorkspaceGid = async () => {
+  const c = platform();
+  const config = c.config();
+  const cache = c.cache();
+
   if (fetchedWorkspaceGid != null) {
     return fetchedWorkspaceGid;
   }
-  fetchedWorkspaceGid = await chromeStorageSyncFetch('workspaceGid', 'string');
+  fetchedWorkspaceGid = await cache.cacheFetch('workspaceGid', 'string');
   if (fetchedWorkspaceGid != null) {
     return fetchedWorkspaceGid;
   }
   const client = await fetchClient();
   const workspaces = await client.workspaces.getWorkspaces();
-  const workspaceName = await fetchWorkspaceName();
+  const workspaceName = await config.fetchWorkspaceName();
   fetchedWorkspaceGid = await findGid(workspaces, (workspace) => workspace.name === workspaceName);
   if (fetchedWorkspaceGid == null) {
     throw new Error('Could not find workspace GID!');
   }
-  chromeStorageSyncStore('workspaceGid', fetchedWorkspaceGid);
+  cache.cacheStore('workspaceGid', fetchedWorkspaceGid);
 
   return fetchedWorkspaceGid;
 };

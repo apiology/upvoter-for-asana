@@ -37,7 +37,7 @@ development.  See the `.envrc` file for detail.
 
 ## Releasing to Chrome Web Store
 
-1. Update screenshots for any new features
+1. Update screenshots in `docs/` for any new features
 1. Update [README.md](./README.md) with new screenshots
 1. PR screenshot updates in
 1. PR a bump to the version in `static/manifest.json`
