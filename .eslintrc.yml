@@ -39,6 +39,11 @@ rules:
       imports: always-multiline
       exports: always-multiline
       functions: never
+  import/prefer-default-export:
+    # I build files incrementally, intending for more than one
+    # function to be within; having this tell me to default export the
+    # first function isn't helpful.
+    - "off"
   import/extensions:
     # doesn't seem compatible with esm support in node and typescript,
     # where I import a .js filename that is satisfied by the
