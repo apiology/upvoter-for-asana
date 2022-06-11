@@ -8,7 +8,7 @@ import { platform } from './platform.js';
 
 export const logSuccess = (result: string | object): void => {
   const logger = platform().logger();
-  logger.log('Upvoted task:', result);
+  logger.log('Acted:', result);
 };
 
 export type Suggestion = {
@@ -30,6 +30,11 @@ export const pullSuggestions = async (text: string): Promise<Suggestion[]> => {
 };
 
 export const actOnInputData = async (text: string) => {
-  console.log(`Acting upon ${text}`);
+  let parsedText = text;
+  if (text.startsWith('upvoter-for-asana:')) {
+    const url = new URL(text);
+    parsedText = decodeURIComponent(url.pathname);
+  }
+  console.log(`Acting upon ${parsedText}`);
   return 'a success message or status';
 };

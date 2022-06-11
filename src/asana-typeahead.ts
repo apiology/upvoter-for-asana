@@ -21,9 +21,7 @@ export const pullResult = async (text: string) => {
 
   logger.log('requesting typeahead with workspaceGid', workspaceGid,
     ' and query of ', query);
-  chrome.omnibox.setDefaultSuggestion({
-    description: `<dim>Searching for ${text}...</dim>`,
-  });
+  logger.userVisibleStatus(`Searching for ${text}...`);
 
   // https://developers.asana.com/docs/typeahead
   const client = await fetchClient();

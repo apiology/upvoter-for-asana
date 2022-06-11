@@ -6,9 +6,23 @@ WARNING: This is not ready for use yet!
 
 Chrome extension which quickly finds and increments integer custom fields in Asana tasks from the Chrome Omnibox.
 
-## Using
+## Using Chrome Extension
 
-## Configuration
+Go to the URL bar ("Chrome Omnibox"), then type 'uv', a space, then...
+
+## Using Alfred Workflow
+
+Similarly, activate Alfred, then type 'uv', a space, then...
+
+## Installing Chrome Extension
+
+This isn't in the Chrome App Store - see [DEVELOPMENT.md](./DEVELOPMENT.md) for how to run from a local checkout.
+
+## Installing Alfred workflow
+
+The Alfred package isn't published yet - see [DEVELOPMENT.md](./DEVELOPMENT.md) for how to run from a local checkout.
+
+## Chrome Extension Configuration
 
 1. Create a new "Personal access token" in
    [Asana](https://app.asana.com/0/my-apps)
@@ -18,22 +32,18 @@ Chrome extension which quickly finds and increments integer custom fields in Asa
    Details | Extension options.
 1. Paste in your personal access token.
 1. Provide the rest of the configuration and hit 'Save'
+
+## Alfred Workflow Configuration
+
+1. Create a new "Personal access token" in
+   [Asana](https://app.asana.com/0/my-apps)
+1. Alfred | Workflows | Upvoter for Asana | [≈] icon in upper right
+1. Add values to Workflow Environment Variables section
+1. Save
+
 ## Legal
 
 Not created, maintained, reviewed, approved, or endorsed by Asana, Inc.
-
-
-## Installing
-
-This isn't in the Chrome App Store, so welcome to the Chrome Extension
-development experience!
-
-1. Run 'make' to create the bundle with webpack, or 'make start' to
-   start webpack in watch mode.
-2. Go to [chrome://extensions/](chrome://extensions/)
-3. Make sure 'Developer mode' is flipped on in the upper right.
-4. Click the 'Load unpacked' button.
-5. Choose the [extension-dist](./extension-dist) directory
 
 ## Contributions
 

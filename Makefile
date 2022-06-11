@@ -33,10 +33,10 @@ default: build package quality ## build and package up for both Alfred and the C
 package: package-chrome-extension
 
 package-chrome-extension: build-chrome-extension
-	cd extension-dist && zip -r ../package.zip .
+	cd dist/chrome-extension && zip -r ../../package.zip .
 
 typecheck: webpack  ## typecheck by running webpack
-	jsonschema --instance static/manifest.json docs/chrome-manifest-v3-schema.json
+	jsonschema --instance static/chrome-extension/manifest.json docs/chrome-manifest-v3-schema.json
 
 requirements_dev.txt.installed: requirements_dev.txt
 	pip install -q --disable-pip-version-check -r requirements_dev.txt
@@ -56,7 +56,7 @@ Gemfile.lock.installed: Gemfile.lock
 bundle_install: Gemfile.lock.installed ## Install Ruby dependencies
 
 clean: ## remove all built artifacts
-	rm package.zip alfred-dist/* extension-dist/* || true
+	rm -fr package.zip dist/alfred/* dist/chrome-extension/* || true
 
 test: webpack ## run tests quickly
 

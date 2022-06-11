@@ -4,6 +4,8 @@ export default abstract class Logger {
   abstract log(message?: any, ...optionalParams: any[]): void;
 
   abstract debug(message?: any, ...optionalParams: any[]): void;
+
+  abstract userVisibleStatus(message: string): void;
   /* eslint-enable @typescript-eslint/no-explicit-any */
   /* eslint-enable @typescript-eslint/no-unused-vars */
 }
