@@ -80,23 +80,6 @@ export const pullCustomField = async (task: Asana.resources.Tasks.Type) => {
   return customField;
 };
 
-// const createSuggestResult = async (
-//   task: Asana.resources.Tasks.Type
-// ): Promise<chrome.omnibox.SuggestResult | null> => {
-//   const customField = await pullCustomField(task);
-
-//   if (customField === undefined) {
-//     return null;
-//   }
-
-//   const description = `<dim>${customField.number_value}</dim>: ${formatTask(task)}`;
-
-//   return {
-//     content: task.gid,
-//     description,
-//   };
-// };
-
 export const actOnInputData = async (taskGid: string) => {
   const config = platform().config();
   const client = await fetchClient();
@@ -138,10 +121,9 @@ const createSuggestResult = async (
 
 export const pullSuggestions = async (text: string): Promise<Suggestion[]> => {
   const typeaheadResult = await pullResult(text);
-  chrome.omnibox.setDefaultSuggestion({
-    description: '<dim>Processing results...</dim>',
-  });
-  console.log('typeaheadResult: ', typeaheadResult);
+  const logger = platform().logger();
+  logger.userVisibleStatus('Processing results...');
+  logger.log('typeaheadResult: ', typeaheadResult);
 
   const suggestionPromises = typeaheadResult.data
     .filter((task) => !task.completed)
