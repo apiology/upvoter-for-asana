@@ -57,5 +57,5 @@ export default class ChromeExtensionConfig {
 
   fetchIncrement = async () => fetchConfig('increment', 'increment behavior', 'boolean');
 
-  fetchOmniboxIncrementAmount = async () => fetchConfig('omniboxIncrementAmount', 'amount to increment when done via omnibox', 'number');
+  fetchManualIncrementAmount = async () => fetchConfig('omniboxIncrementAmount', 'amount to increment when done via omnibox', 'number');
 }

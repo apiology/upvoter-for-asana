@@ -17,7 +17,12 @@ export const fetchClient = async () => {
   }
   const asanaAccessToken = await config.fetchAsanaAccessToken();
 
-  fetchedClient = Asana.Client.create().useAccessToken(asanaAccessToken);
+  const clientOptions: Asana.ClientOptions = {
+    defaultHeaders: {
+      'Asana-Enable': 'new_user_task_lists',
+    },
+  };
+  fetchedClient = Asana.Client.create(clientOptions).useAccessToken(asanaAccessToken);
   return fetchedClient;
 };
 

@@ -12,7 +12,7 @@ just throw a backlog feature task a quick upvote in real time as you
 suffer through missing the feature, then go back later and take on the
 most upvoted tasks!
 
-## Using
+## Using Chrome Extension
 
 Go to the URL bar ("Chrome Omnibox"), and type 'uv', a space, then
 search for an Asana task.  You should see them pop up as suggestions.
@@ -29,7 +29,21 @@ for keyboard shortcuts to hit those links!
 
 <img src="./docs/screenshot-5.png" alt="screenshot showing dependent task with upvotes listed" height="400"/>
 
-## Configuration
+## Using Alfred Workflow
+
+Similarly, activate Alfred, then type 'uv', a space, then type 'uv', a
+space, then search for an Asana task.  You should see them pop up as
+suggestions.  Pick one, and your custom field will be uploaded!
+
+## Installing Chrome Extension
+
+This isn't in the Chrome App Store - see [DEVELOPMENT.md](./DEVELOPMENT.md) for how to run from a local checkout.
+
+## Installing Alfred workflow
+
+The Alfred package isn't published yet - see [DEVELOPMENT.md](./DEVELOPMENT.md) for how to run from a local checkout.
+
+## Chrome Extension Configuration
 
 1. Create a custom field with field type "Number".
 2. Check the 'Add to field library' box.
@@ -47,6 +61,14 @@ for keyboard shortcuts to hit those links!
 <img src="./docs/screenshot-1.png" alt="screenshot showing custom field being added and project with custom field inside" height="400"/>
 
 <img src="./docs/screenshot-2.png" alt="screenshot showing Asana personal access token creation and configuraiton of the extension" height="400"/>
+
+## Alfred Workflow Configuration
+
+1. Create a new "Personal access token" in
+   [Asana](https://app.asana.com/0/my-apps)
+1. Alfred | Workflows | Upvoter for Asana | [≈] icon in upper right
+1. Add values to Workflow Environment Variables section
+1. Save
 
 ## Legal
 

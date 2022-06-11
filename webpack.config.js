@@ -48,7 +48,7 @@ export default {
   },
   mode: 'development', // override with webpack --mode=production on CLI builds
   output: {
-    path: path.resolve(dirname, 'extension-dist'),
+    path: path.resolve(dirname, 'dist/chrome-extension'),
     filename: '[name].js',
   },
   // 'inline-source-map' is suggested by https://webpack.js.org/guides/typescript/
@@ -74,7 +74,7 @@ export default {
       },
     }),
     new CopyPlugin({
-      patterns: [{ from: 'static' }],
+      patterns: [{ from: 'static/chrome-extension' }],
     }),
   ],
 };

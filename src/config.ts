@@ -7,5 +7,5 @@ export default abstract class Config {
 
   abstract fetchIncrement(): Promise<boolean>;
 
-  abstract fetchOmniboxIncrementAmount(): Promise<number>;
+  abstract fetchManualIncrementAmount(): Promise<number>;
 }
