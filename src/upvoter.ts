@@ -101,7 +101,7 @@ export const actOnInputData = async (taskGid: string) => {
   const config = platform().config();
   const client = await fetchClient();
   let task = await client.tasks.getTask(taskGid);
-  const omniboxIncrementAmount = await config.fetchOmniboxIncrementAmount();
+  const omniboxIncrementAmount = await config.fetchManualIncrementAmount();
   task = await upvoteTask(task, omniboxIncrementAmount);
   return task;
 };
