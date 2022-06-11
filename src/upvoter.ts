@@ -111,7 +111,7 @@ const createSuggestResult = async (
 
   const upvotes = customField.number_value || 0;
 
-  const url = `{{cookiecutter.project_slug}}:${encodeURIComponent(task.gid)}`;
+  const url = `upvoter-for-asana:${encodeURIComponent(task.gid)}`;
 
   return {
     url,
