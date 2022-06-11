@@ -45,8 +45,10 @@ export const upvoteTask = async (
   task: Asana.resources.Tasks.Type,
   amountToUpvote = 1
 ): Promise<Asana.resources.Tasks.Type> => {
-  const config = platform().config();
-  console.log('upvoteTask got task', task);
+  const p = platform();
+  const config = p.config();
+  const logger = p.logger();
+  logger.log('upvoteTask got task', task);
   const upvotesCustomFieldGid = await fetchCustomFieldGid();
   const customField = task.custom_fields.find((field) => field.gid === upvotesCustomFieldGid);
   if (customField == null) {
@@ -83,13 +85,13 @@ export const pullCustomField = async (task: Asana.resources.Tasks.Type) => {
 export const actOnInputData = async (text: string) => {
   const config = platform().config();
   const client = await fetchClient();
-
+  const logger = platform().logger();
   let parsedText = text;
   if (text.startsWith('upvoter-for-asana:')) {
     const url = new URL(text);
     parsedText = decodeURIComponent(url.pathname);
   }
-  console.log(`Acting upon ${parsedText}`);
+  logger.log(`Acting upon ${parsedText}`);
   const taskGid = parsedText;
   let task = await client.tasks.getTask(taskGid);
   const omniboxIncrementAmount = await config.fetchManualIncrementAmount();
