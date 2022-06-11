@@ -49,7 +49,7 @@ ensure_yarn() {
 
 ensure_npm_modules() {
   # progress bar creates artifacst in M-x shell
-  yarn install --no-progress
+  yarn install --no-progress --ignore-scripts
 }
 
 apt_upgraded=0

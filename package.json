@@ -1,13 +1,19 @@
 {
-  "name": "upvoter-for-asana",
+  "name": "alfred-upvoter-for-asana",
   "version": "0.1.0",
   "description": "Chrome extension which quickly finds and increments integer custom fields in Asana tasks from the Chrome Omnibox.",
-  "private": true,
+  "private": false,
   "scripts": {
     "start": "webpack --mode=development --watch",
     "build-alfy": "tsc -p tsconfig.alfred.json",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "postinstall": "alfy-init",
+    "preuninstall": "alfy-cleanup"
   },
+  "files": [
+    "info.plist",
+    "dist/alfred/**/*.js"
+  ],
   "type": "module",
   "repository": {
     "type": "git",
@@ -17,7 +23,11 @@
     "chrome-extension",
     "asana"
   ],
-  "author": "Vince Broz <vince@broz.cc>",
+  "author": {
+    "name": "Vince Broz",
+    "email": "vince@broz.cc",
+    "url": "https://github.com/apiology/"
+  },
   "license": "MIT license",
   "bugs": {
     "url": "https://github.com/apiology/upvoter-for-asana/issues"
