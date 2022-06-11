@@ -149,12 +149,3 @@ npm install -g alfred-upvoter-for-asana --upgrade
 1. ... | Preview
 1. [Publish](https://developer.chrome.com/docs/webstore/update/)
 1. Update options.html link in README.md
-
-## Installing local version
-
-1. Run 'make' to create the bundle with webpack, or 'make start' to
-   start webpack in watch mode.
-1. Go to [chrome://extensions/](chrome://extensions/)
-1. Make sure 'Developer mode' is flipped on in the upper right.
-1. Click the 'Load unpacked' button.
-1. Choose the [dist](./dist) directory
