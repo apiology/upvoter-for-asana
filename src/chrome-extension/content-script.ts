@@ -7,7 +7,7 @@
  */
 
 import { fetchClient } from '../asana-base.js';
-import { upvoteTask, logSuccess, pullCustomField } from '../upvoter.js';
+import { upvoteTask, logSuccess, pullCustomField } from '../upvoter-for-asana.js';
 
 const updateLinkMarker = (link: Element, indicator: number | string | null | undefined) => {
   let message = indicator;
