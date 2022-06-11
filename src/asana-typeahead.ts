@@ -14,7 +14,7 @@ export const pullResult = async (text: string) => {
     resource_type: 'task',
     query: text,
     opt_pretty: true,
-    opt_fields: ['name', 'completed', 'parent.name', 'custom_fields.gid', 'custom_fields.number_value', 'memberships.project.name'],
+    opt_fields: 'name,completed,parent.name,custom_fields.gid,custom_fields.number_value,memberships.project.name',
   };
   const workspaceGid = await fetchWorkspaceGid();
   const logger = platform().logger();
