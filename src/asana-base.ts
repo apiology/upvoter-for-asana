@@ -2,7 +2,7 @@
  * asana module.
  *
  * Contains functions useful to connect Asana API with
- * chrome.omnibox API
+ * TODO API
  */
 
 import * as Asana from 'asana';
