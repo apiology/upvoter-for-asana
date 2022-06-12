@@ -1,4 +1,5 @@
 import { isString } from '../types.js';
+import Config from '../config.js';
 
 /* eslint-disable @typescript-eslint/no-unused-vars */
 const fetchConfigString = (envVarName: string) => {
@@ -49,7 +50,7 @@ const fetchConfigInteger = (envVarName: string): number => {
 };
 /* eslint-enable @typescript-eslint/no-unused-vars */
 
-export default class AlfredConfig {
+export default class AlfredConfig extends Config {
   fetchAsanaAccessToken = async () => fetchNonEmptyConfigString('asana_access_key');
 
   fetchWorkspaceName = async (): Promise<string> => fetchNonEmptyConfigString('workspace_name');
