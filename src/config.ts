@@ -8,4 +8,12 @@ export default abstract class Config {
   abstract fetchIncrement(): Promise<boolean>;
 
   abstract fetchManualIncrementAmount(): Promise<number>;
+
+  validate = async (): Promise<void> => {
+    await this.fetchAsanaAccessToken();
+    await this.fetchWorkspaceName();
+    await this.fetchCustomFieldName();
+    await this.fetchIncrement();
+    await this.fetchManualIncrementAmount();
+  }
 }
