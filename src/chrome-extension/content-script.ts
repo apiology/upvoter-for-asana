@@ -8,6 +8,10 @@
 
 import { fetchClient } from '../asana-base.js';
 import { upvoteTask, logSuccess, pullCustomField } from '../upvoter-for-asana.js';
+import { setPlatform } from '../platform.js';
+import ChromeExtensionPlatform from './chrome-extension-platform.js';
+
+setPlatform(new ChromeExtensionPlatform());
 
 const updateLinkMarker = (link: Element, indicator: number | string | null | undefined) => {
   let message = indicator;
