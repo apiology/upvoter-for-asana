@@ -1,4 +1,4 @@
-import { actOnInputData } from '../upvoter.js';
+import { actOnInputData } from '../upvoter-for-asana.js';
 import AlfredPlatform from './alfred-platform.js';
 import { setPlatform } from '../platform.js';
 

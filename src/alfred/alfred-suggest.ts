@@ -1,5 +1,5 @@
 import alfy, { ScriptFilterItem } from 'alfy';
-import { pullSuggestions } from '../upvoter.js';
+import { pullSuggestions } from '../upvoter-for-asana.js';
 import { isString } from '../types.js';
 import AlfredPlatform from './alfred-platform.js';
 import { setPlatform } from '../platform.js';
