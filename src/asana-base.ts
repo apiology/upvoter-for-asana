@@ -1,8 +1,7 @@
 /**
  * asana module.
  *
- * Contains functions useful to connect Asana API with
- * TODO API
+ * Contains functions useful to connect to the Asana API
  */
 
 import * as Asana from 'asana';
