@@ -4,7 +4,7 @@ import { isString } from '../types.js';
 const fetchConfigString = (envVarName: string) => {
   const value = process.env[envVarName];
   if (value == null || !isString(value)) {
-    throw Error(`Configure ${envVarName} in Alfred env vars`);
+    throw new Error(`Configure ${envVarName} in Alfred env vars`);
   }
   return value;
 };
@@ -12,7 +12,38 @@ const fetchConfigString = (envVarName: string) => {
 const fetchNonEmptyConfigString = (envVarName: string) => {
   const value = fetchConfigString(envVarName);
   if (value.length === 0) {
-    throw Error(`Configure ${envVarName} in Alfred env vars`);
+    throw new Error(`Configure ${envVarName} in Alfred env vars`);
+  }
+  return value;
+};
+
+const fetchConfigBoolean = (envVarName: string): boolean => {
+  const validValues: { [index: string]: boolean } = {
+    true: true,
+    false: false,
+    yes: true,
+    no: false,
+    y: true,
+    n: false,
+    t: true,
+    f: false,
+  };
+  const asString = fetchNonEmptyConfigString(envVarName);
+  const value = validValues[asString.toLowerCase()];
+  if (value == null) {
+    throw new Error(`Configure ${envVarName} in Alfred env vars - must be "true" or "false"`);
+  }
+  return value;
+};
+
+const fetchConfigInteger = (envVarName: string): number => {
+  const asString = fetchNonEmptyConfigString(envVarName);
+  const value = Number(asString);
+  if (Number.isNaN(value)) {
+    throw new Error(`Configure ${envVarName} in Alfred env vars - must be valid number`);
+  }
+  if (!Number.isInteger(value)) {
+    throw new Error(`Configure ${envVarName} in Alfred env vars - must be valid integer`);
   }
   return value;
 };
