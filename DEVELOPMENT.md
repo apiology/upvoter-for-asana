@@ -50,27 +50,6 @@ development.  See the `.envrc` file for detail.
    stories = await client.stories.getStoriesForTask('1234);
    ```
 
-## Initial publish of Alfred package to npm
-
-Walk through these steps:
-
-```sh
-git checkout main
-git pull
-git stash
-npm publish
-alfy-cleanup
-npm install -g alfred-upvoter-for-asana --upgrade
-```
-
-Drop the following markdown into README.md in the 'Installing Alfred workflow' section.
-
-```markdown
-1. `npm install -g alfred-upvoter-for-asana`
-2. Alfred | Workflows | File Asana task | Configure workflow and
-   variables icon | configure workspace name and access key.
-```
-
 ## Publishing Alfred package to npm
 
 Related backlog tasks:

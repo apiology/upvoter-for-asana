@@ -41,7 +41,9 @@ suggestions.  Pick one, and your custom field will be uploaded!
 
 ## Installing Alfred workflow
 
-The Alfred package isn't published yet - see [DEVELOPMENT.md](./DEVELOPMENT.md) for how to run from a local checkout.
+1. `npm install -g alfred-upvoter-for-asana`
+2. Alfred | Workflows | File Asana task | Configure workflow and
+   variables icon | configure workspace name and access key.
 
 ## Chrome Extension Configuration
 
