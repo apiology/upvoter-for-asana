@@ -3,4 +3,10 @@ export default abstract class Config {
 
   abstract fetchWorkspaceName(): Promise<string>;
   // abstract fetchSomeConfigItem(): Promise<string>;
+
+  validate = async (): Promise<void> => {
+    await this.fetchAsanaAccessToken();
+    await this.fetchWorkspaceName();
+    // await fetchSomeConfigItem();
+  }
 }
