@@ -37,7 +37,7 @@ suggestions.  Pick one, and your custom field will be uploaded!
 
 ## Installing Chrome Extension
 
-This isn't in the Chrome App Store - see [DEVELOPMENT.md](./DEVELOPMENT.md) for how to run from a local checkout.
+[![Available in the Chrome Web Store](https://storage.googleapis.com/web-dev-uploads/image/WlD8wC6g8khYWPJUsQceQkhXSlv1/tbyBjqi7Zu733AAKA5n4.png)](https://chrome.google.com/webstore/detail/opener-for-asana/aaljndcedpekcigodagpkfmkafncfdfb)
 
 ## Installing Alfred workflow
 
