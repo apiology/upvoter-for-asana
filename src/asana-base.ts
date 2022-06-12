@@ -1,8 +1,7 @@
 /**
  * asana module.
  *
- * Contains functions useful to connect Asana API with
- * chrome.omnibox API
+ * Contains functions useful to connect to the Asana API
  */
 
 import * as Asana from 'asana';
@@ -19,7 +18,7 @@ export const fetchClient = async () => {
 
   const clientOptions: Asana.ClientOptions = {
     defaultHeaders: {
-      'Asana-Enable': 'new_user_task_lists',
+      'Asana-Enable': 'new_user_task_lists,new_project_templates',
     },
   };
   fetchedClient = Asana.Client.create(clientOptions).useAccessToken(asanaAccessToken);
