@@ -25,6 +25,8 @@ PreCommit:
     include:
       - '**/*.js'
       - '**/*.ts'
+    exclude:
+      - 'src/asana.d.ts'
   PythonFlake8:
     enabled: true
     on_warn: fail
