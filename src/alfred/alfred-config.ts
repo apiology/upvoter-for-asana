@@ -31,7 +31,7 @@ const fetchConfigBoolean = (envVarName: string): boolean => {
   const asString = fetchNonEmptyConfigString(envVarName);
   const value = validValues[asString.toLowerCase()];
   if (value == null) {
-    throw Error(`Configure ${envVarName} in Alfred env vars - must be "true" or "false"`);
+    throw new Error(`Configure ${envVarName} in Alfred env vars - must be "true" or "false"`);
   }
   return value;
 };
@@ -40,10 +40,10 @@ const fetchConfigInteger = (envVarName: string): number => {
   const asString = fetchNonEmptyConfigString(envVarName);
   const value = Number(asString);
   if (Number.isNaN(value)) {
-    throw Error(`Configure ${envVarName} in Alfred env vars - must be valid number`);
+    throw new Error(`Configure ${envVarName} in Alfred env vars - must be valid number`);
   }
   if (!Number.isInteger(value)) {
-    throw Error(`Configure ${envVarName} in Alfred env vars - must be valid integer`);
+    throw new Error(`Configure ${envVarName} in Alfred env vars - must be valid integer`);
   }
   return value;
 };
