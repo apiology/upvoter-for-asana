@@ -4,7 +4,7 @@
 
 WARNING: This is not ready for use yet!
 
-Chrome extension which quickly finds and increments integer custom fields in Asana tasks from the Chrome Omnibox.
+Quickly finds and increments integer custom fields in Asana tasks from the Chrome Omnibox or as an Alfred workflow.
 
 ## Using Chrome Extension
 

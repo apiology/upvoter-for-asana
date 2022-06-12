@@ -1,7 +1,7 @@
 /**
  * upvoter-for-asana module.
  *
- * Chrome extension which quickly finds and increments integer custom fields in Asana tasks from the Chrome Omnibox.
+ * Quickly finds and increments integer custom fields in Asana tasks from the Chrome Omnibox or as an Alfred workflow.
  */
 
 import { platform } from './platform.js';
