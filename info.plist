@@ -178,13 +178,22 @@ set -eu
 	<dict>
 		<key>asana_access_key</key>
 		<string></string>
+		<key>custom_field_name</key>
+		<string></string>
+		<key>increment</key>
+		<string></string>
+		<key>increment_amount</key>
+		<string></string>
 		<key>workspace_name</key>
 		<string></string>
 	</dict>
 	<key>variablesdontexport</key>
 	<array>
-		<string>asana_access_key</string>
+		<string>custom_field_name</string>
+		<string>increment</string>
+		<string>increment_amount</string>
 		<string>workspace_name</string>
+		<string>asana_access_key</string>
 	</array>
 	<key>version</key>
 	<string></string>
