@@ -4,7 +4,7 @@ import { isString } from '../types.js';
 const fetchConfigString = (envVarName: string) => {
   const value = process.env[envVarName];
   if (value == null || !isString(value)) {
-    throw Error(`Configure ${envVarName} in Alfred env vars`);
+    throw new Error(`Configure ${envVarName} in Alfred env vars`);
   }
   return value;
 };
@@ -12,7 +12,7 @@ const fetchConfigString = (envVarName: string) => {
 const fetchNonEmptyConfigString = (envVarName: string) => {
   const value = fetchConfigString(envVarName);
   if (value.length === 0) {
-    throw Error(`Configure ${envVarName} in Alfred env vars`);
+    throw new Error(`Configure ${envVarName} in Alfred env vars`);
   }
   return value;
 };
