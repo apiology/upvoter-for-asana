@@ -6,6 +6,9 @@
 //                 Lorant Szakacs <https://github.com/szlori>
 // Definitions: https://github.com/DefinitelyTyped/DefinitelyTyped
 // TypeScript Version: 3.2
+
+
+// temporarily copied in pending merge of https://github.com/DefinitelyTyped/DefinitelyTyped/pull/60776
 declare module 'asana' {
     import * as Promise from 'bluebird';
 
