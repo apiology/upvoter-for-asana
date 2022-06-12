@@ -2,8 +2,8 @@
 
 [![CircleCI](https://circleci.com/gh/apiology/upvoter-for-asana.svg?style=svg)](https://circleci.com/gh/apiology/upvoter-for-asana)
 
-Chrome extension which quickly finds and increments integer custom
-fields in Asana tasks from the Chrome Omnibox.
+Quickly finds and increments integer custom fields in Asana tasks from
+the Chrome Omnibox or as an Alfred workflow.
 
 [![Available in the Chrome Web Store](https://storage.googleapis.com/web-dev-uploads/image/WlD8wC6g8khYWPJUsQceQkhXSlv1/tbyBjqi7Zu733AAKA5n4.png)](https://chrome.google.com/webstore/detail/upvoter-for-asana/olnbepiojfjbimgfnfdalnpkfbaphjjc)
 
