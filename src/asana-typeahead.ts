@@ -9,12 +9,14 @@ import * as Asana from 'asana';
 import { platform } from './platform.js';
 import { fetchClient, fetchWorkspaceGid } from './asana-base.js';
 
-export const pullResult = async (text: string) => {
+export const pullResult = async (
+  text: string
+): Promise<Asana.resources.ResourceList<Asana.resources.Tasks.Type>> => {
   const query: Asana.resources.Typeahead.TypeaheadParams = {
     resource_type: 'task',
     query: text,
     opt_pretty: true,
-    opt_fields: ['name', 'completed', 'parent.name', 'custom_fields.gid', 'custom_fields.number_value', 'memberships.project.name'],
+    opt_fields: 'name,completed,parent.name,custom_fields.gid,custom_fields.number_value,memberships.project.name',
   };
   const workspaceGid = await fetchWorkspaceGid();
   const logger = platform().logger();

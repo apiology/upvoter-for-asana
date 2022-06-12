@@ -35,7 +35,6 @@
   "homepage": "https://github.com/apiology/upvoter-for-asana#readme",
   "_devDependenciesNotes": "copy-webpack-plugin 10 failed with this - https://stackoverflow.com/questions/70080671/copy-webpack-plugin-error-invalid-host-defined-options",
   "devDependencies": {
-    "@types/asana": "^0.18.5",
     "@types/chrome": "^0.0.163",
     "@types/lodash": "^4.14.176",
     "@types/node": "^16.11.7",
