@@ -50,7 +50,7 @@ development.  See the `.envrc` file for detail.
    stories = await client.stories.getStoriesForTask('1234);
    ```
 
-## Publishing Alfred package to npm
+## Releasing Alfred package to npm
 
 Related backlog tasks:
 
