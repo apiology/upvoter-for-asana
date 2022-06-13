@@ -56,3 +56,7 @@ In particular I'd like to call out:
 * [Audrey Roy Greenfeld](https://github.com/audreyfeldroy) for the
   cookiecutter tool and associated examples, which keep my many
   projects building with shared boilerplate with a minimum of fuss.
+* [Sindre Sorhus](https://github.com/sindresorhus) and [Sam
+  Verschueren](https://github.com/SamVerschueren) for the alfy tool,
+  which provided an easy on-ramp to integrating this project with
+  Alfred.
