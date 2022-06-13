@@ -1,7 +1,7 @@
 {
   "name": "alfred-upvoter-for-asana",
   "version": "0.1.0",
-  "description": "Chrome extension which quickly finds and increments integer custom fields in Asana tasks from the Chrome Omnibox.",
+  "description": "Quickly finds and increments integer custom fields in Asana tasks from the Chrome Omnibox or as an Alfred workflow.",
   "private": false,
   "scripts": {
     "start": "webpack --mode=development --watch",
@@ -28,7 +28,7 @@
     "email": "vince@broz.cc",
     "url": "https://github.com/apiology/"
   },
-  "license": "MIT license",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/apiology/upvoter-for-asana/issues"
   },

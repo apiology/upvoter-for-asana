@@ -43,4 +43,6 @@ export default class ChromeExtensionFormatter {
     }
     return `${escapeHTML(task.name)}${membership}`;
   };
+
+  escapeDescriptionPlainText = escapeHTML;
 }
