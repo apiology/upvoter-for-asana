@@ -82,23 +82,6 @@ export const pullCustomField = async (task: Asana.resources.Tasks.Type) => {
   return customField;
 };
 
-export const actOnInputData = async (text: string) => {
-  const config = platform().config();
-  const client = await fetchClient();
-  const logger = platform().logger();
-  let parsedText = text;
-  if (text.startsWith('upvoter-for-asana:')) {
-    const url = new URL(text);
-    parsedText = decodeURIComponent(url.pathname);
-  }
-  logger.log(`Acting upon ${parsedText}`);
-  const taskGid = parsedText;
-  let task = await client.tasks.getTask(taskGid);
-  const omniboxIncrementAmount = await config.fetchManualIncrementAmount();
-  task = await upvoteTask(task, omniboxIncrementAmount);
-  return task;
-};
-
 // https://stackoverflow.com/questions/43118692/typescript-filter-out-nulls-from-an-array
 function notEmpty<TValue>(value: TValue | null | undefined): value is TValue {
   return value !== null && value !== undefined;
@@ -143,4 +126,18 @@ export const pullSuggestions = async (text: string): Promise<Suggestion[]> => {
 
   const suggestions = (await Promise.all(suggestionPromises)).filter(notEmpty);
   return suggestions;
+};
+
+export const actOnInputData = async (text: string) => {
+  const url = new URL(text);
+  const parsedText = decodeURIComponent(url.pathname);
+  const config = platform().config();
+  const client = await fetchClient();
+  const logger = platform().logger();
+  logger.log(`Acting upon ${parsedText}`);
+  const taskGid = parsedText;
+  let task = await client.tasks.getTask(taskGid);
+  const omniboxIncrementAmount = await config.fetchManualIncrementAmount();
+  task = await upvoteTask(task, omniboxIncrementAmount);
+  return task;
 };

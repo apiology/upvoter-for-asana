@@ -44,5 +44,7 @@ export default class ChromeExtensionFormatter {
     return `${escapeHTML(task.name)}${membership}`;
   };
 
+  escapeDescriptionPlainText = escapeHTML;
+
   formatUpvotedTask = (upvotes: number, task: Asana.resources.Tasks.Type) => `<dim>${upvotes}</dim>: ${this.formatTask(task)}`
 }
