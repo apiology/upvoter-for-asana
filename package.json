@@ -12,7 +12,8 @@
   },
   "files": [
     "info.plist",
-    "dist/alfred/**/*.js"
+    "dist/alfred/**/*.js",
+    "icon.png"
   ],
   "type": "module",
   "repository": {
