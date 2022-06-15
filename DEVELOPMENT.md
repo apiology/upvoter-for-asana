@@ -50,7 +50,7 @@ development.  See the `.envrc` file for detail.
    stories = await client.stories.getStoriesForTask('1234);
    ```
 
-## Releasing Alfred package to npm
+## Releasing Alfred package
 
 Related backlog tasks:
 
@@ -74,7 +74,7 @@ npm install -g alfred-upvoter-for-asana --upgrade
 ```
 
 Then, load Alfred | Preferences | Workflows |
-{{cookiecutter.project_name}} | right click | Export ... | Export | choose this
+Upvoter for Asana | right click | Export ... | Export | choose this
 directory | Export
 
 Once done, make a GitHub release with the exported file:
