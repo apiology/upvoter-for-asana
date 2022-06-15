@@ -56,6 +56,8 @@ Related backlog tasks:
 
 * Do npm Alfred release of cookiecutter-multicli projects in CircleCI (after other tests pass)
 
+First, run these commands:
+
 ```sh
 git checkout main
 git pull
@@ -69,6 +71,17 @@ git push --tags
 npm publish
 alfy-cleanup
 npm install -g alfred-upvoter-for-asana --upgrade
+```
+
+Then, load Alfred | Preferences | Workflows |
+{{cookiecutter.project_name}} | right click | Export ... | Export | choose this
+directory | Export
+
+Once done, make a GitHub release with the exported file:
+
+```
+new_release=$(npm version --json | jq -r '."alfred-{{cookiecutter.project_slug}}"')
+gh release create v${new_release:?} '{{cookiecutter.project_name}}.alfredworkflow'
 ```
 
 ## Releasing to Chrome Web Store
