@@ -50,7 +50,7 @@ development.  See the `.envrc` file for detail.
    stories = await client.stories.getStoriesForTask('1234);
    ```
 
-## Initial release of Alfred package to npm
+## Initial release of Alfred package
 
 Walk through these steps:
 
@@ -63,21 +63,33 @@ alfy-cleanup
 npm install -g alfred-upvoter-for-asana --upgrade
 ```
 
+Then, load Alfred | Preferences | Workflows |
+Upvoter for Asana | right click | Export ... | Export | choose this
+directory | Export
+
+Once done, make a GitHub release with the exported file:
+
+```
+new_release=$(npm version --json | jq -r '."alfred-upvoter-for-asana"')
+gh release create v${new_release:?} 'Upvoter for Asana.alfredworkflow'
+```
+
 Drop the following markdown into README.md in the 'Installing Alfred workflow' section.
 
 ```markdown
-1. `npm install -g alfred-upvoter-for-asana`
-2. Alfred | Workflows | File Asana task | Configure workflow and
-   variables icon | configure workspace name and access key.
+Download and double click the latest release's [.alfredworkflow
+file](https://github.com/apiology/upvoter-for-asana/releases).
 ```
 
 Remove this section.
 
-## Releasing Alfred package to npm
+## Releasing Alfred package
 
 Related backlog tasks:
 
 * Do npm Alfred release of cookiecutter-multicli projects in CircleCI (after other tests pass)
+
+First, run these commands:
 
 ```sh
 git checkout main
@@ -93,6 +105,19 @@ npm publish
 alfy-cleanup
 npm install -g alfred-upvoter-for-asana --upgrade
 ```
+
+Then, load Alfred | Preferences | Workflows |
+Upvoter for Asana | right click | Export ... | Export | choose this
+directory | Export
+
+Once done, make a GitHub release with the exported file:
+
+```
+new_release=$(npm version --json | jq -r '."alfred-upvoter-for-asana"')
+gh release create v${new_release:?} 'Upvoter for Asana.alfredworkflow'
+```
+
+Download file.  Install.
 
 ## Initial release to Chrome Web Store
 

@@ -61,3 +61,4 @@ requirements_dev.txt.installed
 # From release process
 /package.zip
 /alfred-upvoter-for-asana-*.tgz
+/Upvoter for Asana.alfredworkflow
