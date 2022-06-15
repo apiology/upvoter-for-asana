@@ -80,8 +80,8 @@ directory | Export
 Once done, make a GitHub release with the exported file:
 
 ```
-new_release=$(npm version --json | jq -r '."alfred-{{cookiecutter.project_slug}}"')
-gh release create v${new_release:?} '{{cookiecutter.project_name}}.alfredworkflow'
+new_release=$(npm version --json | jq -r '."alfred-upvoter-for-asana"')
+gh release create v${new_release:?} 'Upvoter for Asana.alfredworkflow'
 ```
 
 ## Releasing to Chrome Web Store
