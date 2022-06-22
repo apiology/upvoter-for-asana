@@ -4,9 +4,10 @@
   "description": "Quickly finds and increments integer custom fields in Asana tasks from the Chrome Omnibox or as an Alfred workflow.",
   "private": false,
   "scripts": {
-    "start": "webpack --mode=development --watch",
+    "chrome-extension-start": "webpack --mode=development --watch",
+    "alfred-start": "tsc --watch -p tsconfig.alfred.json ",
     "build-alfy": "tsc -p tsconfig.alfred.json",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest",
     "postinstall": "alfy-init",
     "preuninstall": "alfy-cleanup"
   },
@@ -38,6 +39,7 @@
   "devDependencies": {
     "@types/asana": "^0.18.5",
     "@types/chrome": "^0.0.163",
+    "@types/jest": "^28.1.2",
     "@types/lodash": "^4.14.176",
     "@types/node": "^16.11.7",
     "@typescript-eslint/eslint-plugin": "^5.3.1",
@@ -47,7 +49,9 @@
     "eslint-config-airbnb-base": "^14.2.1",
     "eslint-import-resolver-typescript": "^2.7.1",
     "eslint-plugin-import": "^2.22.1",
+    "jest": "^28.1.1",
     "resolve-typescript-plugin": "^1.2.0",
+    "ts-jest": "^28.0.5",
     "ts-loader": "^9.3.0",
     "typescript": "^4.7.3",
     "webpack": "^5",
@@ -67,5 +71,17 @@
   "_resolutionsComments": "asana requires request ^2.88.2 (which is deprecated and not receiving updates), which requires http-signature ~1.2.0, which requires jsprim ^1.2.2, which requires json-schema@0.2.3, which is perhaps vulnerable to CVE-2021-3918 (moderate)",
   "resolutions": {
     "asana/**/json-schema": "^0.4"
+  },
+  "__jest_comments": "https://kulshekhar.github.io/ts-jest/docs/guides/esm-support",
+  "jest": {
+    "preset": "ts-jest/presets/default-esm",
+    "globals": {
+      "ts-jest": {
+        "useESM": true
+      }
+    },
+    "moduleNameMapper": {
+      "^(\\.{1,2}/.*)\\.js$": "$1"
+    }
   }
 }

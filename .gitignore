@@ -52,12 +52,6 @@ requirements_dev.txt.installed
 # From package.json and npm
 /node_modules
 
-# From webpack
-/extension-dist
-
-# From tsc
-/alfred-dist
-
 # From release process
 /package.zip
 /alfred-upvoter-for-asana-*.tgz
