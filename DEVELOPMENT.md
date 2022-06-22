@@ -63,26 +63,56 @@ git checkout main
 git pull
 git stash
 last_released_version=$(npm version --json | jq -r '."alfred-upvoter-for-asana"')
-git log ${last_released_version:?}..
+git log v${last_released_version:?}..
 update_type= # patch/minor/major
 npm version ${update_type:?}
 git push
 git push --tags
 npm publish
 alfy-cleanup
-npm install -g alfred-upvoter-for-asana --upgrade
+```
+
+Now, remove your current installation from Alfred on your machine.
+
+```sh
+npm install --location=global alfred-upvoter-for-asana --upgrade
 ```
 
 Then, load Alfred | Preferences | Workflows |
-Upvoter for Asana | right click | Export ... | Export | choose this
-directory | Export
+Upvoter for Asana | right click | Export ... | (type
+in version from CLI output) | Export | choose this directory | Export
 
-Once done, make a GitHub release with the exported file:
+Once done, make a GitHub release with the exported file (do this in a
+new tab):
 
-```
+```sh
 new_release=$(npm version --json | jq -r '."alfred-upvoter-for-asana"')
 gh release create v${new_release:?} 'Upvoter for Asana.alfredworkflow'
 ```
+
+Remove your current installation again.
+
+open 'Upvoter for Asana.alfredworkflow'
+
+## Initial release to packal.org
+
+1. Go to the [form](http://www.packal.org/node/add/alfred2-workflow)
+1. Workflow Name: Upvoter for Asana
+1. Version: (take latest version from package.json)
+1. Bundle ID: cc.broz.asana.upvoter-for-asana
+1. Short description: (take short description from README, drop
+   mention of Alfred or Chrome Extension)
+1. Icon: (upload static/chrome-extension/apiology-128x128.png) | Upload
+1. Workflow file (upload latest release from GitHub) | Upload
+1. Worfklow Description: select Text format | markdown | Copy the one
+   sentence blurb entered above, then the usage instructions (you may
+   need to merge the Chrome and Alfred instructions)
+1. Alfred Forum Link | (leave empty for now)
+1. Github URL: `https://github.com/apiology/upvoter-for-asana`
+1. Categories: (fill in)
+1. Tags: (fill in - e.g., asana)
+1. Applications: (fill in - probably blank)
+1. Webservices: (fill in - e.g. Asana)
 
 ## Releasing to Chrome Web Store
 

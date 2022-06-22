@@ -113,7 +113,7 @@ const createSuggestResult = async (
 };
 
 export const pullSuggestions = async (text: string): Promise<Suggestion[]> => {
-  const typeaheadResult = await pullResult(text);
+  const typeaheadResult = await pullResult(text, 'task', 'name,completed,parent.name,custom_fields.gid,custom_fields.number_value,memberships.project.name');
   const logger = platform().logger();
   logger.userVisibleStatus('Processing results...');
   logger.log('typeaheadResult: ', typeaheadResult);
