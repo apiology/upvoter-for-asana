@@ -91,7 +91,6 @@ commands:
             bundle exec overcommit --sign
             bundle exec overcommit --sign pre-commit
 
-            make dummyconfig
             bundle exec overcommit --run
 
 jobs:
