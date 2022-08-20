@@ -74,8 +74,16 @@ alfy-cleanup
 
 Now, remove your current installation from Alfred on your machine.
 
+Then, install the newly published version via npm:
+
 ```sh
 npm install --location=global alfred-upvoter-for-asana --upgrade
+```
+
+Verify the version installed matches what you just published:
+
+```sh
+npm list --location=global | grep alfred-upvoter-for-asana
 ```
 
 Then, load Alfred | Preferences | Workflows |
@@ -90,12 +98,35 @@ new_release=$(npm version --json | jq -r '."alfred-upvoter-for-asana"')
 gh release create v${new_release:?} 'Upvoter for Asana.alfredworkflow'
 ```
 
-Remove your current installation again.
+Delete your current installation in Alfred again.
 
-open 'Upvoter for Asana.alfredworkflow'
+open 'Upvoter for Asana.alfredworkflow' | configure as prompted | Import
+
+[packal](http://www.packal.org/) | Login if needed | Dashboard | Upvoter for Asana | edit | Workflow File | Remove | Choose File | (.alfredworkflow file) | Upload | Version | (update) | (scroll to bottom) | Submit
 
 ## Initial release to packal.org
 
+1. Go through at least the screenshot generation steps of 'Initial
+   release to Chrome Web Store'
+1. Note down what the existing screenshots are, including the existing
+   left and right sides of split screen images: `open
+   docs/screenshot-*.png`
+1. Plan out what additional screenshots you'd like to have in the
+   gallery and what will be reused.
+1. Generate 1280x800 (or scaled up) screenshots and save as
+   `docs/screenshot-n-raw.png` and so on
+1. Stage the screenshot raw files in git.
+1. Add any annotations and save `docs/screenshot-n.paint` and so on.
+   Open a similar `.paint` from a sibling project to copy and paste
+   the annotation text to keep to the same style.
+1. Stage the screenshot paint files in git.
+1. File | Save As... | png | `docs/screenshot-n.png` (and so on) | Save
+1. Image | Adjust Size... | Scale proportionally ☑ | Resample image ☑
+   | Get to 1280x800 (or just under if ratio isn't right) | OK
+1. Use adjust size to add transparent border until exactly as 1200x800
+   (don't 'Scale proportionally' or 'Resample image' this time) | OK
+1. Stage `screenshot-n.png` (and so on) in git.
+1. Ensure `docs/screenshot-n.png` is scaled to 1280x800 with `file` command
 1. Go to the [form](http://www.packal.org/node/add/alfred2-workflow)
 1. Workflow Name: Upvoter for Asana
 1. Version: (take latest version from package.json)
@@ -113,6 +144,8 @@ open 'Upvoter for Asana.alfredworkflow'
 1. Tags: (fill in - e.g., asana)
 1. Applications: (fill in - probably blank)
 1. Webservices: (fill in - e.g. Asana)
+1. Packal Documentation Page: Leave blank
+1. Submit
 
 ## Releasing to Chrome Web Store
 
