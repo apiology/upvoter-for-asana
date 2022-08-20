@@ -18,8 +18,8 @@ const updateLinkMarker = (link: Element, indicator: number | string | null | und
   if (message == null) {
     message = 'N/A';
   }
-  // https://regex101.com/r/lrrpZl/1
-  link.innerHTML = link.innerHTML.replace(/\[-?([0-9]+|\.+)*\]$/, ` [${message}]`);
+  // https://regex101.com/r/ySpO01/1
+  link.innerHTML = link.innerHTML.replace(/ \[(\^\^|-?[0-9]+|\.+)*\]$/, ` [${message}]`);
 };
 
 const upvoteLinkClassName = 'upvoter-upvote-link';
