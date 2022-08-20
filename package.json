@@ -68,9 +68,12 @@
     "util": "^0.12.4",
     "lodash": "^4.17.21"
   },
-  "_resolutionsComments": "asana requires request ^2.88.2 (which is deprecated and not receiving updates), which requires http-signature ~1.2.0, which requires jsprim ^1.2.2, which requires json-schema@0.2.3, which is perhaps vulnerable to CVE-2021-3918 (moderate)",
+  "_asanaResolutionsComments": "asana requires request ^2.88.2 (which is deprecated and not receiving updates), which requires http-signature ~1.2.0, which requires jsprim ^1.2.2, which requires json-schema@0.2.3, which is perhaps vulnerable to CVE-2021-3918 (moderate).",
+  "_alfyResolutionsComments": "alfy@1.0.0 requires plist@^2.0.1 (which has a critical security bug) via a transitive dependency on {alfred-link@0.3.1,alfred-notifier@0.2.3}.  alfy@1.0.0 requires got@^6.7.1 (which has a moderate security bug) via a transitive dependency on package-json@4.0.1.  alfy@1.0.0 requires got@^12.0.3 (which has a moderate security bug)",
   "resolutions": {
-    "asana/**/json-schema": "^0.4"
+    "asana/**/json-schema": "^0.4",
+    "alfy/**/plist": "^3.0.5",
+    "alfy/**/got": "^12.1.0"
   },
   "__jest_comments": "https://kulshekhar.github.io/ts-jest/docs/guides/esm-support",
   "jest": {

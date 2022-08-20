@@ -15,6 +15,21 @@ export PRINT_HELP_PYSCRIPT
 help:
 	@python -c "$$PRINT_HELP_PYSCRIPT" < $(MAKEFILE_LIST)
 
+repl: ## Bring up an interactive JavaScript prompt
+	@echo "const asana = require('asana');"
+	@echo "const clientOptions = {"
+	@echo "    defaultHeaders: {"
+	@echo "      'Asana-Enable': 'new_user_task_lists,new_project_templates',"
+	@echo "    },"
+	@echo "};"
+	@echo "const asanaAccessToken = process.env.ASANA_API_TOKEN;"
+	@echo "const client = asana.Client.create(clientOptions).useAccessToken(asanaAccessToken);"
+	@echo "const workspaceGid = (await client.workspaces.getWorkspaces()).data.find((workspace) => workspace.name == 'VB').gid;"
+	@echo "const customField = (await client.customFields.findByWorkspace(workspaceGid)).data.find((customField) => customField.name == 'stars')"
+	@echo "await client.tasks.getTask('123')"
+	@echo "const user = (await client.users.findAll({workspace: workspaceGid})).data.find(user => user.name == 'Vince Broz');"
+	@ASANA_API_TOKEN=$$(with-op op read 'op://private/Asana access token - upvoter-opener-filer chrome extensions/password') node
+
 webpack: ## run webpack and tie together modules for use by browser
 	npx webpack
 

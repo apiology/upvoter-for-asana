@@ -16,7 +16,7 @@
     "scripts": ["background.js"],
     "persistent": false
   },
-  "browser_action": {
+  "action": {
     "default_title": "Make this page red"
   },
   "options_page": "options.html",
