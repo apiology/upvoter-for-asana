@@ -18,7 +18,7 @@ const updateLinkMarker = (link: Element, indicator: number | string | null | und
   if (message == null) {
     message = 'N/A';
   }
-  link.innerHTML = link.innerHTML.replace(/ \[.*\]$/, ` [${message}]`);
+  link.innerHTML = link.innerHTML.replace(/\[([0-9]+|\.+)*\]$/, ` [${message}]`);
 };
 
 const upvoteLinkClassName = 'upvoter-upvote-link';
