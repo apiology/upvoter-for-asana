@@ -17,6 +17,7 @@
 # Uncomment the following lines to make the configuration take effect.
 
 PreCommit:
+  # Extend default config at https://github.com/sds/overcommit/blob/master/config/default.yml
   EsLint:
     required_executable: 'npx'
     command: ['npx', 'eslint']
@@ -25,6 +26,7 @@ PreCommit:
     include:
       - '**/*.js'
       - '**/*.ts'
+      - '**/*.tsx'
   PythonFlake8:
     enabled: true
     on_warn: fail
@@ -33,6 +35,7 @@ PreCommit:
     on_warn: fail
     include:
       - '.envrc'
+      - '**/*.sh'
   YamlLint:
     enabled: true
     on_warn: fail

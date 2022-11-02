@@ -56,3 +56,9 @@ requirements_dev.txt.installed
 /package.zip
 /alfred-upvoter-for-asana-*.tgz
 /Upvoter for Asana.alfredworkflow
+
+# Provided by user
+/config.js
+
+# from jest
+/coverage

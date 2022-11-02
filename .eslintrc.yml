@@ -51,6 +51,17 @@ rules:
     #
     # https://stackoverflow.com/a/60675852/2625807
     - "off"
+  import/no-extraneous-dependencies:
+    - error
+    # Avoids this error:
+    #  'jest-chrome' should be listed in the project's dependencies, not devDependencies. []
+    - devDependencies:
+        - "**/*.test.tsx"
+        - "**/*.test.ts"
+        - "**/*.spec.ts"
+        - "**/*.spec.tsx"
+        - "jest.setup.js"
+        - "webpack.config.js"
   # I don't know whether 'use strict' is the default in Chrome
   # extensions, so let's assume not.
   strict:
@@ -81,5 +92,8 @@ rules:
     #
     # https://stackoverflow.com/questions/35637770/how-to-avoid-no-param-reassign-when-setting-a-property-on-a-dom-object
     - props: false
+  # https://github.com/typescript-eslint/typescript-eslint/issues/2540#issuecomment-692510509
+  no-use-before-define: "off"
+  "@typescript-eslint/no-use-before-define": warn
 # arrow-body-style
 # https://github.com/airbnb/javascript/blob/35914b14025cd52f53cd2ae2f353cdc7384087c0/packages/eslint-config-airbnb-base/rules/es6.js#L15-L20
