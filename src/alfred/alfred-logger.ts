@@ -14,6 +14,10 @@ export default class AlfredLogger {
 
   debug = (s: string): void => { };
 
+  warn = (message?: any, ...optionalParams: any[]) => { };
+
+  error = (message?: any, ...optionalParams: any[]) => { };
+
   userVisibleStatus = (s: string): void => { };
   /* eslint-enable @typescript-eslint/no-explicit-any */
   /* eslint-enable @typescript-eslint/no-unused-vars */
