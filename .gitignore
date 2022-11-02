@@ -52,8 +52,13 @@ requirements_dev.txt.installed
 # From package.json and npm
 /node_modules
 
-# From webpack
-/dist
-
 # From release process
 /package.zip
+/alfred-upvoter-for-asana-*.tgz
+/Upvoter for Asana.alfredworkflow
+
+# Provided by user
+/config.js
+
+# from jest
+/coverage

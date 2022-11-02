@@ -35,9 +35,9 @@ commands:
     steps:
       - checkout
       - restore_cache:
-          key: gems-v1-{{ checksum "Gemfile.lock" }}
+          key: gems-v2-{{ checksum "Gemfile.lock" }}
       - restore_cache:
-          key: wheels-v1-{{ checksum "requirements_dev.txt" }}
+          key: wheels-v2-{{ checksum "requirements_dev.txt" }}
       - restore_cache:
           key: node_modules-v1-{{ checksum "yarn.lock" }}
       - run:
@@ -66,11 +66,11 @@ commands:
           paths:
             - "/home/circleci/project/node_modules"
       - save_cache:
-          key: gems-v1-{{ checksum "Gemfile.lock" }}
+          key: gems-v2-{{ checksum "Gemfile.lock" }}
           paths:
             - "vendor/bundle"
       - save_cache:
-          key: wheels-v1-{{ checksum "requirements_dev.txt" }}
+          key: wheels-v2-{{ checksum "requirements_dev.txt" }}
           paths:
             - "/home/circleci/.cache/pip/wheels"
       - run:
@@ -91,11 +91,11 @@ commands:
             bundle exec overcommit --sign
             bundle exec overcommit --sign pre-commit
 
-            make dummyconfig
             bundle exec overcommit --run
 
 jobs:
   overcommit:
+    working_directory: ~/upvoter-for-asana
     docker:
       - image: apiology/circleci:latest
     steps:
@@ -110,13 +110,17 @@ jobs:
           steps:
             - run: echo "overcommit only runs on main branch"
   build:
+    working_directory: ~/upvoter-for-asana
     docker:
       - image: apiology/circleci:latest
     steps:
       - set_up_environment
       - run_with_languages:
-          label: Test
-          command: make dummyconfig test
+          label: typecheck
+          command: make citypecheck citypecoverage
+      - run_with_languages:
+          label: test
+          command: make citest cicoverage
     # This seemed to shave 5ish% of the build time off when added
     resource_class: large
 

@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>bundleid</key>
+	<string>cc.broz.asana.upvoter-for-asana</string>
+	<key>category</key>
+	<string>Productivity</string>
+	<key>connections</key>
+	<dict>
+		<key>1D63159A-BF1D-4283-8C2B-12AA4A61F261</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>A2F8BB0A-CE0E-462D-A47E-435A86FE3E1E</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+		</array>
+		<key>A2F8BB0A-CE0E-462D-A47E-435A86FE3E1E</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>91D325AE-50D5-44DE-A0F8-616FC7BD818D</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+		</array>
+	</dict>
+	<key>createdby</key>
+	<string>Vince Broz</string>
+	<key>description</key>
+	<string></string>
+	<key>disabled</key>
+	<false/>
+	<key>name</key>
+	<string>Upvoter for Asana</string>
+	<key>objects</key>
+	<array>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>concurrently</key>
+				<false/>
+				<key>escaping</key>
+				<integer>102</integer>
+				<key>script</key>
+				<string>query=$1
+
+set -eu
+
+./node_modules/.bin/run-node dist/alfred/alfred/alfred-act.js "$query" 2&gt;&amp;1</string>
+				<key>scriptargtype</key>
+				<integer>1</integer>
+				<key>scriptfile</key>
+				<string></string>
+				<key>type</key>
+				<integer>0</integer>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.action.script</string>
+			<key>uid</key>
+			<string>A2F8BB0A-CE0E-462D-A47E-435A86FE3E1E</string>
+			<key>version</key>
+			<integer>2</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>alfredfiltersresults</key>
+				<false/>
+				<key>alfredfiltersresultsmatchmode</key>
+				<integer>0</integer>
+				<key>argumenttreatemptyqueryasnil</key>
+				<true/>
+				<key>argumenttrimmode</key>
+				<integer>0</integer>
+				<key>argumenttype</key>
+				<integer>0</integer>
+				<key>escaping</key>
+				<integer>102</integer>
+				<key>keyword</key>
+				<string>uv</string>
+				<key>queuedelaycustom</key>
+				<integer>3</integer>
+				<key>queuedelayimmediatelyinitially</key>
+				<false/>
+				<key>queuedelaymode</key>
+				<integer>1</integer>
+				<key>queuemode</key>
+				<integer>2</integer>
+				<key>runningsubtext</key>
+				<string>Running Upvoter for Asana...</string>
+				<key>script</key>
+				<string>query=$1
+
+set -eu
+
+./node_modules/.bin/run-node dist/alfred/alfred/alfred-suggest.js "$1"  2&gt;&gt; $HOME/alfred.log
+</string>
+				<key>scriptargtype</key>
+				<integer>1</integer>
+				<key>scriptfile</key>
+				<string></string>
+				<key>subtext</key>
+				<string>Enter text for Upvoter for Asana</string>
+				<key>title</key>
+				<string>Upvoter for Asana</string>
+				<key>type</key>
+				<integer>0</integer>
+				<key>withspace</key>
+				<true/>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.input.scriptfilter</string>
+			<key>uid</key>
+			<string>1D63159A-BF1D-4283-8C2B-12AA4A61F261</string>
+			<key>version</key>
+			<integer>3</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>lastpathcomponent</key>
+				<false/>
+				<key>onlyshowifquerypopulated</key>
+				<true/>
+				<key>removeextension</key>
+				<false/>
+				<key>text</key>
+				<string>{query}</string>
+				<key>title</key>
+				<string>Show errors</string>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.output.notification</string>
+			<key>uid</key>
+			<string>91D325AE-50D5-44DE-A0F8-616FC7BD818D</string>
+			<key>version</key>
+			<integer>1</integer>
+		</dict>
+	</array>
+	<key>readme</key>
+	<string>See https://github.com/apiology/upvoter-for-asana/</string>
+	<key>uidata</key>
+	<dict>
+		<key>1D63159A-BF1D-4283-8C2B-12AA4A61F261</key>
+		<dict>
+			<key>xpos</key>
+			<integer>165</integer>
+			<key>ypos</key>
+			<integer>240</integer>
+		</dict>
+		<key>91D325AE-50D5-44DE-A0F8-616FC7BD818D</key>
+		<dict>
+			<key>xpos</key>
+			<integer>615</integer>
+			<key>ypos</key>
+			<integer>240</integer>
+		</dict>
+		<key>A2F8BB0A-CE0E-462D-A47E-435A86FE3E1E</key>
+		<dict>
+			<key>xpos</key>
+			<integer>405</integer>
+			<key>ypos</key>
+			<integer>240</integer>
+		</dict>
+	</dict>
+	<key>variables</key>
+	<dict>
+		<key>asana_access_key</key>
+		<string></string>
+		<key>custom_field_name</key>
+		<string></string>
+		<key>increment</key>
+		<string></string>
+		<key>increment_amount</key>
+		<string></string>
+		<key>workspace_name</key>
+		<string></string>
+	</dict>
+	<key>variablesdontexport</key>
+	<array>
+		<string>custom_field_name</string>
+		<string>increment</string>
+		<string>increment_amount</string>
+		<string>workspace_name</string>
+		<string>asana_access_key</string>
+	</array>
+	<key>version</key>
+	<string></string>
+	<key>webaddress</key>
+	<string>https://github.com/apiology/upvoter-for-asana</string>
+</dict>
+</plist>

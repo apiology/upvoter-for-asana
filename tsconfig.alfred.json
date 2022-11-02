@@ -1,0 +1,13 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "skipLibCheck": true,
+    "outDir": "./dist/alfred/",
+    "lib": ["es2015"]
+  },
+  "include": [
+    "src/asana.d.ts",
+    "src/alfred/alfred-suggest.ts",
+    "src/alfred/alfred-act.ts"
+  ]
+}

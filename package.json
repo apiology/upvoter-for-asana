@@ -1,12 +1,22 @@
 {
-  "name": "upvoter-for-asana",
-  "version": "0.1.0",
-  "description": "Chrome extension which quickly finds and increments integer custom fields in Asana tasks from the Chrome Omnibox.",
-  "private": true,
+  "name": "alfred-upvoter-for-asana",
+  "version": "0.1.1",
+  "description": "Quickly finds and increments integer custom fields in Asana tasks from the Chrome Omnibox or as an Alfred workflow.",
+  "private": false,
   "scripts": {
-    "start": "webpack --mode=development --watch",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "chrome-extension-start": "webpack --mode=development --watch",
+    "alfred-start": "tsc --watch -p tsconfig.alfred.json ",
+    "build-alfy": "tsc -p tsconfig.alfred.json",
+    "test": "jest --coverage --collectCoverageFrom='./src/**'",
+    "postinstall": "alfy-init",
+    "preuninstall": "alfy-cleanup"
   },
+  "files": [
+    "info.plist",
+    "dist/alfred/**/*.js",
+    "icon.png"
+  ],
+  "type": "module",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/apiology/upvoter-for-asana.git"
@@ -15,16 +25,21 @@
     "chrome-extension",
     "asana"
   ],
-  "author": "Vince Broz <vince@broz.cc>",
-  "license": "MIT license",
+  "author": {
+    "name": "Vince Broz",
+    "email": "vince@broz.cc",
+    "url": "https://github.com/apiology/"
+  },
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/apiology/upvoter-for-asana/issues"
   },
   "homepage": "https://github.com/apiology/upvoter-for-asana#readme",
   "_devDependenciesNotes": "copy-webpack-plugin 10 failed with this - https://stackoverflow.com/questions/70080671/copy-webpack-plugin-error-invalid-host-defined-options",
   "devDependencies": {
-    "@types/asana": "^0.18.5",
+    "@types/asana": "^0.18.6",
     "@types/chrome": "^0.0.163",
+    "@types/jest": "^28.1.2",
     "@types/lodash": "^4.14.176",
     "@types/node": "^16.11.7",
     "@typescript-eslint/eslint-plugin": "^5.3.1",
@@ -32,25 +47,53 @@
     "copy-webpack-plugin": "^9",
     "eslint": "^7.18.0",
     "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-import-resolver-typescript": "^2.7.1",
     "eslint-plugin-import": "^2.22.1",
-    "ts-loader": "~8",
-    "typescript": "^4.4.4",
+    "jest": "^28.1.1",
+    "jest-chrome": "^0.7.2",
+    "jest-environment-jsdom": "^29.2.1",
+    "jest-fetch-mock": "^3.0.3",
+    "resolve-typescript-plugin": "^1.2.0",
+    "ts-jest": "^28.0.5",
+    "ts-loader": "^9.3.0",
+    "typescript": "^4.7.3",
     "webpack": "^5",
     "webpack-cli": "^4.5.0"
   },
   "_dependenciesComments": "buffer, process, stream-browserify, url and util are node polyfills needed by asana library",
-  "_dependenciesComments": "buffer, stream-browserify, url and util are node polyfills needed by asana library",
   "dependencies": {
+    "alfy": "^1.0.0",
     "asana": "^0.18.5",
     "buffer": "^6.0.3",
+    "lodash": "^4.17.21",
     "process": "^0.11.10",
     "stream-browserify": "^3.0.0",
     "url": "^0.11.0",
-    "util": "^0.12.4",
-    "lodash": "^4.17.21"
+    "util": "^0.12.4"
   },
-  "_resolutionsComments": "asana requires request ^2.88.2 (which is deprecated and not receiving updates), which requires http-signature ~1.2.0, which requires jsprim ^1.2.2, which requires json-schema@0.2.3, which is perhaps vulnerable to CVE-2021-3918 (moderate)",
+  "_asanaResolutionsComments": "asana requires request ^2.88.2 (which is deprecated and not receiving updates), which requires http-signature ~1.2.0, which requires jsprim ^1.2.2, which requires json-schema@0.2.3, which is perhaps vulnerable to CVE-2021-3918 (moderate).  minimatch < 3.0.5 is vulnerable to CVE-2022-3517.",
+  "_alfyResolutionsComments": "alfy@1.0.0 requires plist@^2.0.1 (which has a critical security bug) via a transitive dependency on {alfred-link@0.3.1,alfred-notifier@0.2.3}.  alfy@1.0.0 requires got@^6.7.1 (which has a moderate security bug) via a transitive dependency on package-json@4.0.1.  alfy@1.0.0 requires got@^12.0.3 (which has a moderate security bug)",
   "resolutions": {
-    "asana/**/json-schema": "^0.4"
+    "asana/**/json-schema": "^0.4",
+    "**/minimatch": "^3.0.5",
+    "alfy/**/plist": "^3.0.5",
+    "alfy/**/got": "^12.1.0"
+  },
+  "__jest_comments": "https://kulshekhar.github.io/ts-jest/docs/guides/esm-support",
+  "jest": {
+    "preset": "ts-jest/presets/default-esm",
+    "globals": {
+      "ts-jest": {
+        "useESM": true
+      }
+    },
+    "moduleNameMapper": {
+      "^(\\.{1,2}/.*)\\.js$": "$1"
+    },
+    "transform": {
+      "^.+\\.(ts|tsx)$": "ts-jest"
+    },
+    "setupFilesAfterEnv": ["./jest.setup.js"],
+    "extensionsToTreatAsEsm": [".ts", ".tsx", ".jsx"]
   }
 }

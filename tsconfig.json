@@ -1,16 +1,14 @@
 {
   "_where_i_got_this_from": "https://webpack.js.org/guides/typescript/",
   "compilerOptions": {
-    "outDir": "./dist/",
+    "outDir": "./dist/chrome-extension/",
     "strict": true,
-    "module": "es6",
+    "module": "node16",
     "target": "es2015",
     "jsx": "react",
-    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "moduleResolution": "node16",
     "lib": ["es2015", "dom"],
     "sourceMap": true
-  },
-  "include": [
-    "src"
-  ]
+  }
 }

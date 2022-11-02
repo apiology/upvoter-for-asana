@@ -48,8 +48,11 @@ ensure_yarn() {
 }
 
 ensure_npm_modules() {
-  # progress bar creates artifacst in M-x shell
-  yarn install --no-progress
+  # --prefer-offline: maximize use of yarn cache for speed
+  # --no-progress: progress bar creates artifacts in M-x shell
+  # --non-interactive: don't interrupt CI with a prompt
+  # --ignore-scripts: don't run alfred installion scripts
+  yarn install --prefer-offline --no-progress --non-interactive --ignore-scripts
 }
 
 apt_upgraded=0
@@ -119,7 +122,18 @@ ensure_rbenv() {
 
 latest_ruby_version() {
   major_minor=${1}
-  rbenv install --list 2>/dev/null | grep "^${major_minor}."
+
+  # Double check that this command doesn't error out under -e
+  rbenv install --list >/dev/null 2>&1
+
+  # not sure why, but 'rbenv install --list' below exits with error code
+  # 1...after providing the same output the previous line gave when it
+  # exited with error code 0.
+  #
+  # https://github.com/rbenv/rbenv/issues/1441
+  set +e
+  rbenv install --list 2>/dev/null | cat | grep "^${major_minor}."
+  set -e
 }
 
 ensure_dev_library() {
@@ -141,12 +155,20 @@ ensure_ruby_build_requirements() {
   ensure_dev_library openssl/ssl.h openssl libssl-dev
 }
 
+ensure_latest_ruby_build_definitions() {
+  ensure_rbenv
+
+  git -C "$(rbenv root)"/plugins/ruby-build pull
+}
+
 # You can find out which feature versions are still supported / have
 # been release here: https://www.ruby-lang.org/en/downloads/
 ensure_ruby_versions() {
+  ensure_latest_ruby_build_definitions
+
   # You can find out which feature versions are still supported / have
   # been release here: https://www.ruby-lang.org/en/downloads/
-  ruby_versions="$(latest_ruby_version 3.0)"
+  ruby_versions="$(latest_ruby_version 3.1)"
 
   echo "Latest Ruby versions: ${ruby_versions}"
 
@@ -352,12 +374,12 @@ ensure_pyenv_virtualenvs() {
 }
 
 ensure_pip_and_wheel() {
-  # Make sure we have a pip with the 20.3 resolver, and after the
-  # initial bugfix release
+  # pip 22 seems to be better at finding pandas pre-compiled wheels
+  # for macOS, so let's make sure we're using at least that version
   major_pip_version=$(pip --version | cut -d' ' -f2 | cut -d '.' -f 1)
   if [[ major_pip_version -lt 21 ]]
   then
-    pip install 'pip>=20.3.1'
+    pip install 'pip>=22'
   fi
   # wheel is helpful for being able to cache long package builds
   pip show wheel >/dev/null 2>&1 || pip install wheel
@@ -393,8 +415,6 @@ ensure_node_versions
 ensure_yarn
 
 ensure_npm_modules
-
-ensure_rbenv
 
 ensure_ruby_versions
 
