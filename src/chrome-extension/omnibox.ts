@@ -41,7 +41,10 @@ const pullAndReportSuggestions = async (text: string, suggest: SuggestFunction) 
   try {
     await populateOmnibox(text, suggest);
   } catch (err) {
-    alert(`Problem getting suggestions for ${text}: ${err}`);
+    // window exists in content-script, not in service worker.  would
+    // love to get typescript to recognize this and force me to write
+    // different platform objects...
+    window?.alert(`Problem getting suggestions for ${text}: ${err}`); // TODO: get an error here
     throw err;
   }
 };
@@ -63,7 +66,7 @@ export const omniboxInputEnteredListener = async (inputData: string) => {
     const out = await actOnInputData(urlText);
     logSuccess(out);
   } catch (err) {
-    alert(`Failed to process ${inputData}: ${err}`);
+    window?.alert(`Failed to process ${inputData}: ${err}`);
     throw err;
   }
 };
