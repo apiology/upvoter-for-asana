@@ -44,7 +44,7 @@ const pullAndReportSuggestions = async (text: string, suggest: SuggestFunction) 
     // window exists in content-script, not in service worker.  would
     // love to get typescript to recognize this and force me to write
     // different platform objects...
-    window?.alert(`Problem getting suggestions for ${text}: ${err}`); // TODO: get an error here
+    window?.alert(`Problem getting suggestions for ${text}: ${err}`);
     throw err;
   }
 };
