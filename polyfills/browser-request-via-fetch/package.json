@@ -1,0 +1,6 @@
+{
+  "name": "browser-request-via-fetch",
+  "description": "Browser port of the Node.js 'request' package, done via fetch() API",
+  "version": "0.4.0",
+  "main": "request.js"
+}
