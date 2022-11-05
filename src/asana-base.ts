@@ -4,7 +4,7 @@
  * Contains functions useful to connect to the Asana API
  */
 
-import * as Asana from 'asana';
+import Asana from 'asana';
 import { platform } from './platform.js';
 
 let fetchedClient: Asana.Client | null = null;
