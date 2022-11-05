@@ -28,3 +28,13 @@ test('omniboxInputEnteredListenerException', async () => {
   expect(mockActOnInputData).toHaveBeenCalledWith('upvoter-for-asana:mumble');
   expect(mockLogSuccess).not.toHaveBeenCalled();
 });
+
+test('omniboxInputEnteredListenerExceptionWithAlertAvailable', async () => {
+  const mockActOnInputData = jest.mocked(actOnInputData);
+  const mockLogSuccess = jest.mocked(logSuccess);
+  mockActOnInputData.mockRejectedValue('123');
+
+  await expect(omniboxInputEnteredListener('upvoter-for-asana:mumble')).rejects.toMatch('123');
+  expect(mockActOnInputData).toHaveBeenCalledWith('upvoter-for-asana:mumble');
+  expect(mockLogSuccess).not.toHaveBeenCalled();
+});
