@@ -13,12 +13,12 @@ afterEach(() => {
 test('omniboxInputEnteredListenerNonDefault', async () => {
   const mockActOnInputData = jest.mocked(actOnInputData);
   const mockLogSuccess = jest.mocked(logSuccess);
-  const task = {} as Asana.resources.Tasks.Type;
-  mockActOnInputData.mockResolvedValue(task);
+  const resolvedValue = {} as Asana.resources.Tasks.Type;
+  mockActOnInputData.mockResolvedValue(resolvedValue);
 
   await omniboxInputEnteredListener('upvoter-for-asana:mumble');
   expect(mockActOnInputData).toHaveBeenCalledWith('upvoter-for-asana:mumble');
-  expect(mockLogSuccess).toHaveBeenCalledWith(task);
+  expect(mockLogSuccess).toHaveBeenCalledWith(resolvedValue);
 });
 
 test('omniboxInputEnteredListenerException', async () => {
@@ -45,8 +45,8 @@ test('omniboxInputEnteredListenerDefaultEmptyList', async () => {
   const mockActOnInputData = jest.mocked(actOnInputData);
   const mockLogSuccess = jest.mocked(logSuccess);
   const mockPullSuggestions = jest.mocked(pullSuggestions);
-  const task = {} as Asana.resources.Tasks.Type;
-  mockActOnInputData.mockResolvedValue(task);
+  const resolvedValue = {} as Asana.resources.Tasks.Type;
+  mockActOnInputData.mockResolvedValue(resolvedValue);
   mockPullSuggestions.mockResolvedValue([]);
 
   await expect(omniboxInputEnteredListener('blah')).rejects.toEqual(new Error('No results for "blah"'));
@@ -58,8 +58,8 @@ test('omniboxInputEnteredListenerDefaultMultipleItems', async () => {
   const mockActOnInputData = jest.mocked(actOnInputData);
   const mockLogSuccess = jest.mocked(logSuccess);
   const mockPullSuggestions = jest.mocked(pullSuggestions);
-  const task = {} as Asana.resources.Tasks.Type;
-  mockActOnInputData.mockResolvedValue(task);
+  const resolvedValue = {} as Asana.resources.Tasks.Type;
+  mockActOnInputData.mockResolvedValue(resolvedValue);
   const item1: Suggestion = { url: 'upvoter-for-asana:foo', description: 'dfoo' };
   const item2: Suggestion = { url: 'upvoter-for-asana:bar', description: 'dbar' };
   const item3: Suggestion = { url: 'upvoter-for-asana:baz', description: 'dbaz' };
@@ -67,5 +67,5 @@ test('omniboxInputEnteredListenerDefaultMultipleItems', async () => {
 
   await omniboxInputEnteredListener('foo');
   expect(mockActOnInputData).toHaveBeenCalledWith('upvoter-for-asana:foo');
-  expect(mockLogSuccess).toHaveBeenCalledWith(task);
+  expect(mockLogSuccess).toHaveBeenCalledWith(resolvedValue);
 });
