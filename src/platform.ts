@@ -3,14 +3,14 @@ import Config from './config.js';
 import Logger from './logger.js';
 import Formatter from './formatter.js';
 
-export abstract class Platform {
-  abstract config(): Config;
+interface Platform {
+  config(): Config;
 
-  abstract cache(): Cache;
+  cache(): Cache;
 
-  abstract logger(): Logger;
+  logger(): Logger;
 
-  abstract formatter(): Formatter;
+  formatter(): Formatter;
 }
 
 let thePlatform: Platform | null = null;
