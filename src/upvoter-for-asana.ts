@@ -5,7 +5,7 @@
  * from the Chrome Omnibox or as an Alfred workflow.
  */
 
-import * as Asana from 'asana';
+import Asana from 'asana';
 
 import { fetchClient, findGid, fetchWorkspaceGid } from './asana-base.js';
 import { pullResult } from './asana-typeahead.js';

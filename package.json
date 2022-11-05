@@ -77,7 +77,8 @@
     "asana/**/json-schema": "^0.4",
     "**/minimatch": "^3.0.5",
     "alfy/**/plist": "^3.0.5",
-    "alfy/**/got": "^12.1.0"
+    "alfy/**/got": "^12.1.0",
+    "asana/**/browser-request": "file:polyfills/browser-request-via-fetch"
   },
   "__jest_comments": "https://kulshekhar.github.io/ts-jest/docs/guides/esm-support",
   "jest": {

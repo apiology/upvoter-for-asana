@@ -1573,10 +1573,8 @@ braces@^3.0.2:
   dependencies:
     fill-range "^7.0.1"
 
-browser-request@^0.3.2:
-  version "0.3.3"
-  resolved "https://registry.yarnpkg.com/browser-request/-/browser-request-0.3.3.tgz#9ece5b5aca89a29932242e18bf933def9876cc17"
-  integrity sha512-YyNI4qJJ+piQG6MMEuo7J3Bzaqssufx04zpEKYfSrl/1Op59HWali9zMtBpXnkmqMcOuWJPZvudrm9wISmnCbg==
+browser-request@^0.3.2, "browser-request@file:polyfills/browser-request-via-fetch":
+  version "0.4.0"
 
 browserslist@^4.14.5:
   version "4.20.4"
