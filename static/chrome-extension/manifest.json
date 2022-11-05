@@ -13,8 +13,7 @@
   ],
   "omnibox": { "keyword": "uv" },
   "background": {
-    "scripts": ["background.js"],
-    "persistent": false
+    "service_worker": "background.js"
   },
   "action": {
     "default_title": "Make this page red"
