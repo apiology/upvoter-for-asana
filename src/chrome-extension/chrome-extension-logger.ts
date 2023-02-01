@@ -1,4 +1,4 @@
-export default class ChromeExtensionLogger {
+export class ChromeExtensionLogger {
   log = console.log;
 
   debug = console.debug;

@@ -1,10 +1,10 @@
 GEM
   remote: https://rubygems.org/
   specs:
-    chef-utils (18.0.172)
+    chef-utils (18.1.0)
       concurrent-ruby
     childprocess (4.0.0)
-    concurrent-ruby (1.1.10)
+    concurrent-ruby (1.2.0)
     iniparse (1.5.0)
     kramdown (2.4.0)
       rexml
@@ -31,6 +31,7 @@ GEM
 PLATFORMS
   ruby
   x86_64-darwin-20
+  x86_64-darwin-21
   x86_64-linux
 
 DEPENDENCIES

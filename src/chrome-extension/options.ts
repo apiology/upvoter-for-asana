@@ -1,9 +1,9 @@
 // https://developer.chrome.com/docs/extensions/mv2/options/
-import { htmlElement } from './dom-utils.js';
+import { htmlElementById } from './dom-utils.js';
 
-const htmlInputElement = (id: string) => htmlElement(id, HTMLInputElement);
+const htmlInputElement = (id: string) => htmlElementById(id, HTMLInputElement);
 
-const htmlDivElement = (id: string) => htmlElement(id, HTMLDivElement);
+const htmlDivElement = (id: string) => htmlElementById(id, HTMLDivElement);
 
 const statusElement = () => htmlDivElement('status');
 
@@ -17,7 +17,7 @@ const customFieldElement = () => htmlInputElement('customField');
 
 const omniboxIncrementAmountElement = () => htmlInputElement('omniboxIncrementAmount');
 
-const saveElement = () => htmlElement('save', HTMLButtonElement);
+const saveElement = () => htmlElementById('save', HTMLButtonElement);
 
 const ensureInt = (s: string): number => {
   const parsed = Number.parseInt(s, 10);
@@ -59,11 +59,11 @@ export function restoreOptions() {
     increment: true,
     omniboxIncrementAmount: 1,
   }, (items) => {
-    tokenElement().value = items.asanaAccessToken;
-    workspaceElement().value = items.workspace;
-    customFieldElement().value = items.customField;
-    incrementElement().checked = items.increment;
-    omniboxIncrementAmountElement().value = items.omniboxIncrementAmount;
+    tokenElement().value = items['asanaAccessToken'];
+    workspaceElement().value = items['workspace'];
+    customFieldElement().value = items['customField'];
+    incrementElement().checked = items['increment'];
+    omniboxIncrementAmountElement().value = items['omniboxIncrementAmount'];
   });
 }
 

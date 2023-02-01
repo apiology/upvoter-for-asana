@@ -1,6 +1,6 @@
 import alfy from 'alfy';
 
-export default class AlfredCache {
+export class AlfredCache {
   cacheFetch = async (key: string, clazz: 'string'): Promise<string | null> => {
     if (clazz !== 'string') {
       throw new Error(`I do not know how to cache items of class ${clazz}`);
