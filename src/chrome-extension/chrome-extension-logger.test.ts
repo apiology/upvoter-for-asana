@@ -1,4 +1,4 @@
-import ChromeExtensionLogger from './chrome-extension-logger.js';
+import { ChromeExtensionLogger } from './chrome-extension-logger.js';
 
 test('log', async () => {
   expect(new ChromeExtensionLogger().log).toBe(console.log);

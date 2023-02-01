@@ -1,4 +1,4 @@
-export default class AlfredLogger {
+export class AlfredLogger {
   // logging is not possible in alfy, as stdout would interfere with
   // the JSON output from alfy, and alfy interprets anything written
   // to stderr as something it should create a separate JSON output

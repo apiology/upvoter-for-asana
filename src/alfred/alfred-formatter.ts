@@ -1,6 +1,6 @@
 import * as Asana from 'asana';
 
-export default class AlfredFormatter {
+export class AlfredFormatter {
   formatTask = (task: Asana.resources.Tasks.Type) => {
     const memberships = task.memberships || [];
 

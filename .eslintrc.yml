@@ -14,6 +14,8 @@ plugins:
   - "@typescript-eslint"
 parserOptions:
   ecmaVersion: 11
+  project:
+    - './tsconfig.json'
   sourceType: module
 settings:
   # https://newbedev.com/using-eslint-with-typescript-unable-to-resolve-path-to-module
@@ -39,6 +41,8 @@ rules:
       imports: always-multiline
       exports: always-multiline
       functions: never
+  dot-notation: "off"
+  "@typescript-eslint/dot-notation": warn
   import/prefer-default-export:
     # I build files incrementally, intending for more than one
     # function to be within; having this tell me to default export the
@@ -51,6 +55,10 @@ rules:
     #
     # https://stackoverflow.com/a/60675852/2625807
     - "off"
+  # Disallow default exports, as they seem to stochastically cause
+  # babel+jest failures as of 2022-11
+  import/no-default-export:
+    - error
   import/no-extraneous-dependencies:
     - error
     # Avoids this error:

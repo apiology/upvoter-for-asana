@@ -61,7 +61,7 @@ export function chromeStorageSyncFetch<T>(key: string,
   });
 }
 
-export default class ChromeExtensionCache {
+export class ChromeExtensionCache {
   cacheFetch = async (key: string,
     clazz: 'string'): Promise<string | null> => chromeStorageSyncFetch(key, clazz);
 

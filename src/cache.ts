@@ -1,4 +1,4 @@
-export default abstract class Cache {
+export abstract class Cache {
   abstract cacheFetch(key: string,
     clazz: 'string'): Promise<string | null>;
 

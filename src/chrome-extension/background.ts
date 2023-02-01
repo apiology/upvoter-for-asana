@@ -8,7 +8,7 @@
 // https://github.com/GoogleChrome/chrome-extensions-samples/blob/1d8d137d20fad5972292377dc22498529d2a4039/api/omnibox/simple-example/background.js
 
 import { setPlatform } from '../platform.js';
-import ChromeExtensionPlatform from './chrome-extension-platform.js';
+import { ChromeExtensionPlatform } from './chrome-extension-platform.js';
 import { omniboxInputChangedListener, omniboxInputEnteredListener } from './omnibox.js';
 
 setPlatform(new ChromeExtensionPlatform());
