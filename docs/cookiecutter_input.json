@@ -7,7 +7,7 @@
     "github_username": "apiology",
     "multicli_keyword": "uv",
     "open_source_license": "MIT license",
-    "options": "no",
+    "options": "yes",
     "project_name": "Upvoter for Asana",
     "project_short_description": "Quickly finds and increments integer custom fields in Asana tasks from the Chrome Omnibox or as an Alfred workflow.",
     "project_slug": "upvoter-for-asana",

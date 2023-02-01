@@ -22,6 +22,17 @@ This isn't in the Chrome App Store - see [DEVELOPMENT.md](./DEVELOPMENT.md) for 
 
 The Alfred package isn't published yet - see [DEVELOPMENT.md](./DEVELOPMENT.md) for how to run from a local checkout.
 
+## Chrome Extension Configuration
+
+1. Create a new "Personal access token" in
+   [Asana](https://app.asana.com/0/my-apps)
+1. Set up options directly
+   [here](chrome-extension://TBD/options.html)
+   or in Chrome | … | More Tools | Extensions | Upvoter for Asana |
+   Details | Extension options.
+1. Paste in your personal access token.
+1. Provide the rest of the configuration and hit 'Save'
+
 ## Alfred Workflow Configuration
 
 1. Create a new "Personal access token" in

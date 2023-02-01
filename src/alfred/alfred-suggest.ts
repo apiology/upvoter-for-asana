@@ -8,6 +8,8 @@ const p = new AlfredPlatform();
 setPlatform(p);
 
 const run = async () => {
+  await p.config().validate();
+
   let items: ScriptFilterItem[];
   try {
     const suggestions = await pullSuggestions(alfy.input);

@@ -13,6 +13,7 @@ const dirname = path.dirname(filename);
 export default {
   entry: {
     background: ['./src/chrome-extension/background.ts'],
+    options: ['./src/chrome-extension/options.ts'],
     'content-script': ['./src/chrome-extension/content-script.ts'],
   },
   // https://webpack.js.org/guides/typescript/
