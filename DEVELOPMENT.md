@@ -240,4 +240,3 @@ open 'Upvoter for Asana.alfredworkflow' | configure as prompted | Import
 1. Save draft
 1. ... | Preview
 1. [Publish](https://developer.chrome.com/docs/webstore/update/)
-1. Update options.html link in README.md

@@ -62,3 +62,9 @@ requirements_dev.txt.installed
 
 # from jest
 /coverage
+
+# from webpack
+/dist/chrome-extension
+
+# from yarn
+/yarn-error.log
