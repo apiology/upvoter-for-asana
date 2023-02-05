@@ -11,10 +11,6 @@ import { upvoteTask, logSuccess, pullCustomField } from '../upvoter-for-asana.js
 import { platform, setPlatform } from '../platform.js';
 import { ChromeExtensionPlatform } from './chrome-extension-platform.js';
 
-setPlatform(new ChromeExtensionPlatform());
-const p = platform();
-const logger = p.logger();
-
 const updateLinkMarker = (link: Element, indicator: number | string | null | undefined) => {
   let message = indicator;
   if (message == null) {
@@ -104,18 +100,12 @@ const observeAndFixDependencyLinks = () => {
   const e = document.querySelector(selector);
   if (e) {
     fixDependencyLinks();
-    logger.log('Fixed up links first try');
-  } else {
-    logger.log('First try did not find element');
   }
 
   const observer = new MutationObserver(() => {
     const element = document.querySelector(selector);
     if (element) {
       fixDependencyLinks();
-      logger.log('Fixed up links incremental');
-    } else {
-      logger.log('Incremental did not find');
     }
   });
 
@@ -127,6 +117,10 @@ const observeAndFixDependencyLinks = () => {
 
 /* istanbul ignore next */
 if (typeof jest === 'undefined') {
+  setPlatform(new ChromeExtensionPlatform());
+  const p = platform();
+  const logger = p.logger();
+
   logger.debug('Starting observation');
   observeAndFixDependencyLinks();
   logger.debug('Done with starting observation');
