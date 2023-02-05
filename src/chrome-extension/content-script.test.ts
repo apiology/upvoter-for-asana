@@ -3,22 +3,20 @@
  */
 
 // import { someTriggerFunction } from '../upvoter-for-asana.js';
-// import { registerEventListeners } from './content-script.js';
-// import { setPlatform } from '../platform.js';
-// import { TestPlatform } from '../__mocks__/test-platform.js';
+import { observeAndFixDependencyLinks } from './content-script.js';
+import { setPlatform } from '../platform.js';
+import { TestPlatform } from '../__mocks__/test-platform.js';
 
 jest.mock('../upvoter-for-asana');
 
-test('dummyTest', () => undefined);
+test('registerEventListeners', async () => {
+  // jest.mocked(shortcutsKeyDownBeforeOthers);
 
-// test('registerEventListeners', async () => {
-//   // jest.mocked(shortcutsKeyDownBeforeOthers);
+  setPlatform(new TestPlatform());
 
-//   setPlatform(new TestPlatform());
+  observeAndFixDependencyLinks();
 
-//   registerEventListeners();
+  // document.dispatchEvent(new window.KeyboardEvent('keydown'));
 
-//   // document.dispatchEvent(new window.KeyboardEvent('keydown'));
-
-//   // expect(someTriggerFunction).toHaveBeenCalled();
-// });
+  // expect(someTriggerFunction).toHaveBeenCalled();
+});

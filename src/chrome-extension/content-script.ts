@@ -95,7 +95,11 @@ const fixDependencyLinks = async () => {
   }
 };
 
-const observeAndFixDependencyLinks = () => {
+export const observeAndFixDependencyLinks = () => {
+  const p = platform();
+  const logger = p.logger();
+
+  logger.debug('Starting observation');
   const selector = `.${bodyNodesClassName}`;
   const e = document.querySelector(selector);
   if (e) {
@@ -113,15 +117,12 @@ const observeAndFixDependencyLinks = () => {
     childList: true,
     subtree: true,
   });
+  logger.debug('Done with starting observation');
 };
 
 /* istanbul ignore next */
 if (typeof jest === 'undefined') {
   setPlatform(new ChromeExtensionPlatform());
-  const p = platform();
-  const logger = p.logger();
 
-  logger.debug('Starting observation');
   observeAndFixDependencyLinks();
-  logger.debug('Done with starting observation');
 }
