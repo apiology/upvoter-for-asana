@@ -8,10 +8,8 @@
 
 import { fetchClient } from '../asana-base.js';
 import { upvoteTask, logSuccess, pullCustomField } from '../upvoter-for-asana.js';
-import { setPlatform } from '../platform.js';
+import { platform, setPlatform } from '../platform.js';
 import { ChromeExtensionPlatform } from './chrome-extension-platform.js';
-
-setPlatform(new ChromeExtensionPlatform());
 
 const updateLinkMarker = (link: Element, indicator: number | string | null | undefined) => {
   let message = indicator;
@@ -69,10 +67,10 @@ const fixUpLinkToDependency = (link: HTMLElement) => {
   }
 };
 
+const bodyNodesClassName = 'CompleteTaskWithIncompletePrecedentTasksConfirmationModal-bodyNode';
+
 const dependencyLinks = () => {
   const links: HTMLElement[] = [];
-  const bodyNodesClassName = 'CompleteTaskWithIncompletePrecedentTasksConfirmationModal-bodyNode';
-
   const bodyNodes = Array.from(document.getElementsByClassName(bodyNodesClassName));
   for (const bodyNode of bodyNodes) {
     const linkClassName = 'CompleteTaskWithIncompletePrecedentTasksConfirmationModal-primaryNavigationLink';
@@ -87,7 +85,7 @@ const dependencyLinks = () => {
   return links;
 };
 
-setInterval(() => {
+const fixDependencyLinks = async () => {
   for (const dependencyLink of dependencyLinks()) {
     // don't process links twice; if we've marked one as processed, consider this done.
     if (dependencyLink.classList.contains(upvoteLinkClassName)) {
@@ -95,4 +93,36 @@ setInterval(() => {
     }
     fixUpLinkToDependency(dependencyLink);
   }
-}, 1000);
+};
+
+export const observeAndFixDependencyLinks = () => {
+  const p = platform();
+  const logger = p.logger();
+
+  logger.debug('Starting observation');
+  const selector = `.${bodyNodesClassName}`;
+  const e = document.querySelector(selector);
+  if (e) {
+    fixDependencyLinks();
+  }
+
+  const observer = new MutationObserver(() => {
+    const element = document.querySelector(selector);
+    if (element) {
+      fixDependencyLinks();
+    }
+  });
+
+  observer.observe(document.body, {
+    childList: true,
+    subtree: true,
+  });
+  logger.debug('Done with starting observation');
+};
+
+/* istanbul ignore next */
+if (typeof jest === 'undefined') {
+  setPlatform(new ChromeExtensionPlatform());
+
+  observeAndFixDependencyLinks();
+}
