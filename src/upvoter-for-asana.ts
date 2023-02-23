@@ -3,7 +3,6 @@
  *
  * Quickly finds and increments integer custom fields in Asana tasks from the Chrome Omnibox or as an Alfred workflow.
  */
-
 import { platform } from './platform.js';
 
 export const logSuccess = (result: string | object): void => {
@@ -34,4 +33,13 @@ export const actOnInputData = async (text: string) => {
   const parsedText = decodeURIComponent(url.pathname);
   console.log(`Acting upon ${parsedText}`);
   return 'a success message or status';
+};
+
+export const doWork = (tab: chrome.tabs.Tab) => {
+  // No tabs or host permissions needed!
+  const logger = platform().logger();
+  logger.debug(`Turning ${tab.url} red!`);
+  chrome.tabs.executeScript({
+    code: 'document.body.style.backgroundColor="red"',
+  });
 };

@@ -28,6 +28,7 @@ repl: ## Bring up an interactive JavaScript prompt
 	@echo "const customField = (await client.customFields.findByWorkspace(workspaceGid)).data.find((customField) => customField.name == 'stars')"
 	@echo "await client.tasks.getTask('123')"
 	@echo "const user = (await client.users.findAll({workspace: workspaceGid})).data.find(user => user.name == 'Vince Broz');"
+	@op-ensure-active
 	@ASANA_API_TOKEN=$$(with-op op read 'op://private/Asana access token - upvoter-opener-filer chrome extensions/password') node
 
 webpack: ## run webpack and tie together modules for use by browser
