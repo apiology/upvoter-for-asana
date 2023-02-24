@@ -65,6 +65,7 @@ requirements_dev.txt.installed
 
 # from webpack
 /dist/chrome-extension
+/dist/alfred
 
 # from yarn
 /yarn-error.log
