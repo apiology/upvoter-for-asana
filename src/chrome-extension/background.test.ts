@@ -1,19 +1,25 @@
 import { chrome } from 'jest-chrome';
-import { doWork } from '../upvoter-for-asana.js';
 import { setPlatform } from '../platform.js';
 import { TestPlatform } from '../__mocks__/test-platform.js';
 import { registerEventListeners } from './background.js';
+import { omniboxInputChangedListener, omniboxInputEnteredListener } from './omnibox.js';
 
-jest.mock('../upvoter-for-asana');
+jest.mock('./omnibox');
 
 test('registerEventListeners', async () => {
-  jest.mocked(doWork);
+  jest.mocked(omniboxInputChangedListener);
+
+  jest.mocked(omniboxInputEnteredListener);
 
   setPlatform(new TestPlatform());
 
   registerEventListeners();
 
-  chrome.browserAction.onClicked.callListeners({} as never);
+  chrome.omnibox.onInputChanged.callListeners('foo', () => undefined);
 
-  expect(doWork).toHaveBeenCalled();
+  expect(omniboxInputChangedListener).toHaveBeenCalled();
+
+  chrome.omnibox.onInputEntered.callListeners('foo', 'currentTab');
+
+  expect(omniboxInputEnteredListener).toHaveBeenCalled();
 });

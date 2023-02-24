@@ -19,7 +19,7 @@ repl: ## Bring up an interactive JavaScript prompt
 	@echo "const asana = require('asana');"
 	@echo "const clientOptions = {"
 	@echo "    defaultHeaders: {"
-	@echo "      'Asana-Enable': 'new_user_task_lists,new_project_templates',"
+	@echo "      'Asana-Enable': 'new_user_task_lists,new_project_templates,new_memberships',"
 	@echo "    },"
 	@echo "};"
 	@echo "const asanaAccessToken = process.env.ASANA_API_TOKEN;"

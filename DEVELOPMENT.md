@@ -127,15 +127,16 @@ Once done, make a GitHub release with the exported file (do this in a
 new tab):
 
 ```sh
+cd ../upvoter-for-asana
 new_release=$(npm version --json | jq -r '."alfred-upvoter-for-asana"')
-gh release create v${new_release:?} 'Upvoter for Asana.alfredworkflow'
+gh release create --generate-notes v${new_release:?} 'Upvoter for Asana.alfredworkflow'
 ```
 
 Delete your current installation in Alfred again.
 
 open 'Upvoter for Asana.alfredworkflow' | configure as prompted | Import
 
-[packal](http://www.packal.org/) | Login if needed | Dashboard | Upvoter for Asana | edit | Workflow File | Remove | Choose File | (.alfredworkflow file) | Upload | Version | (update) | (scroll to bottom) | Submit
+[packal](http://www.packal.org/) | Login if needed | Dashboard | Upvoter for Asana | Edit current | Workflow File | Remove | Choose File | (.alfredworkflow file) | Upload | Version | (update) | (scroll to bottom) | Submit
 
 ## Initial release to packal.org
 
