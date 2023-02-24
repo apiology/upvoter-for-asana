@@ -5,8 +5,6 @@ class ConfigSpy extends Config {
 
   fetchWorkspaceNameCalled: boolean
 
-  fetchVldApiKeyCalled: boolean
-
   fetchCustomFieldNameCalled: boolean
 
   fetchIncrementCalled: boolean
@@ -17,7 +15,6 @@ class ConfigSpy extends Config {
     super();
     this.fetchAsanaAccessTokenCalled = false;
     this.fetchWorkspaceNameCalled = false;
-    this.fetchVldApiKeyCalled = false;
     this.fetchCustomFieldNameCalled = false;
     this.fetchIncrementCalled = false;
     this.fetchManualIncrementAmountCalled = false;
@@ -30,11 +27,6 @@ class ConfigSpy extends Config {
 
   fetchWorkspaceName(): Promise<string> {
     this.fetchWorkspaceNameCalled = true;
-    return new Promise<string>((resolve) => resolve('foo'));
-  }
-
-  fetchVldApiKey(): Promise<string> {
-    this.fetchVldApiKeyCalled = true;
     return new Promise<string>((resolve) => resolve('foo'));
   }
 
@@ -59,5 +51,4 @@ test('Config#validate', async () => {
   await config.validate();
   expect(config.fetchAsanaAccessTokenCalled).toBeTruthy();
   expect(config.fetchWorkspaceName).toBeTruthy();
-  expect(config.fetchVldApiKey).toBeTruthy();
 });

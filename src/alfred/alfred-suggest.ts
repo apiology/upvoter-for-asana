@@ -1,4 +1,5 @@
 import alfy, { ScriptFilterItem } from 'alfy';
+import { hookStderr } from 'hook-std';
 import { pullSuggestions } from '../upvoter-for-asana.js';
 import { isString } from '../types.js';
 import { AlfredPlatform } from './alfred-platform.js';
@@ -28,4 +29,22 @@ const run = async () => {
   }
 };
 
-run();
+/* istanbul ignore next */
+if (typeof jest === 'undefined') {
+  // node-asana sends API deprecation warnings, which may start to
+  // appear at any random time in the future, to stderr.  These are
+  // warning messages, not errors.
+  //
+  // alfy sends them to Alfred.
+  //
+  // Alfred 4 does not react well when receiving this log and then
+  // subsequently receiving the requested results, which effectively
+  // turns them into mysterious failures that don't show either the
+  // error messages or the results.
+  //
+  // Boo.
+  //
+  // https://github.com/sindresorhus/alfy/issues/160
+  hookStderr({ silent: true }, () => undefined);
+  run();
+}

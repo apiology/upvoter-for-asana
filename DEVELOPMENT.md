@@ -59,9 +59,7 @@ Related backlog tasks:
 First, run these commands:
 
 ```sh
-git checkout main
-git pull
-git stash
+git stash && git checkout main && git pull
 last_released_version=$(npm version --json | jq -r '."alfred-upvoter-for-asana"')
 git log v${last_released_version:?}..
 update_type= # patch/minor/major
@@ -152,9 +150,10 @@ open 'Upvoter for Asana.alfredworkflow' | configure as prompted | Import
 1. Update screenshots in `docs/` for any new features
 1. Update [README.md](./README.md) with new screenshots
 1. PR screenshot updates in
-1. PR a bump to the version in `static/chrome-extension/manifest.json`
-1. `git checkout main && git pull`
-1. `make clean && make`
+1. `git stash && git checkout main && git pull`
+1. Bump the version in `static/chrome-extension/manifest.json` locally.
+1.`git commit -m "Bump version" static/chrome-extension/manifest.json`
+1. `git push && make clean && make`
 1. Update [package.zip](./package.zip) in [developer dashboard](https://chrome.google.com/u/1/webstore/devconsole/d34ba2e8-8b5a-4417-889e-4047c35522d0) as `apiology-cws` user.
 1. Upload any new screenshots
 1. Update description to match current README.md - manually translate
@@ -162,4 +161,3 @@ open 'Upvoter for Asana.alfredworkflow' | configure as prompted | Import
 1. Save draft
 1. ... | Preview
 1. [Publish](https://developer.chrome.com/docs/webstore/update/)
-1. Update options.html link in README.md

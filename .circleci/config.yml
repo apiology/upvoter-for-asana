@@ -122,7 +122,7 @@ jobs:
           label: test
           command: make citest cicoverage
     # This seemed to shave 5ish% of the build time off when added
-    resource_class: large
+    resource_class: xlarge
 
 workflows:
   version: 2
