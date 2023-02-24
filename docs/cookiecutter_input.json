@@ -2,6 +2,7 @@
     "_template": "https://github.com/apiology/cookiecutter-multicli.git",
     "asana_api": "yes",
     "asana_related": "yes",
+    "content_script": "yes",
     "email": "vince@broz.cc",
     "full_name": "Vince Broz",
     "github_username": "apiology",
@@ -11,6 +12,7 @@
     "project_name": "Upvoter for Asana",
     "project_short_description": "Quickly finds and increments integer custom fields in Asana tasks from the Chrome Omnibox or as an Alfred workflow.",
     "project_slug": "upvoter-for-asana",
+    "service_worker": "yes",
     "type_of_github_repo": "public",
     "version": "0.1.0"
 }
