@@ -5,13 +5,10 @@ fetchAsanaAccessTokenCalled: boolean
 
   fetchWorkspaceNameCalled: boolean
 
-  fetchVldApiKeyCalled: boolean
-
   constructor() {
     super();
     this.fetchAsanaAccessTokenCalled = false;
     this.fetchWorkspaceNameCalled = false;
-    this.fetchVldApiKeyCalled = false;
   }
 
   fetchAsanaAccessToken(): Promise<string> {
@@ -23,11 +20,6 @@ fetchAsanaAccessTokenCalled: boolean
     this.fetchWorkspaceNameCalled = true;
     return new Promise<string>((resolve) => resolve('foo'));
   }
-
-  fetchVldApiKey(): Promise<string> {
-    this.fetchVldApiKeyCalled = true;
-    return new Promise<string>((resolve) => resolve('foo'));
-  }
 }
 
 test('Config#validate', async () => {
@@ -35,5 +27,4 @@ test('Config#validate', async () => {
   await config.validate();
   expect(config.fetchAsanaAccessTokenCalled).toBeTruthy();
   expect(config.fetchWorkspaceName).toBeTruthy();
-  expect(config.fetchVldApiKey).toBeTruthy();
 });

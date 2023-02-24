@@ -55,9 +55,7 @@ development.  See the `.envrc` file for detail.
 Walk through these steps:
 
 ```sh
-git checkout main
-git pull
-git stash
+git stash && git checkout main && git pull
 npm publish
 alfy-cleanup
 npm install -g alfred-upvoter-for-asana --upgrade
@@ -96,9 +94,7 @@ Related backlog tasks:
 First, run these commands:
 
 ```sh
-git checkout main
-git pull
-git stash
+git stash && git checkout main && git pull
 last_released_version=$(npm version --json | jq -r '."alfred-upvoter-for-asana"')
 git log v${last_released_version:?}..
 update_type= # patch/minor/major
