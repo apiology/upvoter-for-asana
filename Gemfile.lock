@@ -4,7 +4,7 @@ GEM
     chef-utils (18.1.0)
       concurrent-ruby
     childprocess (4.0.0)
-    concurrent-ruby (1.2.0)
+    concurrent-ruby (1.2.2)
     iniparse (1.5.0)
     kramdown (2.4.0)
       rexml
