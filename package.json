@@ -35,7 +35,7 @@
     "url": "https://github.com/apiology/upvoter-for-asana/issues"
   },
   "homepage": "https://github.com/apiology/upvoter-for-asana#readme",
-  "_devDependenciesNotes": "copy-webpack-plugin 10 failed with this - https://stackoverflow.com/questions/70080671/copy-webpack-plugin-error-invalid-host-defined-options",
+  "_devDependenciesNotes": "copy-webpack-plugin 10 failed with this - https://stackoverflow.com/questions/70080671/copy-webpack-plugin-error-invalid-host-defined-options.  webpack <5.76 has CVE-2023-28154",
   "devDependencies": {
     "@types/asana": "^0.18.9",
     "@types/chrome": "^0.0.163",
@@ -58,7 +58,7 @@
     "ts-jest": "^29.0.5",
     "ts-loader": "^9.3.0",
     "typescript": "^4.9.5",
-    "webpack": "^5",
+    "webpack": "^5.76.0",
     "webpack-cli": "^4.5.0"
   },
   "_dependenciesComments": "buffer, process, stream-browserify, url and util are node polyfills needed by asana library",
