@@ -79,6 +79,7 @@
   "_alfyResolutionsComments": "alfy@1.0.0 requires plist@^2.0.1 (which has a critical security bug) via a transitive dependency on {alfred-link@0.3.1,alfred-notifier@0.2.3}.  alfy@1.0.0 requires got@^6.7.1 (which has a moderate security bug) via a transitive dependency on package-json@4.0.1.  alfy@1.0.0 requires got@^12.0.3 (which has a moderate security bug)",
   "resolutions": {
     "asana/**/browser-request": "file:polyfills/browser-request-via-fetch",
+    "asana/**/request": "file:polyfills/browser-request-via-fetch",
     "asana/**/json-schema": "^0.4",
     "**/minimatch": "^3.0.5",
     "**/json5": "^1.0.2",
