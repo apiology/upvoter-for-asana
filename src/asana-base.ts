@@ -18,7 +18,7 @@ export const fetchClient = async () => {
 
   const clientOptions: Asana.ClientOptions = {
     defaultHeaders: {
-      'Asana-Enable': 'new_user_task_lists,new_project_templates,new_memberships',
+      'Asana-Enable': 'new_user_task_lists,new_project_templates,new_memberships,new_goal_memberships,new_goal_memberships',
     },
   };
   fetchedClient = Asana.Client.create(clientOptions).useAccessToken(asanaAccessToken);
