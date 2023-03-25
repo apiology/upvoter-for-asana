@@ -59,7 +59,7 @@ Related backlog tasks:
 First, run these commands:
 
 ```sh
-git stash && git checkout main && git pull
+git stash && git checkout main && git pull && make
 last_released_version=$(npm version --json | jq -r '."alfred-upvoter-for-asana"')
 git log v${last_released_version:?}..
 update_type= # patch/minor/major
