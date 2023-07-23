@@ -31,8 +31,10 @@ export const fetchCustomFieldGid = async (): Promise<string> => {
   const client = await fetchClient();
   const customFields = await client.customFields.getCustomFieldsForWorkspace(workspaceGid, {});
   const customFieldName = await config.fetchCustomFieldName();
-  fetchedCustomFieldGid = await findGid(customFields,
-    (customField) => customField.name === customFieldName);
+  fetchedCustomFieldGid = await findGid(
+    customFields,
+    (customField) => customField.name === customFieldName
+  );
   if (fetchedCustomFieldGid == null) {
     throw new Error('Could not find custom field GID!');
   }
