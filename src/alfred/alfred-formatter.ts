@@ -26,5 +26,5 @@ export class AlfredFormatter {
 
   escapeDescriptionPlainText = (text: string) => text;
 
-  formatUpvotedTask = (upvotes: number, task: Asana.resources.Tasks.Type) => `${upvotes}: ${this.formatTask(task)}`
+  formatUpvotedTask = (upvotes: number, task: Asana.resources.Tasks.Type) => `${upvotes}: ${this.formatTask(task)}`;
 }
