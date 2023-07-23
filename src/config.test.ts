@@ -1,15 +1,15 @@
 import { Config } from './config.js';
 
 class ConfigSpy extends Config {
-  fetchAsanaAccessTokenCalled: boolean
+  fetchAsanaAccessTokenCalled: boolean;
 
-  fetchWorkspaceNameCalled: boolean
+  fetchWorkspaceNameCalled: boolean;
 
-  fetchCustomFieldNameCalled: boolean
+  fetchCustomFieldNameCalled: boolean;
 
-  fetchIncrementCalled: boolean
+  fetchIncrementCalled: boolean;
 
-  fetchManualIncrementAmountCalled: boolean
+  fetchManualIncrementAmountCalled: boolean;
 
   constructor() {
     super();
@@ -22,27 +22,37 @@ class ConfigSpy extends Config {
 
   fetchAsanaAccessToken(): Promise<string> {
     this.fetchAsanaAccessTokenCalled = true;
-    return new Promise<string>((resolve) => resolve('foo'));
+    return new Promise<string>((resolve) => {
+      resolve('foo');
+    });
   }
 
   fetchWorkspaceName(): Promise<string> {
     this.fetchWorkspaceNameCalled = true;
-    return new Promise<string>((resolve) => resolve('foo'));
+    return new Promise<string>((resolve) => {
+      resolve('foo');
+    });
   }
 
   fetchCustomFieldName(): Promise<string> {
     this.fetchCustomFieldNameCalled = true;
-    return new Promise<string>((resolve) => resolve('foo'));
+    return new Promise<string>((resolve) => {
+      resolve('foo');
+    });
   }
 
   fetchIncrement(): Promise<boolean> {
     this.fetchIncrementCalled = true;
-    return new Promise<boolean>((resolve) => resolve(true));
+    return new Promise<boolean>((resolve) => {
+      resolve(true);
+    });
   }
 
   fetchManualIncrementAmount(): Promise<number> {
     this.fetchManualIncrementAmountCalled = true;
-    return new Promise<number>((resolve) => resolve(5));
+    return new Promise<number>((resolve) => {
+      resolve(5);
+    });
   }
 }
 

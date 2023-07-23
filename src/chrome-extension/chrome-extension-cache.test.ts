@@ -1,10 +1,11 @@
 import { chrome } from 'jest-chrome';
-import { ChromeExtensionConfig } from './chrome-extension-config.js';
+import { ChromeExtensionCache } from './chrome-extension-cache.js';
 
 test('create class', () => {
-  expect(new ChromeExtensionConfig()).not.toBeNull();
+  expect(new ChromeExtensionCache()).not.toBeNull();
 });
-test('fetchAsanaAccessToken', async () => {
+
+test('chromeStorageSyncFetch', async () => {
   const fakeChromeStorageSyncGet = (
     keys: string | string[] | { [key: string]: object } | null,
     callback: (items: { [key: string]: object | string }) => void
@@ -15,6 +16,6 @@ test('fetchAsanaAccessToken', async () => {
 
   chrome.storage.sync.get.mockImplementation(fakeChromeStorageSyncGet);
 
-  const config = new ChromeExtensionConfig();
-  expect(await config.fetchAsanaAccessToken()).toEqual('123');
+  const cache = new ChromeExtensionCache();
+  expect(await cache.cacheFetch('asanaAccessToken', 'string')).toEqual('123');
 });

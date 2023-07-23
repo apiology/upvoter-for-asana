@@ -30,6 +30,10 @@ rules:
   no-console: "off"
   # Not sure of other easy UI available in an omnibox action
   no-alert: "off"
+  # They're not wrong - I suspect I'm not using classes in a canonical
+  # way - just not ready to take this on yet.
+  class-methods-use-this:
+    - "off"
   #
   # Dangling commas on a function call/declaration just seems *wrong*,
   # regardless of what the geniuses at AirBNB think.
@@ -102,6 +106,9 @@ rules:
     - props: false
   # https://github.com/typescript-eslint/typescript-eslint/issues/2540#issuecomment-692510509
   no-use-before-define: "off"
+  # I couldn't figure out how to translate this; do I even have regexp literals configued to be used?
+  #   new RegExp('/\\d+/(\\d+)/(\\d+)[/f]?');
+  prefer-regex-literals: "off"
   "@typescript-eslint/no-use-before-define": warn
 # arrow-body-style
 # https://github.com/airbnb/javascript/blob/35914b14025cd52f53cd2ae2f353cdc7384087c0/packages/eslint-config-airbnb-base/rules/es6.js#L15-L20
