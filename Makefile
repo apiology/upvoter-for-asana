@@ -28,8 +28,7 @@ repl: ## Bring up an interactive JavaScript prompt
 	@echo "const customField = (await client.customFields.findByWorkspace(workspaceGid)).data.find((customField) => customField.name == 'stars')"
 	@echo "await client.tasks.getTask('123')"
 	@echo "const user = (await client.users.findAll({workspace: workspaceGid})).data.find(user => user.name == 'Vince Broz');"
-	@op-ensure-active
-	@ASANA_API_TOKEN=$$(with-op op read 'op://private/Asana access token - upvoter-opener-filer chrome extensions/password') node
+	@ASANA_API_TOKEN=$$(op read 'op://private/Asana access token - upvoter-opener-filer chrome extensions/password') node
 
 webpack: ## run webpack and tie together modules for use by browser
 	npx webpack
@@ -110,6 +109,7 @@ cicoverage: report-coverage-to-codecov ## check code coverage, then report to co
 
 update_from_cookiecutter: ## Bring in changes from template project used to create this repo
 	bundle exec overcommit --uninstall
+	cookiecutter_project_upgrader --help >/dev/null
 	IN_COOKIECUTTER_PROJECT_UPGRADER=1 cookiecutter_project_upgrader || true
 	git checkout cookiecutter-template && git push && git checkout main
 	git checkout main && git pull && git checkout -b update-from-cookiecutter-$$(date +%Y-%m-%d-%H%M)

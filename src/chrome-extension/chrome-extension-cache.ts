@@ -26,8 +26,10 @@ export function chromeStorageSyncFetch(key: string,
   clazz: 'boolean'): Promise<boolean | null>;
 export function chromeStorageSyncFetch<T>(key: string,
   clazz: Class<T>): Promise<T | null>;
-export function chromeStorageSyncFetch<T>(key: string,
-  clazz: Class<T> | 'number' | 'string' | 'boolean'):
+export function chromeStorageSyncFetch<T>(
+  key: string,
+  clazz: Class<T> | 'number' | 'string' | 'boolean'
+):
   Promise<T | boolean | string | number | null> {
   return new Promise((resolve) => {
     chrome.storage.sync.get([key], (result) => {
@@ -62,12 +64,14 @@ export function chromeStorageSyncFetch<T>(key: string,
 }
 
 export class ChromeExtensionCache {
-  cacheFetch = async (key: string,
-    clazz: 'string'): Promise<string | null> => chromeStorageSyncFetch(key, clazz);
+  cacheFetch = async (
+    key: string,
+    clazz: 'string'
+  ): Promise<string | null> => chromeStorageSyncFetch(key, clazz);
 
   cacheStore = async (key: string, value: string): Promise<void> => {
     const settings: { [index: string]: string } = {};
     settings[key] = value;
     chrome.storage.sync.set(settings);
-  }
+  };
 }

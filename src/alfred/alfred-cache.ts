@@ -6,7 +6,7 @@ export class AlfredCache {
       throw new Error(`I do not know how to cache items of class ${clazz}`);
     }
     return alfy.cache.get(key);
-  }
+  };
 
   cacheStore = async (key: string, value: string): Promise<void> => {
     alfy.cache.set(key, value);

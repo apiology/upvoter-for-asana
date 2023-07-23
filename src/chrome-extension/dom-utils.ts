@@ -3,6 +3,25 @@
 type Class<T> = new (...args: any[]) => T;
 /* eslint-enable @typescript-eslint/no-explicit-any */
 
+export const ensureNotNull = <T>(value: T | null): T => {
+  if (value == null) {
+    throw new Error('value is null');
+  }
+  return value;
+};
+
+export const ensureHtmlElement = <T extends HTMLElement>(element: object | null,
+  clazz: Class<T>): T => {
+  if (element == null) {
+    throw new Error("Couldn't find element");
+  }
+  if (!(element instanceof clazz)) {
+    throw new Error(`Is not a ${clazz.name} as expected: ${element}`);
+  }
+
+  return element;
+};
+
 export const htmlElementById = <T extends HTMLElement>(id: string, clazz: Class<T>): T => {
   const element = document.getElementById(id);
   if (element == null) {
@@ -10,6 +29,18 @@ export const htmlElementById = <T extends HTMLElement>(id: string, clazz: Class<
   }
   if (!(element instanceof clazz)) {
     throw new Error(`element with id ${id} not an ${clazz.name} as expected!`);
+  }
+  return element;
+};
+
+export const htmlElementBySelector = <T extends HTMLElement>(selector: string,
+  clazz: Class<T>): T => {
+  const element = document.querySelector(selector);
+  if (element == null) {
+    throw new Error(`Couldn't find element with selector ${selector}`);
+  }
+  if (!(element instanceof clazz)) {
+    throw new Error(`element with selector ${selector} not an ${clazz.name} as expected!`);
   }
   return element;
 };

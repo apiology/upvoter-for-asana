@@ -15,5 +15,5 @@ export abstract class Config {
     await this.fetchCustomFieldName();
     await this.fetchIncrement();
     await this.fetchManualIncrementAmount();
-  }
+  };
 }

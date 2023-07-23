@@ -32,8 +32,12 @@ export async function pullResult(text: string, resourceType: string, optFields: 
   const workspaceGid = await fetchWorkspaceGid();
   const logger = platform().logger();
 
-  logger.log('requesting typeahead with workspaceGid', workspaceGid,
-    ' and query of ', query);
+  logger.log(
+    'requesting typeahead with workspaceGid',
+    workspaceGid,
+    ' and query of ',
+    query
+  );
   logger.userVisibleStatus(`Searching for ${text}...`);
 
   // https://developers.asana.com/docs/typeahead

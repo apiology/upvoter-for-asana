@@ -26,8 +26,11 @@ async function fetchConfig(key: string, name: string,
   clazz: 'boolean'): Promise<boolean>;
 async function fetchConfig<T>(key: string, name: string,
   clazz: Class<T>): Promise<T>;
-async function fetchConfig<T>(key: string, name: string,
-  clazz: Class<T> | 'number' | 'string' | 'boolean'): Promise<T | boolean | string | number> {
+async function fetchConfig<T>(
+  key: string,
+  name: string,
+  clazz: Class<T> | 'number' | 'string' | 'boolean'
+): Promise<T | boolean | string | number> {
   if (clazz === 'string') {
     const value = await chromeStorageSyncFetch(key, clazz);
     return ensureConfigNotNull(value, name);
