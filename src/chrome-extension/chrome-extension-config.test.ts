@@ -5,8 +5,10 @@ test('create class', () => {
   expect(new ChromeExtensionConfig()).not.toBeNull();
 });
 test('fetchAsanaAccessToken', async () => {
-  const fakeChromeStorageSyncGet = (keys: string | string[] | { [key: string]: object } | null,
-    callback: (items: { [key: string]: object | string }) => void): void => {
+  const fakeChromeStorageSyncGet = (
+    keys: string | string[] | { [key: string]: object } | null,
+    callback: (items: { [key: string]: object | string }) => void
+  ): void => {
     expect(keys).toEqual(['asanaAccessToken']);
     callback({ asanaAccessToken: '123' });
   };

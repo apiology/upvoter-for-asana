@@ -9,8 +9,10 @@ import { restoreOptions, saveOptions } from './options.js';
 import { htmlElementById } from './dom-utils.js';
 
 beforeEach(async () => {
-  document.body.innerHTML = await readFile('static/chrome-extension/options.html',
-    { encoding: 'utf-8' });
+  document.body.innerHTML = await readFile(
+    'static/chrome-extension/options.html',
+    { encoding: 'utf-8' }
+  );
   jest.useFakeTimers();
 });
 
@@ -62,8 +64,10 @@ test('saveOptionsUpdatesStatusOnSuccess', async () => {
 });
 
 test('restoreOptions', async () => {
-  const fakeChromeStorageSyncGet = (keys: string | string[] | { [key: string]: object } | null,
-    callback: (items: { [key: string]: object | string | undefined }) => void): void => {
+  const fakeChromeStorageSyncGet = (
+    keys: string | string[] | { [key: string]: object } | null,
+    callback: (items: { [key: string]: object | string | undefined }) => void
+  ): void => {
     if (Array.isArray(keys)) {
       fail('Did not expect this to be array!');
     }

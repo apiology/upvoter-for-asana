@@ -17,7 +17,16 @@
 # Uncomment the following lines to make the configuration take effect.
 
 PreCommit:
-  # Extend default config at https://github.com/sds/overcommit/blob/master/config/default.yml
+  # Extend default config at
+  # https://github.com/sds/overcommit/blob/master/config/default.yml
+  BrokenSymlinks:
+    enabled: true
+    description: 'Check for broken symlinks'
+    quiet: true
+    exclude:
+      # This is a symlink to sibling checkout of plate-spinner, used
+      # only in local development
+      - config/env.1p
   EsLint:
     required_executable: 'npx'
     command: ['npx', 'eslint']
@@ -38,6 +47,7 @@ PreCommit:
       - '**/*.sh'
   YamlLint:
     enabled: true
+    flags: ['-c', '.yamllint.yml']
     on_warn: fail
   CircleCi:
     required_executable: 'circleci'
@@ -45,6 +55,12 @@ PreCommit:
     include:
       - '.circleci/config.yml'
     enabled: true
+  Punchlist:
+    command: ['bundle', 'exec', 'punchlist']
+    exclude:
+      - 'yarn.lock'
+    enabled: true
+    problem_on_unmodified_line: warn
 
 #PostCheckout:
 #  ALL: # Special hook name that customizes all hooks of this type

@@ -8,5 +8,5 @@ export abstract class Config {
     await this.fetchAsanaAccessToken();
     await this.fetchWorkspaceName();
     // await this.fetchSomeConfigItem();
-  }
+  };
 }
