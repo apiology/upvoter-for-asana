@@ -1,9 +1,9 @@
 import path from 'path';
-import webpack from 'webpack';
 import { createRequire } from 'module';
+import { fileURLToPath } from 'url';
+import webpack from 'webpack';
 import CopyPlugin from 'copy-webpack-plugin';
 import ResolveTypeScriptPlugin from 'resolve-typescript-plugin';
-import { fileURLToPath } from 'url';
 
 const require = createRequire(import.meta.url);
 const filename = fileURLToPath(import.meta.url);
