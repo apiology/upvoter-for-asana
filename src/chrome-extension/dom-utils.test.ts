@@ -3,11 +3,89 @@
  */
 
 import {
-  htmlElementByClass, htmlElementById, waitForElement, parent,
+  htmlElementByClass, htmlElementById, waitForElement, parent, ensureNotNull,
+  ensureHtmlElement, htmlElementBySelector,
 } from './dom-utils.js';
 
 afterEach(() => {
   document.body.innerHTML = '';
+});
+
+test('ensureNotNull - null', async () => {
+  expect(() => ensureNotNull(null)).toThrowError('value is null');
+});
+
+test('ensureNotNull - not null', async () => {
+  expect(ensureNotNull(123)).toBe(123);
+});
+
+test('ensureHtmlElement', async () => {
+  document.body.innerHTML = `
+<div>
+  <div id='foo'>1</div>
+  <div id='bar'>2</div>
+  <div id='baz'>3</div>
+</div>
+`;
+
+  const bar: HTMLDivElement = htmlElementById('bar', HTMLDivElement);
+
+  expect(ensureHtmlElement(bar, HTMLDivElement)).toBe(bar);
+});
+
+test('ensureHtmlElement - null', async () => {
+  expect(() => ensureHtmlElement(null, HTMLDivElement)).toThrowError("Couldn't find element");
+});
+
+test('ensureHtmlElement - unexpected type', async () => {
+  document.body.innerHTML = `
+<div>
+  <div id='foo'>1</div>
+  <div id='bar'>2</div>
+  <div id='baz'>3</div>
+</div>
+`;
+
+  const bar: HTMLDivElement = htmlElementById('bar', HTMLDivElement);
+  expect(() => ensureHtmlElement(bar, HTMLAnchorElement)).toThrowError('Is not a HTMLAnchorElement as expected: [object HTMLDivElement]');
+});
+
+test('htmlElementBySelector', async () => {
+  document.body.innerHTML = `
+<div>
+  <div id='foo'>1</div>
+  <div id='bar'>2</div>
+  <div id='baz'>3</div>
+</div>
+`;
+
+  const bar: HTMLDivElement = htmlElementById('bar', HTMLDivElement);
+
+  expect(htmlElementBySelector('#bar', HTMLDivElement)).toBe(bar);
+});
+
+test('htmlElementBySelector - wrong element', async () => {
+  document.body.innerHTML = `
+<div>
+  <div id='foo'>1</div>
+  <div id='bar'>2</div>
+  <div id='baz'>3</div>Is not a HTMLAnchorElement as expected: [object HTMLDivElement]
+</div>
+`;
+
+  expect(() => htmlElementBySelector('div#bar', HTMLAnchorElement)).toThrowError('element with selector div#bar not an HTMLAnchorElement as expected!');
+});
+
+test('htmlElementBySelector - not found', async () => {
+  document.body.innerHTML = `
+<div>
+  <div id='foo'>1</div>
+  <div id='bar'>2</div>
+  <div id='baz'>3</div>Is not a HTMLAnchorElement as expected: [object HTMLDivElement]
+</div>
+`;
+
+  expect(() => htmlElementBySelector('.bing', HTMLDivElement)).toThrowError("Couldn't find element");
 });
 
 test('htmlElementById', async () => {

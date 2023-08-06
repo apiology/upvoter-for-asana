@@ -32,7 +32,7 @@ export async function pullResult(text: string, resourceType: string, optFields: 
   const workspaceGid = await fetchWorkspaceGid();
   const logger = platform().logger();
 
-  logger.log(
+  logger.debug(
     'requesting typeahead with workspaceGid',
     workspaceGid,
     ' and query of ',
