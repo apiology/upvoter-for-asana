@@ -2,8 +2,8 @@
  * @jest-environment jsdom
  */
 
-import { chrome } from 'jest-chrome';
 import { readFile } from 'node:fs/promises';
+import { chrome } from 'jest-chrome';
 import { restoreOptions, saveOptions } from './options.js';
 // we will assume these are tested well by dom-utils.test.js and feel free to use them here
 import { htmlElementById } from './dom-utils.js';
