@@ -32,9 +32,11 @@ GEM
     tomlrb (2.0.3)
 
 PLATFORMS
+  arm64-darwin-23
   ruby
   x86_64-darwin-20
   x86_64-darwin-21
+  x86_64-darwin-23
   x86_64-linux
   x86_64-linux-musl
 
@@ -44,4 +46,4 @@ DEPENDENCIES
   punchlist
 
 BUNDLED WITH
-   2.4.18
+   2.5.21
