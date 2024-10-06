@@ -153,7 +153,7 @@ open 'Upvoter for Asana.alfredworkflow' | configure as prompted | Import
 1. PR screenshot updates in
 1. `git stash && git checkout main && git pull`
 1. Bump the version in `static/chrome-extension/manifest.json` locally.
-1.`git commit -m "Bump version" static/chrome-extension/manifest.json`
+1. `git commit -m "Bump version" static/chrome-extension/manifest.json`
 1. `git push && make clean && make`
 1. Update [package.zip](./package.zip) in [developer dashboard](https://chrome.google.com/u/1/webstore/devconsole/d34ba2e8-8b5a-4417-889e-4047c35522d0) as `apiology-cws` user.
 1. Upload any new screenshots
