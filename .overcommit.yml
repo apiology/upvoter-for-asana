@@ -47,7 +47,7 @@ PreCommit:
       - '**/*.sh'
   YamlLint:
     enabled: true
-    flags: ['-c', '.yamllint.yml']
+    flags: ['-c', '.yamllint.yml', '--format=parsable', '--strict']
     on_warn: fail
   CircleCi:
     required_executable: 'circleci'
@@ -59,6 +59,8 @@ PreCommit:
     command: ['bundle', 'exec', 'punchlist']
     exclude:
       - 'yarn.lock'
+      # vendored
+      - 'docs/chrome-manifest-v3-schema.json'
     enabled: true
     problem_on_unmodified_line: warn
 
