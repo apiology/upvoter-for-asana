@@ -29,7 +29,7 @@ development.  See the `.envrc` file for detail.
 
 1. `make`
 2. `yarn install`  (only needed once)
-3. You should now see the worfklow show up in Alfred's configuration.
+3. You should now see the workflow show up in Alfred's configuration.
 
 ## Interactive development with Asana API
 
