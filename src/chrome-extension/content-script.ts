@@ -10,6 +10,7 @@ import { fetchClient } from '../asana-base.js';
 import { upvoteTask, logSuccess, pullCustomField } from '../upvoter-for-asana.js';
 import { platform, setPlatform } from '../platform.js';
 import { ChromeExtensionPlatform } from './chrome-extension-platform.js';
+import { waitForPopulatedAttr } from './dom-utils.js';
 
 const updateLinkMarker = (link: Element, indicator: number | string | null | undefined) => {
   let message = indicator;
@@ -22,49 +23,59 @@ const updateLinkMarker = (link: Element, indicator: number | string | null | und
 
 const upvoteLinkClassName = 'upvoter-upvote-link';
 
-const populateCurrentCount = async (dependentTaskGid: string, link: Element) => {
+const populateCurrentCount = async (dependentTaskGid: string, link: Element):
+  Promise<number | null | undefined> => {
   const client = await fetchClient();
   const task = await client.tasks.getTask(dependentTaskGid);
   const customField = await pullCustomField(task);
 
+  const number = customField?.number_value;
   updateLinkMarker(link, customField?.number_value);
+  return number;
 };
 
 const upvote = async (dependentTaskGid: string, link: Element) => {
   try {
-    console.log('updating link marker');
+    const logger = platform().logger();
+
+    logger.debug('updating link marker');
     updateLinkMarker(link, '^^');
-    console.log('updated link marker');
+    logger.debug('updated link marker');
     const client = await fetchClient();
-    console.log('client', client);
+    logger.debug('client', client);
     const task = await client.tasks.getTask(dependentTaskGid);
-    console.log('task', task);
+    logger.debug('task', task);
     await upvoteTask(task);
-    console.log('upvoted task');
     logSuccess(task);
     await populateCurrentCount(dependentTaskGid, link);
   } catch (err) {
     alert(`Problem upvoting ${dependentTaskGid}: ${err}`);
-    throw err;
+    // throw err;
   }
 };
 
-const fixUpLinkToDependency = (link: HTMLElement) => {
-  const url = link.getAttribute('href');
-  if (url != null) {
-    const dependentTaskGid = url.split('/').at(-1);
-    if (dependentTaskGid == null) {
-      throw new Error(`Could not parse URL: ${url}`);
-    }
-    link.removeAttribute('href');
-    link.innerHTML += ' [...]';
-    populateCurrentCount(dependentTaskGid, link);
-    link.onclick = (event: MouseEvent) => {
-      upvote(dependentTaskGid, link);
-      event.stopPropagation();
-    };
-    link.classList.add(upvoteLinkClassName);
+const fixUpLinkToDependency = async (link: HTMLElement) => {
+  const logger = platform().logger();
+
+  link.classList.add(upvoteLinkClassName);
+  logger.debug('Waiting for populated href on', link.outerHTML);
+  const href = await waitForPopulatedAttr(link, 'href');
+  logger.debug('Found populated href on', link);
+  const url = href.value;
+  const dependentTaskGid = url.split('/').at(-1);
+  logger.debug('Found dependent task GID', JSON.stringify(dependentTaskGid), 'for URL', JSON.stringify(url), 'on', link);
+  if (dependentTaskGid == null || dependentTaskGid === '') {
+    throw new Error(`Could not parse URL: ${url}`);
   }
+  link.removeAttribute('href');
+  link.innerHTML += ' [...]';
+  const count = await populateCurrentCount(dependentTaskGid, link);
+  link.onclick = (event: MouseEvent) => {
+    if (count) {
+      upvote(dependentTaskGid, link);
+    }
+    event.stopPropagation();
+  };
 };
 
 const bodyNodesClassName = 'CompleteTaskWithIncompletePrecedentTasksConfirmationModal-bodyNode';
@@ -86,38 +97,41 @@ const dependencyLinks = () => {
 };
 
 const fixDependencyLinks = async () => {
+  const logger = platform().logger();
+
   for (const dependencyLink of dependencyLinks()) {
     // don't process links twice; if we've marked one as processed, consider this done.
     if (dependencyLink.classList.contains(upvoteLinkClassName)) {
+      logger.debug("Skipping link that's already been processed", dependencyLink?.outerHTML);
       break;
     }
+    logger.debug('Fixing up link', dependencyLink?.outerHTML);
     fixUpLinkToDependency(dependencyLink);
   }
 };
 
-export const observeAndFixDependencyLinks = () => {
-  const p = platform();
-  const logger = p.logger();
+export const observeAndFixDependencyLinks = async () => {
+  const logger = platform().logger();
 
   logger.debug('Starting observation');
-  const selector = `.${bodyNodesClassName}`;
-  const e = document.querySelector(selector);
-  if (e) {
-    fixDependencyLinks();
-  }
-
+  const selector = `.${bodyNodesClassName} > a`;
   const observer = new MutationObserver(() => {
     const element = document.querySelector(selector);
+    // logger.finer('Mutation observed - is now', element?.outerHTML);
     if (element) {
       fixDependencyLinks();
     }
   });
-
   observer.observe(document.body, {
     childList: true,
     subtree: true,
   });
   logger.debug('Done with starting observation');
+
+  const e = document.querySelector(selector);
+  if (e) {
+    await fixDependencyLinks();
+  }
 };
 
 /* istanbul ignore next */
