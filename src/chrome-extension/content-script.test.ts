@@ -33,7 +33,7 @@ test('registerEventListeners', async () => {
 
   setPlatform(new TestPlatform());
 
-  observeAndFixDependencyLinks();
+  await observeAndFixDependencyLinks();
 
   const element = document.querySelector('.CompleteTaskWithIncompletePrecedentTasksConfirmationModal-bodyNode a');
   expect(element?.textContent).toEqual('Task name [...]');

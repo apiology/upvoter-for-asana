@@ -1,3 +1,5 @@
+import { platform } from '../platform.js';
+
 // https://2ality.com/2020/04/classes-as-values-typescript.html
 /* eslint-disable @typescript-eslint/no-explicit-any */
 type Class<T> = new (...args: any[]) => T;
@@ -81,6 +83,35 @@ export function waitForElement(selector: string): Promise<Element> {
       childList: true,
       subtree: true,
     });
+  });
+}
+
+// https://stackoverflow.com/questions/5525071/how-to-wait-until-an-element-exists
+export function waitForPopulatedAttr(e: HTMLElement, attributeName: string): Promise<Attr> {
+  const logger = platform().logger();
+
+  return new Promise<Attr>((resolve) => {
+    let attr = e.getAttributeNode(attributeName);
+    if (attr && attr.value && attr.value.length > 0) {
+      resolve(attr);
+    } else {
+      logger.debug('initial look for changes on', attributeName, 'on', e.outerHTML, 'found no value');
+    }
+
+    const observer = new MutationObserver(() => {
+      attr = e.getAttributeNode(attributeName);
+      if (attr && attr.value && attr.value.length > 0) {
+        resolve(attr);
+        observer.disconnect();
+      } else {
+        logger.debug('incremental look for changes on', attributeName, 'on', e.outerHTML, 'found no value');
+      }
+    });
+
+    observer.observe(e, {
+      attributes: true,
+    });
+    logger.debug('Created observer for', attributeName, 'on', e.outerHTML);
   });
 }
 
