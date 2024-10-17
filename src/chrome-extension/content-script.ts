@@ -113,8 +113,8 @@ const fixDependencyLinks = async () => {
 export const observeAndFixDependencyLinks = async () => {
   const logger = platform().logger();
 
-  logger.debug('Starting observation');
-  const selector = `.${bodyNodesClassName} > a`;
+  const selector = `.${bodyNodesClassName} a`;
+  logger.debug(`Starting observation on ${selector}`);
   const observer = new MutationObserver(() => {
     const element = document.querySelector(selector);
     // logger.finer('Mutation observed - is now', element?.outerHTML);
