@@ -1,7 +1,7 @@
 {
   "name": "Upvoter for Asana",
   "description": "Quickly finds and increments integer custom fields in Asana tasks from the Chrome Omnibox or as an Alfred workflow.",
-  "version": "0.4.3",
+  "version": "0.4.4",
   "icons": {
     "16": "apiology-16x16.png",
     "48": "apiology-48x48.png",
