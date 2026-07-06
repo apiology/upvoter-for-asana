@@ -9,7 +9,6 @@ export class AlfredLogger {
 
   /* eslint-disable @typescript-eslint/no-explicit-any */
   /* eslint-disable @typescript-eslint/no-unused-vars */
-  /* eslint-disable @typescript-eslint/no-empty-function */
   log = (message?: any, ...optionalParams: any[]) => { };
 
   debug = (s: string): void => { };
@@ -21,5 +20,4 @@ export class AlfredLogger {
   userVisibleStatus = (s: string): void => { };
   /* eslint-enable @typescript-eslint/no-explicit-any */
   /* eslint-enable @typescript-eslint/no-unused-vars */
-  /* eslint-enable @typescript-eslint/no-empty-function */
 }

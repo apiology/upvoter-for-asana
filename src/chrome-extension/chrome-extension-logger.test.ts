@@ -1,4 +1,4 @@
-import 'jest-chrome';
+import '@mobile-next/jest-chrome';
 import { ChromeExtensionLogger } from './chrome-extension-logger.js';
 
 test('create class', () => {

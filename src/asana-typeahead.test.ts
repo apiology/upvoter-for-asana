@@ -14,8 +14,8 @@ test('pullResult', async () => {
   const mockTasks = ({ getTask: mockGetTask } as unknown) as Asana.resources.Tasks;
 
   const mockTypeaheadResult = {} as Asana.resources.ResourceList<Asana.resources.Tasks.Type>;
-  const mockTypeaheadForWorkspace = async ():
-    Promise<Asana.resources.ResourceList<Asana.resources.Tasks.Type>> => mockTypeaheadResult;
+  type TaskList = Asana.resources.ResourceList<Asana.resources.Tasks.Type>;
+  const mockTypeaheadForWorkspace = async (): Promise<TaskList> => mockTypeaheadResult;
   const mockTypeahead = (
     ({ typeaheadForWorkspace: mockTypeaheadForWorkspace } as unknown) as Asana.resources.Typeahead
   );

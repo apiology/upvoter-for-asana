@@ -16,8 +16,6 @@ const ensureConfigNotNull = <T>(value: T | null, name: string): T => {
   return value;
 };
 
-// You can remove this error suppression once your first config item is created
-/* eslint-disable @typescript-eslint/no-unused-vars */
 async function fetchConfig(key: string, name: string,
   clazz: 'number'): Promise<number>;
 async function fetchConfig(key: string, name: string,
@@ -50,7 +48,6 @@ async function fetchConfig<T>(
   const value = await chromeStorageSyncFetch(key, clazz);
   return ensureConfigNotNull(value, name);
 }
-/* eslint-enable @typescript-eslint/no-unused-vars */
 
 export class ChromeExtensionConfig extends Config {
   fetchAsanaAccessToken = async () => fetchConfig('asanaAccessToken', 'Asana access token', 'string');

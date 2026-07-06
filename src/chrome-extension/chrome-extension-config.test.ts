@@ -1,4 +1,4 @@
-import { chrome } from 'jest-chrome';
+import { chrome } from '@mobile-next/jest-chrome';
 import { ChromeExtensionConfig } from './chrome-extension-config.js';
 
 test('create class', () => {

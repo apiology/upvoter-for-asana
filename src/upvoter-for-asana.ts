@@ -92,7 +92,7 @@ function notEmpty<TValue>(value: TValue | null | undefined): value is TValue {
 export type Suggestion = {
   url: string;
   description: string;
-}
+};
 
 const createSuggestResult = async (
   task: Asana.resources.Tasks.Type
