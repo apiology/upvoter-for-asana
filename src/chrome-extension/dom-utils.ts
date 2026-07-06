@@ -3,12 +3,48 @@
 type Class<T> = new (...args: any[]) => T;
 /* eslint-enable @typescript-eslint/no-explicit-any */
 
-export const ensureNotNull = <T>(value: T | null): T => {
+export const ensureNotNull = <T>(value: T | null | undefined): T => {
   if (value == null) {
     throw new Error('value is null');
   }
   return value;
 };
+
+export function ensureArrayType(value: Array<unknown>, type: 'number'): Array<number>;
+
+export function ensureArrayType(value: Array<unknown>, type: 'string'): Array<string>;
+
+export function ensureArrayType(value: Array<unknown>, type: 'boolean'): Array<boolean>;
+
+export function ensureArrayType<T extends object>(value: Array<unknown>, type: Class<T>): Array<T>;
+
+export function ensureArrayType
+<T extends object | StringConstructor | NumberConstructor | BooleanConstructor>(
+  value: Array<unknown>,
+  type: Class<T> | 'number' | 'string' | 'boolean'
+): Array<T> {
+  if (!Array.isArray(value)) {
+    throw new Error(`value is not an array: ${value}`);
+  }
+  for (const element of value) {
+    if (type === 'string') {
+      if (typeof element !== 'string') {
+        throw new Error(`element [${element}] is not a string`);
+      }
+    } else if (type === 'number') {
+      if (typeof element !== 'number') {
+        throw new Error(`element [${element}] is not a number`);
+      }
+    } else if (type === 'boolean') {
+      if (typeof element !== 'boolean') {
+        throw new Error(`element [${element}] is not a boolean`);
+      }
+    } else if (!(element instanceof type)) {
+      throw new Error(`element [${element}] is not a ${type.name}`);
+    }
+  }
+  return value as Array<T>;
+}
 
 export const ensureHtmlElement = <T extends HTMLElement>(element: object | null,
   clazz: Class<T>): T => {
@@ -45,7 +81,17 @@ export const htmlElementBySelector = <T extends HTMLElement>(selector: string,
   return element;
 };
 
-export const htmlElementByClass = <T extends HTMLElement>(className: string,
+export const htmlElementsBySelector = <T extends Element>(selector: string,
+  clazz: Class<T>): T[] => {
+  const elements = Array.from(document.querySelectorAll(selector));
+  try {
+    return ensureArrayType(elements, clazz);
+  } catch {
+    throw new Error(`element with selector ${selector} not an ${clazz.name} as expected!`);
+  }
+};
+
+export const htmlElementByClass = <T extends Element>(className: string,
   clazz: Class<T>): T => {
   const elements = document.getElementsByClassName(className);
   if (elements.length === 0) {
@@ -61,27 +107,51 @@ export const htmlElementByClass = <T extends HTMLElement>(className: string,
   return element;
 };
 
-// https://stackoverflow.com/questions/5525071/how-to-wait-until-an-element-exists
-export function waitForElement(selector: string): Promise<Element> {
-  return new Promise<Element>((resolve) => {
-    const e = document.querySelector(selector);
-    if (e) {
+const lookForElements = <T extends Element>(
+  resolve: (value: T[] | PromiseLike<T[]>) => void,
+  reject: (reason?: any) => void, // eslint-disable-line @typescript-eslint/no-explicit-any
+  selector: string,
+  clazz: Class<T>
+): boolean => {
+  try {
+    const e = htmlElementsBySelector(selector, clazz);
+    if (e.length > 0) {
       resolve(e);
+      return true;
     }
+  } catch (err) {
+    reject(err);
+  }
+  return false;
+};
 
-    const observer = new MutationObserver(() => {
-      const element = document.querySelector(selector);
-      if (element) {
-        resolve(element);
-        observer.disconnect();
-      }
-    });
+// https://stackoverflow.com/questions/5525071/how-to-wait-until-an-element-exists
+export function waitForElements<T extends Element>(
+  selector: string,
+  clazz: Class<T> = Element as Class<T>
+): Promise<T[]> {
+  return new Promise<T[]>((resolve, reject) => {
+    if (!lookForElements(resolve, reject, selector, clazz)) {
+      const observer = new MutationObserver(() => {
+        if (lookForElements(resolve, reject, selector, clazz)) {
+          observer.disconnect();
+        }
+      });
 
-    observer.observe(document.body, {
-      childList: true,
-      subtree: true,
-    });
+      observer.observe(document.body, {
+        childList: true,
+        subtree: true,
+      });
+    }
   });
+}
+
+export async function waitForElement<T extends Element>(
+  selector: string,
+  clazz: Class<T> = Element as Class<T>
+): Promise<T> {
+  const elements = await waitForElements(selector, clazz);
+  return ensureNotNull(elements[0]);
 }
 
 export const parent = (element: Element): Element => {

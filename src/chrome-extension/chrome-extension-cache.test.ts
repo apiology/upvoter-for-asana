@@ -1,4 +1,4 @@
-import { chrome } from 'jest-chrome';
+import { chrome } from '@mobile-next/jest-chrome';
 import { ChromeExtensionCache } from './chrome-extension-cache.js';
 
 test('create class', () => {

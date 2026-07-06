@@ -40,17 +40,36 @@ Temporary Items
 
 # Used by Makefile to track what we have and haven't installed
 Gemfile.lock.installed
+yarn.lock.installed
 requirements_dev.txt.installed
+types.installed
 
 # Used by CircleCI as a place to store installed gems
-/vendor
+/vendor/bundle
 
 # Installed by fix.sh based on what latest versions are
 /.python-version
 /.ruby-version
 
+# Ruby-related
+
+# Ignore bundler config.
+/.bundle/config
+
+# 1Password Environment local mount (resolved literals; template is config/env.1p)
+/config/env.local
+
+# Overcommit installs hooks here; only bootstrap post-checkout is tracked
+.githooks/*
+!.githooks/post-checkout
+
+# Ignore make target files
+/.make/*
+!/.make/.keep
+
 # From package.json and npm
 /node_modules
+/.yarn
 
 # From release process
 /package.zip
@@ -69,3 +88,5 @@ requirements_dev.txt.installed
 
 # from yarn
 /yarn-error.log
+/.pnp.cjs
+/.pnp.loader.mjs

@@ -11,10 +11,10 @@ export const logSuccess = (result: string | object): void => {
 };
 
 export type Suggestion = {
-  url: string
+  url: string;
   text: string;
   description: string;
-}
+};
 
 export const pullSuggestions = async (text: string): Promise<Suggestion[]> => {
   const url = `upvoter-for-asana:${encodeURIComponent(text)}`;
