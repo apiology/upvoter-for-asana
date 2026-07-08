@@ -142,7 +142,7 @@ test('htmlElementBySelector - not found', async () => {
 <div>
   <div id='foo'>1</div>
   <div id='bar'>2</div>
-  <div id='baz'>3</div>Is not a HTMLAnchorElement as expected: [object HTMLDivElement]
+  <div id='baz'>3</div>
 </div>
 `;
 
