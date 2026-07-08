@@ -43,6 +43,7 @@ export default {
       util: require.resolve('util'),
       stream: require.resolve('stream-browserify'),
       buffer: require.resolve('buffer'),
+      querystring: require.resolve("querystring-es3"),
       // see the plugins key below for more complex handling of
       // process.
     },

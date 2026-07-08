@@ -1,4 +1,4 @@
-import { chrome } from 'jest-chrome';
+import { chrome } from '@mobile-next/jest-chrome';
 import { setPlatform } from '../platform.js';
 import { TestPlatform } from '../__mocks__/test-platform.js';
 import { registerEventListeners } from './background.js';

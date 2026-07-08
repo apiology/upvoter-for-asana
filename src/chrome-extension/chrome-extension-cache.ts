@@ -29,8 +29,7 @@ export function chromeStorageSyncFetch<T>(key: string,
 export function chromeStorageSyncFetch<T>(
   key: string,
   clazz: Class<T> | 'number' | 'string' | 'boolean'
-):
-  Promise<T | boolean | string | number | null> {
+): Promise<T | boolean | string | number | null> {
   return new Promise((resolve) => {
     chrome.storage.sync.get([key], (result) => {
       const output = result[key];
