@@ -3,8 +3,8 @@
  */
 
 import {
-  ensureArrayType, htmlElementByClass, htmlElementById, waitForElement, parent, ensureNotNull,
-  ensureHtmlElement, htmlElementBySelector, htmlElementsBySelector,
+  ensureArrayType, htmlElementByClass, htmlElementById, waitForElement, waitForElements,
+  parent, ensureNotNull, ensureHtmlElement, htmlElementBySelector, htmlElementsBySelector,
 } from './dom-utils.js';
 
 afterEach(() => {
@@ -250,6 +250,17 @@ test('waitForElementAlreadyExists', async () => {
 `;
   const element = await waitForElement('#bar', HTMLDivElement);
   expect(element.textContent).toEqual('2');
+});
+
+test('waitForElementsDefaultType', async () => {
+  document.body.innerHTML = `
+<div>
+  <div id='bar'>2</div>
+</div>
+`;
+  const elements = await waitForElements('#bar');
+  expect(elements).toHaveLength(1);
+  expect(elements[0]!.textContent).toEqual('2');
 });
 
 test('waitForElementDefaultType', async () => {
