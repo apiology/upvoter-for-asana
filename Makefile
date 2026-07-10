@@ -1,4 +1,4 @@
-.PHONY: clean test help typecheck quality
+.PHONY: clean test help typecheck quality build-typecheck
 .DEFAULT_GOAL := default
 
 define PRINT_HELP_PYSCRIPT
@@ -55,6 +55,9 @@ package-chrome-extension: build-chrome-extension
 
 typecheck: webpack  ## validate types in code and configuration
 	jsonschema --instance static/chrome-extension/manifest.json docs/chrome-manifest-v3-schema.json
+
+build-typecheck: ## Compatibility target for cookiecutter post_gen_project
+	@$(MAKE) build
 
 citypecheck: typecheck ## Run type check from CircleCI
 
