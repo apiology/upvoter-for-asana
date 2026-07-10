@@ -60,6 +60,7 @@ types.installed
 /config/env.local
 
 # Overcommit installs hooks here; only bootstrap post-checkout is tracked
+.local-overcommit.yml
 .githooks/*
 !.githooks/post-checkout
 
@@ -90,3 +91,4 @@ types.installed
 /yarn-error.log
 /.pnp.cjs
 /.pnp.loader.mjs
+.env-local-probe-path
