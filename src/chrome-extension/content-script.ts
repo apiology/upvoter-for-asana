@@ -23,8 +23,10 @@ const updateLinkMarker = (link: Element, indicator: number | string | null | und
 
 const upvoteLinkClassName = 'upvoter-upvote-link';
 
-const populateCurrentCount = async (dependentTaskGid: string, link: Element):
-  Promise<number | null | undefined> => {
+const populateCurrentCount = async (
+  dependentTaskGid: string,
+  link: Element,
+): Promise<number | null | undefined> => {
   const client = await fetchClient();
   const task = await client.tasks.getTask(dependentTaskGid);
   const customField = await pullCustomField(task);

@@ -2,7 +2,6 @@
   "name": "alfred-upvoter-for-asana",
   "version": "0.1.5",
   "description": "Quickly finds and increments integer custom fields in Asana tasks from the Chrome Omnibox or as an Alfred workflow.",
-  "private": false,
   "scripts": {
     "chrome-extension-start": "yarn run webpack --mode=development --watch",
     "alfred-start": "tsc --watch -p tsconfig.alfred.json ",
