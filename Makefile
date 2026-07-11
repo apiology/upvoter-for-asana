@@ -109,3 +109,8 @@ cicoverage: report-coverage-to-codecov ## check code coverage, then report to co
 
 update_from_cookiecutter: ## Bring in changes from template project used to create this repo
 	bin/cookiecutter_project_upgrader.sh
+	@$(MAKE) post_cookiecutter_sync
+
+post_cookiecutter_sync: ## Ecosystem-specific steps after template sync (empty by default)
+	@:
+
