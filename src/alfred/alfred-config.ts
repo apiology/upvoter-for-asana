@@ -47,7 +47,6 @@ const fetchConfigInteger = (envVarName: string): number => {
   }
   return value;
 };
-/* eslint-enable @typescript-eslint/no-unused-vars */
 
 export class AlfredConfig extends Config {
   fetchAsanaAccessToken = async () => fetchNonEmptyConfigString('asana_access_key');
