@@ -24,6 +24,7 @@ commands:
             eval "$(pyenv init --path)"
             eval "$(pyenv virtualenv-init -)"
             eval "$(rbenv init -)"
+            . "$HOME/.nvm/nvm.sh"
 
             <<parameters.command>>
           environment:
