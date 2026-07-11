@@ -1,7 +1,6 @@
 import { isString } from '../types.js';
 import { Config } from '../config.js';
 
-/* eslint-disable @typescript-eslint/no-unused-vars */
 const fetchConfigString = (envVarName: string) => {
   const value = process.env[envVarName];
   if (value == null || !isString(value)) {
@@ -48,7 +47,6 @@ const fetchConfigInteger = (envVarName: string): number => {
   }
   return value;
 };
-/* eslint-enable @typescript-eslint/no-unused-vars */
 
 export class AlfredConfig extends Config {
   fetchAsanaAccessToken = async () => fetchNonEmptyConfigString('asana_access_key');

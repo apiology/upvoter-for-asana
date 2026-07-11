@@ -1,4 +1,4 @@
-.PHONY: clean test help typecheck quality
+.PHONY: clean test help typecheck quality build-typecheck
 .DEFAULT_GOAL := default
 
 define PRINT_HELP_PYSCRIPT
@@ -56,6 +56,9 @@ package-chrome-extension: build-chrome-extension
 typecheck: webpack  ## validate types in code and configuration
 	jsonschema --instance static/chrome-extension/manifest.json docs/chrome-manifest-v3-schema.json
 
+build-typecheck: ## Compatibility target for cookiecutter post_gen_project
+	@$(MAKE) build
+
 citypecheck: typecheck ## Run type check from CircleCI
 
 typecoverage: typecheck ## Run type checking and then ratchet coverage in metrics/
@@ -106,6 +109,12 @@ report-coverage-to-codecov: report-coverage ## use codecov.io for PR-scoped code
 	@./codecov --file coverage/lcov.info --nonZero
 
 cicoverage: report-coverage-to-codecov ## check code coverage, then report to codecov
+
+update_apt: .make/apt_updated
+
+.make/apt_updated:
+	sudo DEBIAN_FRONTEND=noninteractive apt-get update -y
+	touch .make/apt_updated
 
 update_from_cookiecutter: ## Bring in changes from template project used to create this repo
 	bin/cookiecutter_project_upgrader.sh
