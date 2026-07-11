@@ -2308,6 +2308,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"browser-request@file:polyfills/browser-request-via-fetch::locator=alfred-upvoter-for-asana%40workspace%3A.":
+  version: 0.4.0
+  resolution: "browser-request@file:polyfills/browser-request-via-fetch#polyfills/browser-request-via-fetch::hash=64c77b&locator=alfred-upvoter-for-asana%40workspace%3A."
+  checksum: 10c0/864a5d8f132937ea5d42c38270633e49270196121457e2c9d07e69a74729052f370af2f5ac2fc05b2600e436cf74d4b9f0420049c65c02a2c25e0633324d0cd4
+  languageName: node
+  linkType: hard
+
 "browserslist@npm:^4.24.0, browserslist@npm:^4.28.1":
   version: 4.28.5
   resolution: "browserslist@npm:4.28.5"
@@ -7182,6 +7189,13 @@ __metadata:
     tunnel-agent: "npm:^0.6.0"
     uuid: "npm:^3.3.2"
   checksum: 10c0/0ec66e7af1391e51ad231de3b1c6c6aef3ebd0a238aa50d4191c7a792dcdb14920eea8d570c702dc5682f276fe569d176f9b8ebc6031a3cf4a630a691a431a63
+  languageName: node
+  linkType: hard
+
+"request@file:polyfills/browser-request-via-fetch::locator=alfred-upvoter-for-asana%40workspace%3A.":
+  version: 0.4.0
+  resolution: "request@file:polyfills/browser-request-via-fetch#polyfills/browser-request-via-fetch::hash=e01141&locator=alfred-upvoter-for-asana%40workspace%3A."
+  checksum: 10c0/38f9346cf79b61b2023473f48712c0f6784add3e4eea52524e9e37818d6b2c9e514421b744e592464542e2dc8f5ba14388344e7d7eb5b1818af5e082d43f34c7
   languageName: node
   linkType: hard
 
