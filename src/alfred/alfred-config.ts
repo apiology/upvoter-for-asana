@@ -1,7 +1,6 @@
 import { isString } from '../types.js';
 import { Config } from '../config.js';
 
-/* eslint-disable @typescript-eslint/no-unused-vars */
 const fetchConfigString = (envVarName: string) => {
   const value = process.env[envVarName];
   if (value == null || !isString(value)) {

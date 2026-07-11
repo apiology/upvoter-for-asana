@@ -25,7 +25,7 @@ const upvoteLinkClassName = 'upvoter-upvote-link';
 
 const populateCurrentCount = async (
   dependentTaskGid: string,
-  link: Element,
+  link: Element
 ): Promise<number | null | undefined> => {
   const client = await fetchClient();
   const task = await client.tasks.getTask(dependentTaskGid);
