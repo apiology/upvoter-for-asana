@@ -110,6 +110,12 @@ report-coverage-to-codecov: report-coverage ## use codecov.io for PR-scoped code
 
 cicoverage: report-coverage-to-codecov ## check code coverage, then report to codecov
 
+update_apt: .make/apt_updated
+
+.make/apt_updated:
+	sudo DEBIAN_FRONTEND=noninteractive apt-get update -y
+	touch .make/apt_updated
+
 update_from_cookiecutter: ## Bring in changes from template project used to create this repo
 	bin/cookiecutter_project_upgrader.sh
 	@$(MAKE) post_cookiecutter_sync
