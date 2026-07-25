@@ -1,6 +1,6 @@
 {
-    "_checkout": null,
-    "_output_dir": "/Users/broz/.cursor/worktrees/upvoter-for-asana/cascade-upvoter-for-asana-1783678364324/.git/cookiecutter",
+    "_checkout": "main",
+    "_output_dir": "/Users/broz/.claude/worktrees/upvoter-for-asana/cascade-upvoter-for-asana-1785003286251/.git/cookiecutter",
     "_repo_dir": "/Users/broz/.cookiecutters/cookiecutter-multicli",
     "_template": "https://github.com/apiology/cookiecutter-multicli.git",
     "asana_api": "yes",

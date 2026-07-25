@@ -1,4 +1,4 @@
-.PHONY: clean test help typecheck quality build-typecheck
+.PHONY: build build-typecheck bundle_install cicoverage citypecheck citest citypecoverage clean clean-coverage clean-typecheck clean-typecoverage coverage default gem_dependencies help overcommit post_cookiecutter_sync quality repl report-coverage report-coverage-to-codecov test typecheck typecoverage update_from_cookiecutter docs
 .DEFAULT_GOAL := default
 
 define PRINT_HELP_PYSCRIPT
@@ -111,16 +111,8 @@ report-coverage-to-codecov: report-coverage ## use codecov.io for PR-scoped code
 cicoverage: report-coverage-to-codecov ## check code coverage, then report to codecov
 
 update_from_cookiecutter: ## Bring in changes from template project used to create this repo
-	bundle exec overcommit --uninstall
-	cookiecutter_project_upgrader --help >/dev/null
-	IN_COOKIECUTTER_PROJECT_UPGRADER=1 cookiecutter_project_upgrader || true
-	git checkout cookiecutter-template && git push && git checkout main
-	git checkout main && git pull && git checkout -b update-from-cookiecutter-$$(date +%Y-%m-%d-%H%M)
-	git merge cookiecutter-template || true
-	bundle exec overcommit --install || true
-	@echo
-	@echo "Please resolve any merge conflicts below and push up a PR with:"
-	@echo
-	@echo '   gh pr create --title "Update from cookiecutter" --body "Automated PR to update from cookiecutter boilerplate"'
-	@echo
-	@echo
+	bin/cookiecutter_project_upgrader.sh
+	@$(MAKE) post_cookiecutter_sync
+
+post_cookiecutter_sync: ## Ecosystem-specific steps after template sync (empty by default)
+	@:
